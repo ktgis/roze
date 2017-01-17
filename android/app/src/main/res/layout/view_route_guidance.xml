@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/constraint"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <com.kt.rozenavi.ui.main.navigation.TbtGuidanceView
+        android:id="@+id/tbt_guidance_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
+    <com.kt.rozenavi.ui.main.navigation.HighWayView
+        android:id="@+id/highway_guidance_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tbt_guidance_view"
+        android:visibility="invisible"/>
+
+    <ImageView
+        android:id="@+id/roadview_imageview"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_below="@+id/tbt_guidance_view"
+        android:scaleType="fitXY"
+        android:visibility="invisible"/>
+
+    <com.kt.rozenavi.ui.main.navigation.LaneGuidanceView
+        android:id="@+id/lane_guidance_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tbt_guidance_view"/>
+    <TextView
+        android:id="@+id/oilprice_textview"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:layout_below="@+id/tbt_guidance_view"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:text="최저가 주유소까지 000m 남았습니다"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        android:visibility="gone"
+    />
+
+    <com.kt.rozenavi.ui.main.navigation.SpotGuidanceView
+        android:id="@+id/spot_guidance_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"/>
+
+
+    <ImageButton
+        android:id="@+id/btn_drive_menu"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:background="@color/colorPrimary"
+        android:src="@android:drawable/ic_menu_directions"/>
+
+    <com.kt.rozenavi.ui.main.navigation.RemainGuidanceView
+        android:id="@+id/remain_guidance_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/btn_drive_menu"/>
+
+
+    <com.kt.rozenavi.ui.main.navigation.DriveMenuView
+        android:id="@+id/drive_menu_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btn_drive_menu"
+        android:visibility="gone"
+
+    />
+</RelativeLayout>

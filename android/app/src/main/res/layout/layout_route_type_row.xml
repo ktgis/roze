@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:background="@android:color/white"
+              android:orientation="vertical">
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/search_row"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:background="@drawable/route_row_bg">
+
+        <TextView
+            android:id="@+id/route_arrived_time_textview"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="오전 0:00분"
+            android:textColor="@drawable/black_white_text_color"
+            android:textSize="25sp"
+            android:textStyle="normal|bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:gravity="bottom"
+            android:text="도착"
+            android:textColor="@drawable/black_white_text_color"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@+id/route_arrived_time_textview"
+            app:layout_constraintLeft_toRightOf="@+id/route_arrived_time_textview"/>
+
+        <TextView
+            android:id="@+id/route_type_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/route_button_bg"
+            android:paddingBottom="3dp"
+            android:paddingEnd="5dp"
+            android:paddingStart="5dp"
+            android:paddingTop="3dp"
+            android:text="안내"
+            android:textColor="#ffffff"
+            app:layout_constraintBottom_toBottomOf="@+id/route_arrived_time_textview"
+            app:layout_constraintRight_toRightOf="parent"/>
+
+        <ImageView
+            android:id="@+id/km_icon_imageview"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:padding="2dp"
+            android:background="@color/colorPrimaryDark"
+            android:tint="@android:color/white"
+            android:src="@drawable/img_distance_s"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/route_arrived_time_textview"/>
+
+        <TextView
+            android:id="@+id/route_dis_textview_textview"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="0.0km"
+            android:textColor="@drawable/black_white_text_color"
+            app:layout_constraintBottom_toBottomOf="@+id/km_icon_imageview"
+            app:layout_constraintLeft_toRightOf="@+id/km_icon_imageview"/>
+
+        <ImageView
+            android:id="@+id/totaltoll_icon_imageview"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:padding="2dp"
+            android:background="@color/colorPrimaryDark"
+            android:tint="@android:color/white"
+            android:src="@drawable/img_price_s"
+            app:layout_constraintLeft_toRightOf="@+id/route_dis_textview_textview"
+            app:layout_constraintTop_toBottomOf="@+id/route_arrived_time_textview"/>
+
+        <TextView
+            android:id="@+id/route_totaltoll_textview_textview"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="0원"
+            android:textColor="@drawable/black_white_text_color"
+            app:layout_constraintBottom_toBottomOf="@+id/km_icon_imageview"
+            app:layout_constraintLeft_toRightOf="@+id/totaltoll_icon_imageview"/>
+    </android.support.constraint.ConstraintLayout>
+</LinearLayout>

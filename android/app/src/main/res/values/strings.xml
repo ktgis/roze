@@ -1,0 +1,205 @@
+<!--
+  ~ Copyright (c) 2016 kt corp. All rights reserved.
+  ~
+  ~  This is a proprietary software of kt corp, and you may not use this file
+  ~  except in compliance with license agreement with kt corp. Any redistribution
+  ~  or use of this software, with or without modification shall be strictly
+  ~  prohibited without prior written approval of kt corp, and the copyright
+  ~  notice above does not evidence any actual or intended publication of such
+  ~  software.
+  -->
+
+<resources>
+    <string name="app_name">RozeNavi</string>
+    <string name="title_activity_search">SearchActivity</string>
+    <string name="large_text">
+        "Material is the metaphor.\n\n"
+
+        "A material metaphor is the unifying theory of a rationalized space and a system of motion."
+        "The material is grounded in tactile reality, inspired by the study of paper and ink, yet "
+        "technologically advanced and open to imagination and magic.\n"
+        "Surfaces and edges of the material provide visual cues that are grounded in reality. The "
+        "use of familiar tactile attributes helps users quickly understand affordances. Yet the "
+        "flexibility of the material creates new affordances that supercede those in the physical "
+        "world, without breaking the rules of physics.\n"
+        "The fundamentals of light, surface, and movement are key to conveying how objects move, "
+        "interact, and exist in space and in relation to each other. Realistic lighting shows "
+        "seams, divides space, and indicates moving parts.\n\n"
+
+        "Bold, graphic, intentional.\n\n"
+
+        "The foundational elements of print based design typography, grids, space, scale, color, "
+        "and use of imagery guide visual treatments. These elements do far more than please the "
+        "eye. They create hierarchy, meaning, and focus. Deliberate color choices, edge to edge "
+        "imagery, large scale typography, and intentional white space create a bold and graphic "
+        "interface that immerse the user in the experience.\n"
+        "An emphasis on user actions makes core functionality immediately apparent and provides "
+        "waypoints for the user.\n\n"
+
+        "Motion provides meaning.\n\n"
+
+        "Motion respects and reinforces the user as the prime mover. Primary user actions are "
+        "inflection points that initiate motion, transforming the whole design.\n"
+        "All action takes place in a single environment. Objects are presented to the user without "
+        "breaking the continuity of experience even as they transform and reorganize.\n"
+        "Motion is meaningful and appropriate, serving to focus attention and maintain continuity. "
+        "Feedback is subtle yet clear. Transitions are efﬁcient yet coherent.\n\n"
+
+        "3D world.\n\n"
+
+        "The material environment is a 3D space, which means all objects have x, y, and z "
+        "dimensions. The z-axis is perpendicularly aligned to the plane of the display, with the "
+        "positive z-axis extending towards the viewer. Every sheet of material occupies a single "
+        "position along the z-axis and has a standard 1dp thickness.\n"
+        "On the web, the z-axis is used for layering and not for perspective. The 3D world is "
+        "emulated by manipulating the y-axis.\n\n"
+
+        "Light and shadow.\n\n"
+
+        "Within the material environment, virtual lights illuminate the scene. Key lights create "
+        "directional shadows, while ambient light creates soft shadows from all angles.\n"
+        "Shadows in the material environment are cast by these two light sources. In Android "
+        "development, shadows occur when light sources are blocked by sheets of material at "
+        "various positions along the z-axis. On the web, shadows are depicted by manipulating the "
+        "y-axis only. The following example shows the card with a height of 6dp.\n\n"
+
+        "Resting elevation.\n\n"
+
+        "All material objects, regardless of size, have a resting elevation, or default elevation "
+        "that does not change. If an object changes elevation, it should return to its resting "
+        "elevation as soon as possible.\n\n"
+
+        "Component elevations.\n\n"
+
+        "The resting elevation for a component type is consistent across apps (e.g., FAB elevation "
+        "does not vary from 6dp in one app to 16dp in another app).\n"
+        "Components may have different resting elevations across platforms, depending on the depth "
+        "of the environment (e.g., TV has a greater depth than mobile or desktop).\n\n"
+
+        "Responsive elevation and dynamic elevation offsets.\n\n"
+
+        "Some component types have responsive elevation, meaning they change elevation in response "
+        "to user input (e.g., normal, focused, and pressed) or system events. These elevation "
+        "changes are consistently implemented using dynamic elevation offsets.\n"
+        "Dynamic elevation offsets are the goal elevation that a component moves towards, relative "
+        "to the component’s resting state. They ensure that elevation changes are consistent "
+        "across actions and component types. For example, all components that lift on press have "
+        "the same elevation change relative to their resting elevation.\n"
+        "Once the input event is completed or cancelled, the component will return to its resting "
+        "elevation.\n\n"
+
+        "Avoiding elevation interference.\n\n"
+
+        "Components with responsive elevations may encounter other components as they move between "
+        "their resting elevations and dynamic elevation offsets. Because material cannot pass "
+        "through other material, components avoid interfering with one another any number of ways, "
+        "whether on a per component basis or using the entire app layout.\n"
+        "On a component level, components can move or be removed before they cause interference. "
+        "For example, a floating action button (FAB) can disappear or move off screen before a "
+        "user picks up a card, or it can move if a snackbar appears.\n"
+        "On the layout level, design your app layout to minimize opportunities for interference. "
+        "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
+        "when a user tries to pick up one of cards.\n\n"
+    </string>
+    <!--menu-->
+    <string name="action_save">저장</string>
+
+    <!--common-->
+    <string name="current_location">현재위치</string>
+
+    <!--title-->
+    <string name="activity_title_setting_car_type">차량설정</string>
+    <string name="activity_title_setting_route_type">경로설정</string>
+    <string name="activity_title_setting_sound_option">음성안내설정</string>
+
+    <!--log-->
+    <string name="toast_message_log_save_success">GPS 정보를 저장하였습니다.</string>
+    <string name="toast_message_log_save_fail">GPS 정보 저장에 실패하였습니다.</string>
+
+    <!--splash-->
+    <string name="permission_dialog_title">권한확인알림</string>
+    <string name="permission_dialog_content">길안내를 위한 앱 권한 승인이 필요합니다.</string>
+    <string name="permission_dialog_button_positive">권한확인</string>
+    <string name="permission_dialog_button_negative">앱종료</string>
+
+    <!--main-->
+    <string name="toast_message_main_back_button">\'뒤로\'버튼을 한번 더 누르시면 종료됩니다.</string>
+    <string name="toast_message_navigation_stop">경로 안내를 종료합니다.</string>
+    <string name="toast_message_navigation_arrived_destination">목적지에 도착하여 경로안내를 종료합니다.</string>
+    <string name="toast_message_navigation_arrived_waypoint">경유지에 도착하였습니다. 다음장소로 이동합니다.</string>
+    <string name="toast_message_navigation_traffic_update">실시간 교통정보를 반영중입니다.</string>
+    <string name="toast_message_route_fail">경로 탐색에 실패하였습니다.</string>
+    <string name="toast_message_reroute_auto">교통상황이 변경되어 경로를 재탐색합니다.</string>
+    <string name="toast_message_location_deviated">경로를 이탈하여 재탐색 합니다.</string>
+    <string name="toast_message_location_did_not_enter">경로에 진입하지 못하여 재탐색 합니다.</string>
+
+    <string name="dialog_navigation_init_fail_title">네비게이션 초기화 실패</string>
+    <string name="dialog_navigation_init_fail_message">구글플레이 서비스가 업데이트가 필요합니다. 업데이트 후 다시 실행해
+        주세요
+    </string>
+    <string name="dialog_navigation_init_fail_button">앱 종료</string>
+
+    <!--route-->
+    <string name="toast_message_gps_signal_not_found">gps가 잡히지 않았습니다. 잠시후 다시 시도해 주세요.</string>
+    <string name="route_type_view_toggle_select_route">경로선택 하기</string>
+    <string name="route_type_view_toggle_show_tbt">상세경로 보기</string>
+
+    <!--search-->
+    <string name="toast_message_save_recent_fail">데이터 저장에 실패 했습니다.</string>
+    <string name="toast_message_search_fail">목적지 검색에 실패 하였습니다.</string>
+
+    <!--navigation-->
+    <string name="toast_message_navigation_start_fail">경로안내 시작에 실패했습니다.</string>
+
+    <!--rgtype string-->
+    <string name="rgtype_go_strait">직진</string>
+    <string name="rgtype_direction_1">1시방향</string>
+    <string name="rgtype_direction_2">2시방향</string>
+    <string name="rgtype_turn_right">우회전</string>
+    <string name="rgtype_direction_4">4시방향</string>
+    <string name="rgtype_direction_5">5시방향</string>
+    <string name="rgtype_direction_7">7시방향</string>
+    <string name="rgtype_direction_8">8시방향</string>
+    <string name="rgtype_turn_left">좌회전</string>
+    <string name="rgtype_direction_10">10시방향</string>
+    <string name="rgtype_direction_11">11시방향</string>
+    <string name="rgtype_go_overpass">직진방향에 고가도로 진입</string>
+    <string name="rgtype_right_overpass">오른쪽방향에 고가도로 진입</string>
+    <string name="rgtype_left_overpass">왼쪽방향에 고가도로 진입</string>
+    <string name="rgtype_go_underpass">지하차도 진입</string>
+    <string name="rgtype_overpass_right_side">오른쪽방향에 고가도로 옆도로</string>
+    <string name="rgtype_overpass_left_side">왼쪽방향에 고가도로 옆도로</string>
+    <string name="rgtype_underpass_right_side">오른쪽방향에 지하차도 옆 도로</string>
+    <string name="rgtype_underpass_left_side">왼쪽방향에 지하차도 옆 도로</string>
+    <string name="rgtype_right_side">오른쪽 도로</string>
+    <string name="rgtype_left_side">왼쪽 도로</string>
+    <string name="rgtype_go_in_highway">직진방향에 고속도로 입구</string>
+    <string name="rgtype_right_in_highway">오른쪽에 고속도로 입구</string>
+    <string name="rgtype_left_in_highway">왼쪽에 고속도로 입구</string>
+    <string name="rgtype_go_in_expressway">직진방향에 도시고속도로 입구</string>
+    <string name="rgtype_right_in_expressway">오른쪽에 도시고속도로 입구</string>
+    <string name="rgtype_left_in_expressway">왼쪽에 도시고속도로 입구</string>
+    <string name="rgtype_right_out_highway">오른쪽에 고속도로 출구</string>
+    <string name="rgtype_left_out_highway">왼쪽에 고속도로 출구</string>
+    <string name="rgtype_junction_go_strait">분기점에서 직진</string>
+    <string name="rgtype_junction_right">분기점에서 오른쪽</string>
+    <string name="rgtype_junction_left">분기점에서 왼쪽</string>
+    <string name="rgtype_u_turn">유턴</string>
+    <string name="rgtype_no_sound_go_strait">무발성 직진</string>
+    <string name="rgtype_tunnel">터널</string>
+    <string name="rgtype_rotary_1">로터리에서 1시 방향</string>
+    <string name="rgtype_rotary_2">로터리에서 2시 방향</string>
+    <string name="rgtype_rotary_3">로터리에서 3시 방향</string>
+    <string name="rgtype_rotary_4">로터리에서 4시 방향</string>
+    <string name="rgtype_rotary_5">로터리에서 5시 방향</string>
+    <string name="rgtype_rotary_6">로터리에서 6시 방향</string>
+    <string name="rgtype_rotary_7">로터리에서 7시 방향</string>
+    <string name="rgtype_rotary_8">로터리에서 8시 방향</string>
+    <string name="rgtype_rotary_9">로터리에서 9시 방향</string>
+    <string name="rgtype_rotary_10">로터리에서 10시 방향</string>
+    <string name="rgtype_rotary_11">로터리에서 11시 방향</string>
+    <string name="rgtype_rotary_12">로터리에서 12시 방향</string>
+    <string name="rgtype_starting_point">출발지</string>
+    <string name="rgtype_waypoint">경유지</string>
+    <string name="rgtype_destination">목적지</string>
+</resources>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <import type="com.kt.rozenavi.utils.NaviUtils"/>
+        <variable name="remainGuidanceData"
+                  type="com.kt.rozenavi.ui.main.navigation.data.RemainGuidanceData"/>
+    </data>
+    <LinearLayout
+        android:id="@+id/remain_data_layout"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="#ffffff"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/remain_time_textview"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@{remainGuidanceData.displayRemainTime ? NaviUtils.convertRemainTime(remainGuidanceData.lastRemainTime) : NaviUtils.convertArrivedTime(remainGuidanceData.lastRemainTime)}"
+            android:textColor="@color/text"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/remain_distance_textview"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@{NaviUtils.convertDistanceUnit(remainGuidanceData.lastRemainDistance)}"
+            android:textColor="@color/text"
+            android:textSize="18sp"/>
+    </LinearLayout>
+</layout>

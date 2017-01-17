@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/tbt_guidance_view"
+    android:background="@color/colorPrimary">
+
+    <LinearLayout
+        android:id="@+id/lane_image_linearlayout"
+        android:layout_width="wrap_content"
+        android:layout_height="38dp"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingBottom="4dp"
+    />
+
+    <TextView
+        android:id="@+id/lane_remain_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="10dp"
+        android:layout_toRightOf="@+id/lane_image_linearlayout"
+        android:textColor="#ffffff"
+        android:textSize="16sp"
+        android:textStyle="bold"
+    />
+</RelativeLayout>

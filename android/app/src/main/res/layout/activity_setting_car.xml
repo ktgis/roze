@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context="com.kt.rozenavi.ui.setting.SettingCarActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        style="@style/Widget.AppCompat.Button"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:background="@color/colorPrimaryDark"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:paddingBottom="5dp"
+        android:paddingStart="10dp"
+        android:paddingTop="5dp"
+        android:text="차종선택"
+        android:textColor="#ffffff"
+        android:textSize="20sp"/>
+
+    <RadioGroup
+        android:id="@+id/car_type_radiogroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical">
+        <RadioButton
+            android:id="@+id/car_type_unknown"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="10dp"
+            android:text="미정의(UNKNOWN)"
+            android:visibility="gone"/>
+        <RadioButton
+            android:id="@+id/car_type_motorcycle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="10dp"
+            android:text="이륜차(MOTORCYCLE)"/>
+        <RadioButton
+            android:id="@+id/car_type_car"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="10dp"
+            android:text="승용차, 소형 승합차, 소형 화물차(CAR)"/>
+        <RadioButton
+            android:id="@+id/car_type_mid_car"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="10dp"
+            android:text="중형 승합차, 중형 화물차(MID_CAR)"/>
+        <RadioButton
+            android:id="@+id/car_type_heavy_car"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="10dp"
+            android:text="대형 승합차, 대형 화물차(2축)(HEAVY_CAR)"/>
+        <RadioButton
+            android:id="@+id/car_type_truck"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="10dp"
+            android:text="대형 화물차(3축)(TRUCK)"/>
+        <RadioButton
+            android:id="@+id/car_type_specific_goods"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="10dp"
+            android:text="특수 화물차(4축 이상)(SPECIFIC_GOODS)"/>
+        <RadioButton
+            android:id="@+id/car_type_small_car"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="10dp"
+            android:text="경차(SMALL_CAR)"/>
+
+    </RadioGroup>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/colorPrimary"
+        android:paddingBottom="5dp"
+        android:paddingStart="10dp"
+        android:paddingTop="5dp"
+        android:text="하이패스 유무"
+        android:textColor="#ffffff"
+        android:textSize="20sp"/>
+
+    <RadioGroup
+        android:id="@+id/car_hipass_radiogroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/car_hipass_no"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingStart="10dp"
+            android:text="미사용"/>
+
+        <RadioButton
+            android:id="@+id/car_hipass_yes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingStart="10dp"
+            android:text="사용"/>
+    </RadioGroup>
+</LinearLayout>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<transitionSet xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="3000"
+    android:transitionOrdering="together">
+    <slide
+        android:duration="3000"
+        android:slideEdge="bottom">
+        <targets>
+            <target android:targetId="@id/recyclerView_locations" />
+        </targets>
+    </slide>
+</transitionSet>

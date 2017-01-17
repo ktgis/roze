@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~  Copyright (c) 2016 kt corp. All rights reserved.
+  ~
+  ~  This is a proprietary software of kt corp, and you may not use this file
+  ~  except in compliance with license agreement with kt corp. Any redistribution
+  ~  or use of this software, with or without modification shall be strictly
+  ~  prohibited without prior written approval of kt corp, and the copyright
+  ~   notice above does not evidence any actual or intended publication of such
+  ~  software.
+  ~
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context="com.kt.rozenavi.ui.setting.SettingCarActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        style="@style/Widget.AppCompat.Button"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        android:background="@color/colorPrimaryDark"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:paddingBottom="5dp"
+        android:paddingStart="10dp"
+        android:paddingTop="5dp"
+        android:text="음성안내선택"
+        android:textColor="#ffffff"
+        android:textSize="20sp"/>
+    <ScrollView android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+        <LinearLayout
+            android:id="@+id/sound_option_checkbox_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="30dp"
+            android:layout_marginStart="30dp"
+            android:orientation="vertical"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp">
+            <CheckBox
+                android:id="@+id/sound_option_fixed_speed_camera"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:button="@null"
+                android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+                android:paddingEnd="10dp"
+                android:paddingStart="10dp"
+                android:text="고정식 카메라"/>
+            <CheckBox
+                android:id="@+id/sound_option_movable_speed_camera"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:button="@null"
+                android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+                android:paddingEnd="10dp"
+                android:paddingStart="10dp"
+                android:text="이동식 카메라"/>
+            <CheckBox
+                android:id="@+id/sound_option_signal_violation_camera"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:button="@null"
+                android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+                android:paddingEnd="10dp"
+                android:paddingStart="10dp"
+                android:text="신호위반 카메라"/>
+            <CheckBox
+                android:id="@+id/sound_option_bus_camera"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:button="@null"
+                android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+                android:paddingEnd="10dp"
+                android:paddingStart="10dp"
+                android:text="버스전용 카메라"/>
+            <CheckBox
+                android:id="@+id/sound_option_traffic_camera"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:button="@null"
+                android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+                android:paddingEnd="10dp"
+                android:paddingStart="10dp"
+                android:text="교통정보 수집 카메라"/>
+            <CheckBox
+                android:id="@+id/sound_option_stop_camera"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:button="@null"
+                android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+                android:paddingEnd="10dp"
+                android:paddingStart="10dp"
+                android:text="주정차 단속 카메라"/>
+            <CheckBox
+                android:id="@+id/sound_option_overload_camera"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:button="@null"
+                android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+                android:paddingEnd="10dp"
+                android:paddingStart="10dp"
+                android:text="과적차량 단속 카메라"/>
+            <CheckBox
+                android:id="@+id/sound_option_interrupt_camera"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:button="@null"
+                android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+                android:paddingEnd="10dp"
+                android:paddingStart="10dp"
+                android:text="끼어들기 단속 카메라"/>
+            <CheckBox
+                android:id="@+id/sound_option_cctv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:button="@null"
+                android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+                android:paddingEnd="10dp"
+                android:paddingStart="10dp"
+                android:text="방범CCTV"/>
+            <CheckBox
+                android:id="@+id/sound_option_shoulder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:button="@null"
+                android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+                android:paddingEnd="10dp"
+                android:paddingStart="10dp"
+                android:text="갓길단속"/>
+            <CheckBox
+                android:id="@+id/sound_option_sharp_curve"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:button="@null"
+                android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+                android:paddingEnd="10dp"
+                android:paddingStart="10dp"
+                android:text="급회전 구간"/>
+            <CheckBox
+                android:id="@+id/sound_option_accident_black_spot"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:button="@null"
+                android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+                android:paddingEnd="10dp"
+                android:paddingStart="10dp"
+                android:text="사고다발 구간"/>
+            <CheckBox
+                android:id="@+id/sound_option_lane_decrease"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:button="@null"
+                android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+                android:paddingEnd="10dp"
+                android:paddingStart="10dp"
+                android:text="좁아지는 지역"/>
+            <CheckBox
+                android:id="@+id/sound_option_rock_slide"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:button="@null"
+                android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+                android:paddingEnd="10dp"
+                android:paddingStart="10dp"
+                android:text="낙석주의"/>
+            <CheckBox
+                android:id="@+id/sound_option_slippery_surface"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:button="@null"
+                android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+                android:paddingEnd="10dp"
+                android:paddingStart="10dp"
+                android:text="미끄럼주의"/>
+            <CheckBox
+                android:id="@+id/sound_option_speed_bump"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:button="@null"
+                android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+                android:paddingEnd="10dp"
+                android:paddingStart="10dp"
+                android:text="과속방지턱"/>
+            <CheckBox
+                android:id="@+id/sound_option_fog"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:button="@null"
+                android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+                android:paddingEnd="10dp"
+                android:paddingStart="10dp"
+                android:text="안개주의"/>
+            <CheckBox
+                android:id="@+id/sound_option_fall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:button="@null"
+                android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+                android:paddingEnd="10dp"
+                android:paddingStart="10dp"
+                android:text="추락주의"/>
+            <CheckBox
+                android:id="@+id/sound_option_railroad_crossing"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:button="@null"
+                android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+                android:paddingEnd="10dp"
+                android:paddingStart="10dp"
+                android:text="철길건널목"/>
+            <CheckBox
+                android:id="@+id/sound_option_scarp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:button="@null"
+                android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+                android:paddingEnd="10dp"
+                android:paddingStart="10dp"
+                android:text="급경사"/>
+            <CheckBox
+                android:id="@+id/sound_option_deer_crossing"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:button="@null"
+                android:drawableRight="?android:attr/listChoiceIndicatorMultiple"
+                android:paddingEnd="10dp"
+                android:paddingStart="10dp"
+                android:text="야생동물보호"/>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

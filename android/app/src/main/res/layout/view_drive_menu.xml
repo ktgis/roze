@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drive_menu_back"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/layout_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/text"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_save_gps"
+            style="@android:style/Widget.DeviceDefault.Button.Borderless"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/text"
+            android:drawableTop="@android:drawable/stat_sys_upload"
+            android:text="경로저장"
+            android:textColor="@color/common_plus_signin_btn_text_dark_disabled"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btn_rerouting"
+            style="@android:style/Widget.DeviceDefault.Button.Borderless"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/text"
+            android:drawableTop="@android:drawable/ic_popup_sync"
+            android:text="재탐색"
+            android:textColor="@color/common_plus_signin_btn_text_dark_disabled"
+            android:textSize="13sp" />
+
+        <Button
+            android:id="@+id/btn_stop_routing"
+            style="@android:style/Widget.DeviceDefault.Button.Borderless"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/text"
+            android:drawableTop="@android:drawable/ic_menu_rotate"
+            android:text="경로취소"
+            android:textColor="@color/common_plus_signin_btn_text_dark_disabled"
+            android:textSize="13sp" />
+    </LinearLayout>
+
+</RelativeLayout>

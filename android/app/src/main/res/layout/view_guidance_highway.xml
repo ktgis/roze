@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                             xmlns:app="http://schemas.android.com/apk/res-auto"
+                                             xmlns:tools="http://schemas.android.com/tools"
+                                             android:layout_width="match_parent"
+                                             android:layout_height="match_parent"
+>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:layout_marginTop="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/highway_tbt_1_layout"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/highway_tbt_1_direction_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#ffffff"
+                android:padding="5dp"
+                android:text="direction" />
+
+            <TextView
+                android:id="@+id/highway_tbt_1_distance_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#333333"
+                android:padding="5dp"
+                android:text="distance"
+                android:textColor="#ffffff" />
+            <LinearLayout
+                android:id="@+id/extra_highway_data_1"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#666666"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/highway_tbt_2_layout"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/highway_tbt_2_direction_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#ffffff"
+                android:padding="5dp"
+                android:text="direction" />
+
+            <TextView
+                android:id="@+id/highway_tbt_2_distance_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#333333"
+                android:padding="5dp"
+                android:text="distance"
+                android:textColor="#ffffff" />
+            <LinearLayout
+                android:id="@+id/extra_highway_data_2"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#666666"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/highway_tbt_3_layout"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/highway_tbt_3_direction_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#ffffff"
+                android:padding="5dp"
+                android:text="direction" />
+
+            <TextView
+                android:id="@+id/highway_tbt_3_distance_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#333333"
+                android:padding="5dp"
+                android:text="distance"
+                android:textColor="#ffffff" />
+            <LinearLayout
+                android:id="@+id/extra_highway_data_3"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#666666"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/hipass_lane_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:layout_marginBottom="50dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        >
+
+        <ImageView
+            android:id="@+id/hipass_lane_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_toLeftOf="@+id/hipass_lane_inform"
+            android:background="@drawable/lane_hipass"
+            />
+        <LinearLayout
+            android:id="@+id/hipass_lane_inform"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingBottom="4dp"
+            />
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>

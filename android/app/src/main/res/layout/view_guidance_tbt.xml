@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable name="tbtGuidanceData"
+                  type="com.kt.rozenavi.ui.main.navigation.data.TbtGuidanceData"/>
+    </data>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/first_tbt_imageView"
+            android:layout_width="55dp"
+            android:layout_height="75dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            app:imageResource="@{tbtGuidanceData.firstTurnResourceId}"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="bottom"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/first_tbt_remainView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="0 m"
+                    android:textColor="@color/bg"
+                    android:textSize="20sp"
+                    android:textStyle="normal|bold"
+                    app:spannableDistance="@{tbtGuidanceData.firstTurnDistance}"/>
+
+                <LinearLayout
+                    android:id="@+id/second_tbt_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/second_tbt_arrow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
+                        android:alpha="0.8"
+                        android:text=" > "
+                        android:textColor="@color/bg"
+                        android:textSize="30sp"/>
+
+                    <ImageView
+                        android:id="@+id/second_tbt_imageView"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:alpha="0.8"
+                        android:scaleType="fitEnd"
+                        app:imageResource="@{tbtGuidanceData.secondTurnResourceId}"
+                    />
+
+                    <TextView
+                        android:id="@+id/second_tbt_remainview"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:alpha="0.8"
+                        android:ems="6"
+                        android:gravity="bottom"
+                        android:paddingBottom="5dp"
+                        android:text="0 m"
+                        android:textColor="@color/bg"
+                        android:textSize="14sp"
+                        app:spannableDistance="@{tbtGuidanceData.secondTurnDistance}"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/direction_data_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="5dp"
+                android:text="@{tbtGuidanceData.directionText}"
+                android:textColor="#ffffff"
+                android:textSize="20sp"/>
+        </LinearLayout>
+    </LinearLayout>
+</layout>

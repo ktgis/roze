@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+    <LinearLayout
+        android:id="@+id/route_list_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+        android:orientation="vertical"
+    />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/route_tbt_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@+id/route_list_layout"
+        android:layout_alignTop="@+id/route_list_layout"
+        android:background="#ffffff"
+        android:minHeight="48dp"
+        android:orientation="vertical"
+        android:visibility="gone"
+    />
+</RelativeLayout>
