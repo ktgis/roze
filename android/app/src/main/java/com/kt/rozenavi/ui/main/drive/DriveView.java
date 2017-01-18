@@ -171,6 +171,10 @@ public class DriveView extends RelativeLayout
             viewportImageView.setImageResource(R.drawable.bt_headup_pin);
             MapController.getInstance().setHeadingMode(MapController.HEADING_BEARING);
         }
+        if (currentLocationBtn.getVisibility() == View.VISIBLE) {
+            currentLocationBtn.setVisibility(View.INVISIBLE);
+            handler.removeMessages(0);
+        }
     }
 
     /**

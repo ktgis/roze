@@ -243,10 +243,19 @@ public class MapController {
         this.currentHeading = heading;
 
         //현재 중심점 확인 pivot기준
-        Coord currentCoord = map.getCoordFromViewportPoint(currentPivot);
+        Coord currentCoord = getCurrentLocation();
+        if (currentCoord == null) {
+            currentCoord = map.getCoordFromViewportPoint(currentPivot);
+        }
+
         //마커와 지도의 중심점을 일단 동일하게 마지막 bearing값으로 셋팅
         float markerBearing = NavigationManager.getInstance().getLastBearing();
         float mapBearing = NavigationManager.getInstance().getLastBearing();
+
+        if(NavigationManager.getInstance().getLastRouteLocation() != null) {
+            markerBearing = (float) NavigationManager.getInstance().getLastRouteLocation().angle;
+            mapBearing = (float) NavigationManager.getInstance().getLastRouteLocation().angle;
+        }
 
         ViewpointChange viewpointChange;
         if (currentHeading == HEADING_NORTH) {  //정북방향
@@ -262,7 +271,6 @@ public class MapController {
         } else if (currentHeading == HEADING_BEARING) { //회전방향
             currentPivot = headingPivot;
             //나침반 모드이므로 marker bearing값을 0으로 초기화
-            markerBearing = 0;
             viewpointChange = ViewpointChange.builder()
                     .panTo(currentCoord)
                     .pivot(currentPivot)
@@ -445,10 +453,6 @@ public class MapController {
             carMarker.setPosition(coord);
             carMarker.bringToFront();
         }
-        if (currentHeading == HEADING_BEARING) {
-            carMarker.setRotation((float) currentRotation);
-        }
-
         //routepath가 있고 맵매칭이 되고 있는상황일때
         if (pathList.size() > 0 && isEnterInRoutePath) {
             //좌표에 해당하는 routepath까지 통과정보로 설정
@@ -774,11 +778,9 @@ public class MapController {
         //설정하지 않는경우 -1로 입력받음
         if (rotation >= 0) {
             //현재 헤딩 타입에 따라서 지도회전 / 내차 마커 회전을 설정
-            if (currentHeading == HEADING_NORTH) {
+            builder.rotateTo(currentHeading == HEADING_BEARING ? rotation : 0);
+            if(carMarker != null) {
                 carMarker.setRotation((float) rotation);
-                builder.rotateTo(0);
-            } else if (currentHeading == HEADING_BEARING) {
-                builder.rotateTo(rotation);
             }
         }
         //줌레벨값 있는경우 설정
@@ -802,17 +804,32 @@ public class MapController {
 
     /**
      * 내위치로 이동
-     * 마지막 gps 위치정보를 이용하며 네비게이션 모드일경우
-     * 맵매칭 좌표를 확인하여 해당 좌표로 이동
      *
      * @return 내위치 이동 동작여부
      */
     public boolean showCurrentLocation() {
+        UTMK coord = getCurrentLocation();
+        if (coord == null) {
+            return false;
+        }
+        //내위치 이동
+        changeViewpoint(coord, currentTilt, -1, currentZoom, currentPivot, 0, null);
+        return true;
+    }
+
+    /**
+     * 현재 위치 반환
+     * 마지막 gps 위치정보를 이용하며 네비게이션 모드일경우
+     * 맵매칭 좌표를 확인하여 해당 좌표로 이동
+     *
+     * @return 현재 위치 좌표
+     */
+    private UTMK getCurrentLocation() {
         //마지막 gps 수신위치를 가져옴
         Location lastGpsLocation = NavigationManager.getInstance().getLastGpsLocation();
         //수신된 gps 가 없는경우는 종료
         if (lastGpsLocation == null) {
-            return false;
+            return null;
         }
 
         //wgs84좌표를 지도에서 사용할 수 있는 utmk좌표로 변환
@@ -828,9 +845,7 @@ public class MapController {
                 coord = routeLocation.location;
             }
         }
-        //내위치 이동
-        changeViewpoint(coord, currentTilt, currentRotation, currentZoom, currentPivot, 0, null);
-        return true;
+        return coord;
     }
 
     void setInitLocation(double lat, double lon) {
