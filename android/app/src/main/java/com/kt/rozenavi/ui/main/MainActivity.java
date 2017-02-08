@@ -188,8 +188,8 @@ public class MainActivity extends AppCompatActivity
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         //지도 및 UI 제어 싱글턴 클래스 destroy
-        MapController.getInstance().destroy();
         UIController.getInstance().destroy();
+        MapController.getInstance().destroy();
 
         //최종 좌표 저장
         Location lastLocation = NavigationManager.getInstance().getLastGpsLocation();

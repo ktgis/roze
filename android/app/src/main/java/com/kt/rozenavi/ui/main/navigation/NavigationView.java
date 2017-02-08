@@ -31,8 +31,8 @@ import com.kt.roze.RozeError;
 import com.kt.roze.RozeOptions;
 import com.kt.roze.SoundManager;
 import com.kt.roze.data.model.Accident;
+import com.kt.roze.data.model.EnergyPrice;
 import com.kt.roze.data.model.Lane;
-import com.kt.roze.data.model.OilPrice;
 import com.kt.roze.data.model.Route;
 import com.kt.roze.guidance.RouteGuidanceListener;
 import com.kt.roze.guidance.model.HighwayGuidance;
@@ -103,7 +103,8 @@ public class NavigationView extends RelativeLayout
     @BindView(R.id.oilprice_textview)
     protected TextView oilpriceTextView;
 
-    private List<OilPrice> oilPriceList;
+
+    private List<EnergyPrice> mEnergyPriceList;
     private List<Marker> oilPriceMarkerList = new ArrayList<>();
     private List<Marker> accidentMarkerList = new ArrayList<>();
     private Marker lowPriceOilMarker;
@@ -325,32 +326,53 @@ public class NavigationView extends RelativeLayout
 
     /**
      * 최저가 주유소 마커 생성
-     * @param oilPriceList 최저가 주유소 정보 리스트
+     *
+     * @param energyPriceList 최저가 주유소 정보 리스트
      */
-    private void createOilMarker(List<OilPrice> oilPriceList) {
-        if (oilPriceList == null || oilPriceList.isEmpty()) {
+    private void createOilMarker(List<EnergyPrice> energyPriceList) {
+        if (energyPriceList == null || energyPriceList.isEmpty()) {
             return;
         }
-        this.oilPriceList = oilPriceList;
+        this.mEnergyPriceList = energyPriceList;
         Marker oilMarker;
-        for (OilPrice oilPrice : oilPriceList) {
+        for (EnergyPrice energyPrice : energyPriceList) {
             oilMarker = new Marker();
-            oilMarker.setPosition(oilPrice.coord);
+            oilMarker.setPosition(energyPrice.coord);
             oilMarker.setAnchor(new Point(1.0, 1.0));
-            int resId = GasStationResourceManager.getPoiGasResourceID((short) oilPrice.brand);
+            int resId = GasStationResourceManager.getPoiGasResourceID((short) energyPrice.brand);
             if (resId > 0) {
                 oilMarker.setIcon(ResourceDescriptorFactory.fromResource(resId));
                 oilMarker.setIconSize(new Point(30, 38));
             }
-            oilMarker.setCaption("G:" + oilPrice.gasolinePrice + ",D:" + oilPrice.dieselPrice
-                    + ",L:" + oilPrice.lpgPrice);
+            oilMarker.setCaption(getEnergyPrice(energyPrice));
             oilPriceMarkerList.add(oilMarker);
             MapController.getInstance().addMarker(oilMarker);
         }
     }
 
+    private String getEnergyPrice(EnergyPrice energyPrice) {
+        int gasolinePrice = 0;
+        int diselPrice = 0;
+        int lpgPrice = 0;
+        for (int i = 0, size = energyPrice.energyTypes.size(); i < size; i++) {
+            switch (energyPrice.energyTypes.get(i)) {
+                case EnergyPrice.EnergyType.GASOLINE:
+                    gasolinePrice = energyPrice.energyPrices.get(i);
+                    break;
+                case EnergyPrice.EnergyType.DIESEL:
+                    diselPrice = energyPrice.energyPrices.get(i);
+                    break;
+                case EnergyPrice.EnergyType.LPG:
+                    lpgPrice = energyPrice.energyPrices.get(i);
+                    break;
+            }
+        }
+        return "G:" + gasolinePrice + ",D:" + diselPrice + ",L:" + lpgPrice;
+    }
+
     /**
      * 유고 정보 마커 생성
+     *
      * @param accidentList 유고 정보 리스트
      */
     private void createAccidentMarker(List<Accident> accidentList) {
@@ -538,12 +560,12 @@ public class NavigationView extends RelativeLayout
             super.onLowestGasStationChangedEvent(isShow, list);
             //최저가 주유소 표출 및 해제
             if (isShow) {
-                OilPrice lowPrice = list.get(0).price;
+                EnergyPrice lowPrice = list.get(0).price;
                 oilpriceTextView.setText(
                         "최저가 주유소까지 " + NaviUtils.convertDistanceUnit(
                                 list.get(0).getRemainDistance()) + "남았습니다.");
-                for (int i = 0, size = oilPriceList.size(); i < size; i++) {
-                    if (oilPriceList.get(i).id == lowPrice.id) {
+                for (int i = 0, size = mEnergyPriceList.size(); i < size; i++) {
+                    if (mEnergyPriceList.get(i).id == lowPrice.id) {
                         lowPriceOilMarker = oilPriceMarkerList.get(i);
                         lowPriceOilMarker.setIconSize(new Point(44, 57));
                         lowPriceOilMarker.bringToFront();
@@ -603,6 +625,15 @@ public class NavigationView extends RelativeLayout
     @Override
     public void onSoundStart(SoundManager soundManager, Sound sound) {
         soundManager.play(sound);
+    }
+
+    @Override
+    public void onExceedSoundEvent(SoundManager soundManager, Sound sound) {
+        if (sound == null) {
+            soundManager.stopExceedSound(sound);
+        } else {
+            soundManager.playExceedSound(sound);
+        }
     }
 
 }

@@ -20,9 +20,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.kt.roze.data.model.OilPrice;
 import com.kt.roze.guidance.model.BaseHighway;
 import com.kt.roze.guidance.model.HighwayGuidance;
+import com.kt.roze.guidance.model.SAGasStation;
 import com.kt.roze.guidance.model.SAGuidance;
 import com.kt.roze.guidance.model.TGGuidance;
 import com.kt.roze.resource.GasStationResourceManager;
@@ -197,45 +197,23 @@ public class HighWayView extends RelativeLayout {
         l.removeAllViews();
 
         SAGuidance sa = (SAGuidance) h;
-        byte oilCode = sa.getOilCode();
-        List<OilPrice> prices = sa.getGasInforms();
-        if (oilCode != GasStationResourceManager.GasStationBrandType.NONE) {
 
-            int resId = GasStationResourceManager.getSAGasResourceID(oilCode);
-            if (resId != GasStationResourceManager.RESOURCE_NOT_FOUND) {
-                TextView tx = new TextView(l.getContext());
-                tx.append("OIL ");
-                if (prices != null) {
-                    for (OilPrice p : prices) {
-                        if (p.brand == oilCode) {
-                            tx.append(String.format("\n%d원", p.gasolinePrice));
-                            break;
-                        }
-
-                    }
-                }
-                l.addView(tx);
-                l.addView(getSaItemView(l.getContext(), resId));
-            }
+        List<SAGasStation> gasStations = sa.getGasInforms();
+        if(gasStations == null || gasStations.isEmpty()){
+            l.setVisibility(View.GONE);
+            return;
         }
-        byte gasCode = sa.getGasCode();
-        if (gasCode != GasStationResourceManager.GasStationBrandType.NONE) {
 
-            int resId = GasStationResourceManager.getSAGasResourceID(gasCode);
+        int resId, brand;
+        for(SAGasStation g : gasStations){
+            resId = GasStationResourceManager.getSAGasResourceID(g.getBrand(),g.getEnergySrc());
             if (resId != GasStationResourceManager.RESOURCE_NOT_FOUND) {
-                TextView tx = new TextView(l.getContext());
-                tx.append("LPG ");
-                if (prices != null) {
-                    for (OilPrice p : prices) {
-                        if (p.brand == gasCode) {
-                            tx.append(String.format("\n%d원", p.lpgPrice));
-                            break;
-                        }
-
-                    }
-                }
-                l.addView(tx);
                 l.addView(getSaItemView(l.getContext(), resId));
+                if (g.getPrice() != -1) {
+                    TextView tx = new TextView(l.getContext());
+                    tx.append(String.format("\n%d원", g.getPrice()));
+                    l.addView(tx);
+                }
             }
         }
         l.setVisibility(View.VISIBLE);

@@ -345,7 +345,7 @@ public class SpotGuidanceView extends RelativeLayout {
                     public void call(Long aLong) {
                         remainIntervalTime -= 1;
                         setIntervalRemainTimeText(remainIntervalTime);
-                        if (remainIntervalTime < 0) {
+                        if (remainIntervalTime <= 0) {
                             if (subscription != null) {
                                 subscription.unsubscribe();
                                 subscription = null;

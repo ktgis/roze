@@ -121,7 +121,7 @@ public class SettingCarActivity extends AppCompatActivity
      *
      * @param id 버튼 index
      */
-    private void selectCarHighpass(int id) {
+    private void selectCarHipass(int id) {
         int index = carHipassRadioGroup.indexOfChild(carHipassRadioGroup.findViewById(id));
         boolean isHipass = (index == 1);
         PreferenceUtils.putBoolean(this, PreferenceUtils.KEY_CAR_HIPASS, isHipass);
@@ -136,7 +136,7 @@ public class SettingCarActivity extends AppCompatActivity
         if (id == R.id.car_type_radiogroup) {
             selectCarType(i);
         } else if (id == R.id.car_hipass_radiogroup) {
-            selectCarHighpass(i);
+            selectCarHipass(i);
         }
     }
     //--RadioGroup.OnCheckedChangeListener
