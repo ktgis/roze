@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <FrameLayout
         android:id="@+id/gmap"
@@ -11,12 +11,19 @@
         android:layout_height="match_parent"
         android:background="@color/bg"
         android:visibility="invisible">
+
         <fragment
             android:id="@+id/gmapfragment"
             class="com.kt.maps.GMapFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:maxZoom="12.0"/>
+            app:centerX="958386"
+            app:centerY="1941448"
+            app:maxZoom="12.0"
+            app:minZoom="0"
+            app:rotation="0"
+            app:tilt="0"
+            app:zoom="11.0" />
     </FrameLayout>
 
     <android.support.v7.widget.Toolbar
@@ -40,23 +47,23 @@
             android:textAlignment="textStart"
             android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Title"
             android:textColor="@color/common_google_signin_btn_text_light_disabled"
-            android:textSize="18sp"/>
+            android:textSize="18sp" />
     </android.support.v7.widget.Toolbar>
 
     <com.kt.rozenavi.ui.main.drive.DriveView
         android:id="@+id/drive_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
     <!--<com.kt.rozenavi.ui.main.route.RouteView-->
-        <!--android:id="@+id/route_view"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"/>-->
+    <!--android:id="@+id/route_view"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"/>-->
 
     <!--<com.kt.rozenavi.ui.main.navigation.NavigationView-->
-        <!--android:id="@+id/navigation_view"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"/>-->
+    <!--android:id="@+id/navigation_view"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"/>-->
 
     <View
         android:layout_width="match_parent"

@@ -35,9 +35,7 @@ import com.kt.maps.GMap;
 import com.kt.maps.GMapFragment;
 import com.kt.maps.OnMapReadyListener;
 import com.kt.maps.model.Viewpoint;
-import com.kt.roze.BuildConfig;
 import com.kt.roze.NavigationManager;
-import com.kt.roze.location.LocationConfig;
 import com.kt.rozenavi.R;
 import com.kt.rozenavi.RozeNaviApplication;
 import com.kt.rozenavi.ui.search.SearchActivity;
@@ -247,14 +245,17 @@ public class MainActivity extends AppCompatActivity
      */
     private void initGMap() {
         //code 방식
-        //        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        //        //지도옵션을 통해 초기위치 지정
-        //        MapOptions options = new MapOptions();
-        //        options.viewpoint(new Viewpoint(MapUtils.BASE_COORD, 11, 0, 0));
-        //        //gmapfragment에 지도옵션 설정하여 생성
-        //        GMapFragment fragment = new GMapFragment(options);
-        //        fragmentTransaction.add(R.id.gmap, fragment);
-        //        fragmentTransaction.commit();
+//        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+//        //지도옵션을 통해 초기위치 지정
+//        MapOptions options = new MapOptions();
+//        options.viewpoint(new Viewpoint(MapUtils.DEFAULT_COORD, MapUtils.DEFAULT_ZOOM, MapUtils.DEFAULT_TILT,
+//                MapUtils.DEFAULT_ROTATION));
+//        options.maxZoom(MapUtils.DEFAULT_MAX_ZOOM);
+//        options.minZoom(MapUtils.DEFAULT_MIN_ZOOM);
+//        //gmapfragment에 지도옵션 설정하여 생성
+//        GMapFragment fragment = new GMapFragment(options);
+//        fragmentTransaction.add(R.id.gmap, fragment);
+//        fragmentTransaction.commit();
 
         //layout xml 방식
         GMapFragment fragment =

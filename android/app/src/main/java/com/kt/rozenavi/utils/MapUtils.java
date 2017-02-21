@@ -23,6 +23,30 @@ import com.kt.geom.model.UTMK;
  */
 public class MapUtils {
     /**
+     * 지도 초기화 기본 좌표
+     */
+    public static final UTMK DEFAULT_COORD = new UTMK(958386, 1941448);
+    /**
+     * 지도 초기화 기본 줌 레벨
+     */
+    public static final float DEFAULT_ZOOM = 11.0f;
+    /**
+     * 지도 초기화 기본 기울기
+     */
+    public static final float DEFAULT_TILT = 0.0f;
+    /**
+     * 지도 초기화 기본 회전
+     */
+    public static final float DEFAULT_ROTATION = 0.0f;
+    /**
+     * 지도 초기화 최대 줌레벨
+     */
+    public static final float DEFAULT_MAX_ZOOM = 12.0f;
+    /**
+     * 지도 초기화 최소 줌레벨
+     */
+    public static final float DEFAULT_MIN_ZOOM = 0.0f;
+    /**
      * 지도 경로 표시 path객체 width 보정용 상수
      */
     public static final float ROUTE_PATH_WIDTH_IN_DP = 9;
