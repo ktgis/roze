@@ -139,6 +139,9 @@
     <string name="dialog_navigation_init_fail_message">구글플레이 서비스가 업데이트가 필요합니다. 업데이트 후 다시 실행해
         주세요
     </string>
+    <string name="dialog_navigation_init_fail_api_key_message">인증키 오류가 발생했습니다. 등록한 키가 올바른지 확인 후
+        다시 실행해 주세요
+    </string>
     <string name="dialog_navigation_init_fail_button">앱 종료</string>
 
     <!--route-->

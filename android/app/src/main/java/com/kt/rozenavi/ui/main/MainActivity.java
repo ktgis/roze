@@ -36,6 +36,7 @@ import com.kt.maps.GMapFragment;
 import com.kt.maps.OnMapReadyListener;
 import com.kt.maps.model.Viewpoint;
 import com.kt.roze.NavigationManager;
+import com.kt.roze.RozeResultCode;
 import com.kt.rozenavi.R;
 import com.kt.rozenavi.RozeNaviApplication;
 import com.kt.rozenavi.ui.search.SearchActivity;
@@ -116,8 +117,12 @@ public class MainActivity extends AppCompatActivity
 
         //구글플레이서비스를 활용하지 못하는 상황일때 정상적인 내비기능을 활용하지 못하여
         //구글플레이서비스를 업데이트 하거나 사용가능하도록 변경하도록 안내 팝업을 표시 후 앱을 종료시킴
-        if (!NavigationManager.getInstance().initApplicationContext(getApplicationContext())) {
-            showNaviInitFailDialog();
+
+        RozeResultCode initCode = NavigationManager.getInstance()
+                .initApplicationContext(getApplicationContext());
+        if (initCode != RozeResultCode.SUCCESS) {
+            //TODO 실패 내용에 맞는 Dialog 필요
+            showNaviInitFailDialog(initCode);
             return;
         }
         //gps 수신을 위해 내비게이션 시작
@@ -147,10 +152,17 @@ public class MainActivity extends AppCompatActivity
      * 구글플레이 서비스 오류로 초기화에 실패
      * 업데이트 안내팝업
      */
-    private void showNaviInitFailDialog() {
+    private void showNaviInitFailDialog(RozeResultCode errorCode) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.dialog_navigation_init_fail_title);
-        builder.setMessage(R.string.dialog_navigation_init_fail_message);
+        switch (errorCode) {
+            case API_KEY_ERROR:
+                builder.setMessage(R.string.dialog_navigation_init_fail_api_key_message);
+                break;
+            default:
+                builder.setMessage(R.string.dialog_navigation_init_fail_message);
+                break;
+        }
         builder.setNegativeButton(R.string.dialog_navigation_init_fail_button,
                 new DialogInterface.OnClickListener() {
                     @Override

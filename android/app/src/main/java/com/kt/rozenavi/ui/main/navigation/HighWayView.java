@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.kt.roze.data.model.EnergyPrice;
 import com.kt.roze.guidance.model.BaseHighway;
 import com.kt.roze.guidance.model.HighwayGuidance;
 import com.kt.roze.guidance.model.SAGasStation;
@@ -199,14 +200,15 @@ public class HighWayView extends RelativeLayout {
         SAGuidance sa = (SAGuidance) h;
 
         List<SAGasStation> gasStations = sa.getGasInforms();
-        if(gasStations == null || gasStations.isEmpty()){
+        if (gasStations == null || gasStations.isEmpty()) {
             l.setVisibility(View.GONE);
             return;
         }
 
-        int resId, brand;
-        for(SAGasStation g : gasStations){
-            resId = GasStationResourceManager.getSAGasResourceID(g.getBrand(),g.getEnergySrc());
+        int resId;
+        for (SAGasStation g : gasStations) {
+            resId = GasStationResourceManager.getSAGasResourceID(g.getBrand(),
+                    EnergyPrice.EnergyType.valueOf(g.getEnergySrc()));
             if (resId != GasStationResourceManager.RESOURCE_NOT_FOUND) {
                 l.addView(getSaItemView(l.getContext(), resId));
                 if (g.getPrice() != -1) {
@@ -327,10 +329,8 @@ public class HighWayView extends RelativeLayout {
         if (guidances != null && guidances.size() > 0 && firstHighwayDistance < 600) {
             HighwayGuidance firstGuidance = guidances.get(0);
             if (firstGuidance.getType() == BaseHighway.Type.TG) {
-                if (hipass_lane_layout.getVisibility() == View.GONE) {
-                    TGGuidance tg = (TGGuidance) firstGuidance;
-                    updateHipassLanes(tg);
-                }
+                TGGuidance tg = (TGGuidance) firstGuidance;
+                updateHipassLanes(tg);
             } else {
                 updateHipassLanes(null);
             }

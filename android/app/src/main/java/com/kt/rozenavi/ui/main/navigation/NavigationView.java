@@ -355,14 +355,16 @@ public class NavigationView extends RelativeLayout
         int diselPrice = 0;
         int lpgPrice = 0;
         for (int i = 0, size = energyPrice.energyTypes.size(); i < size; i++) {
-            switch (energyPrice.energyTypes.get(i)) {
-                case EnergyPrice.EnergyType.GASOLINE:
+            EnergyPrice.EnergyType type = energyPrice.energyTypes.get(i);
+
+            switch (type) {
+                case GASOLINE:
                     gasolinePrice = energyPrice.energyPrices.get(i);
                     break;
-                case EnergyPrice.EnergyType.DIESEL:
+                case DIESEL:
                     diselPrice = energyPrice.energyPrices.get(i);
                     break;
-                case EnergyPrice.EnergyType.LPG:
+                case LPG:
                     lpgPrice = energyPrice.energyPrices.get(i);
                     break;
             }
@@ -561,8 +563,10 @@ public class NavigationView extends RelativeLayout
             //최저가 주유소 표출 및 해제
             if (isShow) {
                 EnergyPrice lowPrice = list.get(0).price;
+                EnergyPrice.EnergyType energyType = RozeOptions.getInstance().getEnergyType();
+
                 oilpriceTextView.setText(
-                        "최저가 주유소까지 " + NaviUtils.convertDistanceUnit(
+                        energyType.name() + "최저가 주유소까지 " + NaviUtils.convertDistanceUnit(
                                 list.get(0).getRemainDistance()) + "남았습니다.");
                 for (int i = 0, size = mEnergyPriceList.size(); i < size; i++) {
                     if (mEnergyPriceList.get(i).id == lowPrice.id) {
@@ -586,8 +590,10 @@ public class NavigationView extends RelativeLayout
         public void onLowestGasStationDistanceChangedEvent(int distance) {
             super.onLowestGasStationDistanceChangedEvent(distance);
             //최저가 주유소 거리 갱신
+            EnergyPrice.EnergyType energyType = RozeOptions.getInstance().getEnergyType();
             oilpriceTextView.setText(
-                    "최저가 주유소까지 " + NaviUtils.convertDistanceUnit(distance) + "남았습니다.");
+                    energyType.name() + "최저가 주유소까지 " + NaviUtils.convertDistanceUnit(distance) +
+                            "남았습니다.");
         }
     };
 
