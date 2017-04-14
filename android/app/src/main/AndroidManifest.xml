@@ -29,6 +29,10 @@
         <meta-data
             android:name="OMSHomeDir"
             android:value="{EXTERNAL}/telos" />
+	    <!-- since : sdk 0.9.3
+	    <meta-data
+            android:name="RozeHomeDir"
+            android:value="{EXTERNAL}/navihome" />-->
         <meta-data
             android:name="com.kt.rozenavi.RozeNaviGlideModule"
             android:value="GlideModule"/>

@@ -15,6 +15,7 @@ package com.kt.rozenavi;
 import android.content.Context;
 import android.support.multidex.MultiDexApplication;
 
+import com.kt.roze.RozeOptions;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 
@@ -45,5 +46,10 @@ public class RozeNaviApplication extends MultiDexApplication {
         super.onCreate();
         //참조정보를 확인할 수 있는 refwatcher 생성
         refWatcher = LeakCanary.install(this);
+        //since : sdk 0.9.3
+        //RozeOption의 개인화 데이터 저장을 위해 초기 initialize 기능 추가
+        //AndroidManifest.xml에 meta-data로 RozeHomeDir 정보를 설정할 경우 initialize를 통해
+        //저장된 폴더에 데이터 save / load 진행
+        RozeOptions.initialize(this);
     }
 }

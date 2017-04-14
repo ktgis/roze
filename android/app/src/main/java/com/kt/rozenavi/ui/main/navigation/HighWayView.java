@@ -21,7 +21,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.kt.roze.data.model.EnergyPrice;
-import com.kt.roze.guidance.model.BaseHighway;
 import com.kt.roze.guidance.model.HighwayGuidance;
 import com.kt.roze.guidance.model.SAGasStation;
 import com.kt.roze.guidance.model.SAGuidance;
@@ -151,13 +150,15 @@ public class HighWayView extends RelativeLayout {
         StringBuilder builder = new StringBuilder();
 
         //Highway 요금 정보
-        if (h.getType() == BaseHighway.Type.TG) {
+		//since : sdk 0.9.3
+		// 고속도로 안내점 Type을 BaseHighway에서 HighwayGuidance로 이동 처리.
+        if (h.getType() == HighwayGuidance.Type.TG) {
             builder.append(h.getNodeName());
             TGGuidance TG = (TGGuidance) h;
             if (TG.getToll() != 0) {
                 builder.append("\n요금 : ").append(TG.getToll());
             }
-        } else if (h.getType() == BaseHighway.Type.RA) {
+        } else if (h.getType() == HighwayGuidance.Type.RA) {
             builder.append("졸음쉼터");
         } else {
             builder.append(h.getNodeName());
@@ -191,7 +192,7 @@ public class HighWayView extends RelativeLayout {
      * @param l 휴계소 View
      */
     private void setExtraData(HighwayGuidance h, LinearLayout l) {
-        if (h.getType() != BaseHighway.Type.SA) {
+        if (h.getType() != HighwayGuidance.Type.SA) {
             l.setVisibility(View.GONE);
             return;
         }
@@ -328,7 +329,7 @@ public class HighWayView extends RelativeLayout {
 
         if (guidances != null && guidances.size() > 0 && firstHighwayDistance < 600) {
             HighwayGuidance firstGuidance = guidances.get(0);
-            if (firstGuidance.getType() == BaseHighway.Type.TG) {
+            if (firstGuidance.getType() == HighwayGuidance.Type.TG) {
                 TGGuidance tg = (TGGuidance) firstGuidance;
                 updateHipassLanes(tg);
             } else {

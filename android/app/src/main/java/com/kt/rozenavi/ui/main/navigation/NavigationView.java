@@ -625,10 +625,15 @@ public class NavigationView extends RelativeLayout
     @Override
     public void onRerouteFailed(NavigationManager.RouteMode mode, RozeError error) {
         UIUtils.showToast(getContext(), R.string.toast_message_route_fail);
+		//since : sdk 0.9.3
+		//사용자 재탐색 / 자동 재탐색(주기적) 일 경우 실패 시 기존경로를 이용하여 주행하도록 변경.
+		if (mode.isReusePreviousRoute()) {
+            return;
+		}
         UIController.getInstance().setMode(UIController.MODE_DRIVE);
     }
 
-    @Override
+   @Override
     public void onSoundStart(SoundManager soundManager, Sound sound) {
         soundManager.play(sound);
     }
@@ -636,7 +641,9 @@ public class NavigationView extends RelativeLayout
     @Override
     public void onExceedSoundEvent(SoundManager soundManager, Sound sound) {
         if (sound == null) {
-            soundManager.stopExceedSound(sound);
+            //since : sdk 0.9.3
+            //반복음 사운드 재생종료 인터페이스 변경
+            soundManager.stopExceedSound();
         } else {
             soundManager.playExceedSound(sound);
         }
