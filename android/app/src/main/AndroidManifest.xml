@@ -79,6 +79,8 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
+        <!--since : sdk 0.9.5
+        Map sdk / Navi sdk 인증키 -->
         <meta-data
             android:name="giskey"
             android:value="전달받은 api key 입력" />
