@@ -134,6 +134,9 @@
     <string name="toast_message_reroute_auto">교통상황이 변경되어 경로를 재탐색합니다.</string>
     <string name="toast_message_location_deviated">경로를 이탈하여 재탐색 합니다.</string>
     <string name="toast_message_location_did_not_enter">경로에 진입하지 못하여 재탐색 합니다.</string>
+    <string name="toast_message_map_init_fail_result_empty">AndroidManifest.xml에 giskey를 입력했는지 확인해 주세요</string>
+    <string name="toast_message_map_init_fail_result_invalid">giskey형식이 올바르지 않습니다.전달받은 giskey를 정확하게 입력했는지 확인해 주세요</string>
+    <string name="toast_message_map_init_fail_result_fail">giskey가 맞지 않습니다. 전달받은 giskey를 정확하게 입력했는지 확인해 주세요</string>
 
     <string name="dialog_navigation_init_fail_title">네비게이션 초기화 실패</string>
     <string name="dialog_navigation_init_fail_message">구글플레이 서비스가 업데이트가 필요합니다. 업데이트 후 다시 실행해

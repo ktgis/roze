@@ -483,13 +483,13 @@ public class NavigationView extends RelativeLayout
     @Override
     public void onRouteDeviated(Location location) {
         UIUtils.showToast(getContext(), R.string.toast_message_location_deviated);
-        requestReRoute(location, NavigationManager.RouteMode.DID_NOT_ENTER_REROUTE);
+        requestReRoute(location, NavigationManager.RouteMode.DEVIATED_REROUTE);
     }
 
     @Override
     public void onRouteDidNotEnter(Location location) {
         UIUtils.showToast(getContext(), R.string.toast_message_location_did_not_enter);
-        requestReRoute(location, NavigationManager.RouteMode.DEVIATED_REROUTE);
+        requestReRoute(location, NavigationManager.RouteMode.DID_NOT_ENTER_REROUTE);
     }
 
     /**

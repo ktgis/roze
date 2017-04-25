@@ -80,8 +80,8 @@
             android:value="@integer/google_play_services_version" />
 
         <meta-data
-            android:name="rozekey"
-            android:value="asdlkfj897asdf897sda897" />
+            android:name="giskey"
+            android:value="전달받은 api key 입력" />
     </application>
 
 </manifest>
