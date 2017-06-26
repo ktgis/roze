@@ -112,6 +112,7 @@ public class NavigationView extends RelativeLayout
     private RouteSummary routeSummary;
     private int routeIndex;
 
+    private ZoomChanger zoomChanger;
     public NavigationView(Context context) {
         super(context);
         initView(context);
@@ -272,6 +273,7 @@ public class NavigationView extends RelativeLayout
      */
     public void updateTBTViews(List<TurnGuidance> guidances) {
         tbtGuidanceView.updateTBTViews(guidances);
+        zoomChanger.updateTbt(guidances);
     }
 
     /**
@@ -281,6 +283,7 @@ public class NavigationView extends RelativeLayout
      */
     public void updateTBTDistance(int distance) {
         tbtGuidanceView.updateTBTDistance(distance);
+        zoomChanger.checkZoomlevel(distance);
     }
 
     /**
@@ -322,6 +325,7 @@ public class NavigationView extends RelativeLayout
 
         routeSummary.setActiveRoute(routeIndex);
         NavigationManager.getInstance().startRouting(routeSummary, this);
+        zoomChanger = new ZoomChanger(routeSummary.getActiveRoute());
     }
 
     /**
@@ -610,6 +614,7 @@ public class NavigationView extends RelativeLayout
         routeSummary.setActiveRoute(routeIndex);
         Route route = routeSummary.routes.get(0);
         MapController.getInstance().drawRoute(route);
+        zoomChanger.setRoute(route);
 
         clearPoiMarker();
         //경로상 주유소 및 사고상황 표시

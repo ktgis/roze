@@ -19,7 +19,7 @@
             android:layout_height="match_parent"
             app:centerX="958386"
             app:centerY="1941448"
-            app:maxZoom="12.0"
+            app:maxZoom="13.0"
             app:minZoom="0"
             app:rotation="0"
             app:tilt="0"

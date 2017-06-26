@@ -792,6 +792,8 @@ public class MapController {
         //pivot정보가 있는경우 설정
         if (pivot != null) {
             builder.pivot(pivot);
+        } else {
+            builder.pivot(currentPivot);
         }
 
         //애니메이션 시간과 애니메이션 타입에 따라 화면이동
