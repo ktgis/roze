@@ -319,7 +319,7 @@ public class MapController {
         //routepath객체 생성
         RoutePath path;
         for (Route route : routeList) {
-            path = createRoutePath(route.routePath());
+            path = createSummaryRoutePath(route.routePath());
 
             //지도 및 리스트에 routepath 추가
             map.addOverlay(path);
@@ -361,6 +361,24 @@ public class MapController {
                 .hasPeriodicImage(true)
                 .periodicImage(ResourceDescriptorFactory.fromAsset("slash.png"))
                 //2017.07.07 add path pattern
+                .passedFillColor(Color.GRAY)
+                .fillColor(Color.GRAY));
+    }
+
+    /**
+     * 요약경로 용 routepath객체 생성
+     * 입력받은 path의 좌표정보를 이용하여 routepath를 생성
+     * 기본색상은 Color.GRAY로 설정
+     *
+     * @param pathPointList path좌표정보 리스트
+     * @return routepath 객체
+     */
+    private RoutePath createSummaryRoutePath(List<UTMK> pathPointList) {
+        return new RoutePath(new RoutePathOptions().addPoints(pathPointList)
+                .bufferWidth(map.getResolution() *
+                        MapUtils.ROUTE_PATH_WIDTH_IN_DP)
+                .strokeWidth(1)
+                .strokeColor(Color.DKGRAY)
                 .passedFillColor(Color.GRAY)
                 .fillColor(Color.GRAY));
     }
