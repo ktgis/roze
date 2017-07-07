@@ -356,6 +356,11 @@ public class MapController {
                         MapUtils.ROUTE_PATH_WIDTH_IN_DP)
                 .strokeWidth(1)
                 .strokeColor(Color.DKGRAY)
+                //2017.07.07 add path pattern
+                .period(100)
+                .hasPeriodicImage(true)
+                .periodicImage(ResourceDescriptorFactory.fromAsset("slash.png"))
+                //2017.07.07 add path pattern
                 .passedFillColor(Color.GRAY)
                 .fillColor(Color.GRAY));
     }
@@ -644,6 +649,11 @@ public class MapController {
         if (pathList != null && pathList.size() > 0) {
             for (RoutePath routePath : pathList) {
                 routePath.setBufferWidth(map.getResolution() * MapUtils.ROUTE_PATH_WIDTH_IN_DP);
+                //2017.07.07 add path pattern
+                if(routePath.getHasPeriodicImage()){
+                    routePath.setPeriod(getPeriodicDistance(viewpoint.zoom));
+                }
+                //2017.07.07 add path pattern
             }
         }
         currentZoom = viewpoint.zoom;
@@ -952,4 +962,18 @@ public class MapController {
     public void removeMarker(Marker marker) {
         map.removeOverlay(marker);
     }
+
+    //2017.07.07 add path pattern
+    /**
+     * periodic number
+     * 레벨에 따른 거리 periodic distance(M) return
+     */
+    private final static int MAX_ZOOM = 14;
+    private final static int DEFAULT_PERIOD_DISTANCE = 25;
+    private int getPeriodicDistance(float zoomlevel){
+        int zoom = MAX_ZOOM - Math.round(zoomlevel);
+        int fixedDistance = (int)Math.pow(2,zoom);
+        return fixedDistance * DEFAULT_PERIOD_DISTANCE;
+    }
+    //2017.07.07 add path pattern
 }
