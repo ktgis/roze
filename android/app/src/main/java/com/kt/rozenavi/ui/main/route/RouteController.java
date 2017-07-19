@@ -25,6 +25,7 @@ import com.kt.roze.routing.RoutePlan;
 import com.kt.roze.routing.RouteSummary;
 import com.kt.rozenavi.R;
 import com.kt.rozenavi.ui.main.UIController;
+import com.kt.rozenavi.ui.main.drive.DriveView;
 import com.kt.rozenavi.ui.main.route.data.LocationItem;
 import com.kt.rozenavi.ui.setting.SettingCarActivity;
 import com.kt.rozenavi.ui.setting.SettingRouteActivity;
@@ -203,9 +204,14 @@ class RouteController implements RouteManager.RouteManagerListener {
                 //하이패스 유무 설정
                 .hipass(isHipass)
                 //경로타입
-                .routeTypes(routeTypes)
-                //회전값
-                .bearing(NavigationManager.getInstance().getLastBearing());
+                .routeTypes(routeTypes);
+
+        //2017.07.19 각도정보 제외
+        //gps off상태일때는 bearing정보가 정확하지 않으므로 경로탐색에서 제외
+        if (DriveView.isGpsOn) {
+            //회전값
+            builder.bearing(NavigationManager.getInstance().getLastBearing());
+        }
 
         //정확도(accuracy)에 대한 측정값이 있으면 추가
         if (NavigationManager.getInstance().getLastGpsLocation().hasAccuracy()) {

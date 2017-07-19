@@ -32,6 +32,7 @@ import com.kt.roze.resource.RoadSignResourceManager;
 import com.kt.rozenavi.R;
 import com.kt.rozenavi.ui.main.MapController;
 import com.kt.rozenavi.ui.main.UIController;
+import com.kt.rozenavi.ui.main.drive.DriveView;
 import com.kt.rozenavi.utils.NaviUtils;
 
 import java.util.ArrayList;
@@ -149,8 +150,7 @@ public class SpotGuidanceView extends RelativeLayout {
 
             if (item != null) {
                 setSafetyImage(item);
-                if (item.safetySpot.getLimitSpeed() <
-                        UIController.getInstance().getDriveView().currentSpeed) {
+                if (item.safetySpot.getLimitSpeed() < DriveView.currentSpeed) {
                     startCameraWarningAnimation(item.safetySpot.getCoord());
                 } else {
                     stopCameraWarningAnimation();

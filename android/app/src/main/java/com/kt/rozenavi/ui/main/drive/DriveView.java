@@ -64,10 +64,7 @@ public class DriveView extends RelativeLayout
      * 차량 마커가 Route Path에 진입했는지 여부
      */
     private boolean isEnterInRoutePath = false;
-    /**
-     * Gps 정보가 실제 수신되었는지 여부
-     */
-    private boolean isGpsOn = false;
+
     /**
      * 정북방향 헤딩여부
      */
@@ -79,7 +76,11 @@ public class DriveView extends RelativeLayout
     /**
      * 현재 속도 정보
      */
-    public int currentSpeed;
+    public static int currentSpeed;
+    /**
+     * Gps 정보가 실제 수신되었는지 여부
+     */
+    public static boolean isGpsOn = false;
     /**
      * 타이머 대용 내부 핸들러
      * 지도 이동시 일정시간 뒤 내위치로 지도를 다시 복귀할 때 활용

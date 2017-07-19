@@ -114,8 +114,6 @@ public class MainActivity extends AppCompatActivity
 
         //UIController에 UI component 연결
         UIController.getInstance().bindMainActivity(this);
-        //안전운행모드로 설정
-        UIController.getInstance().setMode(UIController.MODE_DRIVE);
 
         //구글플레이서비스를 활용하지 못하는 상황일때 정상적인 내비기능을 활용하지 못하여
         //구글플레이서비스를 업데이트 하거나 사용가능하도록 변경하도록 안내 팝업을 표시 후 앱을 종료시킴
@@ -304,6 +302,10 @@ public class MainActivity extends AppCompatActivity
                         .setInitLocation(Double.parseDouble(lat), Double.parseDouble(lon));
             }
         }
+        //2017.07.19 앱 재시작시 오류
+        //안전운행모드로 설정
+        //명시적으로 지도 객체 설정이후 시점으로 변경
+        UIController.getInstance().setMode(UIController.MODE_DRIVE);
     }
 
     /**
