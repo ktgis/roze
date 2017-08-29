@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~  Copyright (c) 2017 kt corp. All rights reserved.
+  ~
+  ~  This is a proprietary software of kt corp, and you may not use this file
+  ~  except in compliance with license agreement with kt corp. Any redistribution
+  ~  or use of this software, with or without modification shall be strictly
+  ~  prohibited without prior written approval of kt corp, and the copyright
+  ~   notice above does not evidence any actual or intended publication of such
+  ~  software.
+  ~
+  -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="200dp"
+        android:background="#ffffff"
+        android:padding="25dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/waypoint_title_textview"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:paddingTop="10dp"
+            android:text="@string/waypoint_dialog_title"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            android:textStyle="normal|bold" />
+
+        <TextView
+            android:id="@+id/waypoint_message_textview"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:paddingTop="30dp"
+            android:text="@string/waypoint_dialog_content"
+            android:textAlignment="center"
+            android:textSize="15sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="#ffffff"
+            android:orientation="horizontal"
+            android:paddingLeft="150dp">
+
+            <TextView
+                android:id="@+id/waypoint_btn_Negative_textview"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="@string/waypoint_dialog_button_negative"
+                android:paddingTop="10dp"
+                android:textColor="#000000" />
+
+            <RelativeLayout
+                android:id="@+id/waypoint_btn_Positive"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1.5">
+
+                <TextView
+                    android:id="@+id/waypoint_btn_Positive_textview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/waypoint_dialog_button_positive"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="10dp"
+                    android:textColor="#000000" />
+
+                <TextView
+                    android:id="@+id/waypoint_btn_Positive_Count"
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:paddingLeft="11dp"
+                    android:paddingTop="10dp" />
+
+                <ImageView
+                    android:id="@+id/waypoint_btn_Positive_Progress"
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:src="@drawable/btn_progress_spin"/>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~  Copyright (c) 2017 kt corp. All rights reserved.
+  ~
+  ~  This is a proprietary software of kt corp, and you may not use this file
+  ~  except in compliance with license agreement with kt corp. Any redistribution
+  ~  or use of this software, with or without modification shall be strictly
+  ~  prohibited without prior written approval of kt corp, and the copyright
+  ~   notice above does not evidence any actual or intended publication of such
+  ~  software.
+  ~
+  -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/constraint"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.kt.rozenavi.ui.main.navigation.view.NavigationTbtView
+        android:id="@+id/tbt_guidance_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.kt.rozenavi.ui.main.navigation.view.NavigationHighWayView
+        android:id="@+id/highway_guidance_view"
+        android:layout_width="124dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:minHeight="100dp"
+        android:visibility="invisible" />
+
+    <com.kt.rozenavi.ui.main.navigation.view.NavigationLaneView
+        android:id="@+id/lane_guidance_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tbt_guidance_view"
+        android:layout_marginTop="4dp"
+        android:visibility="invisible" />
+
+    <com.kt.rozenavi.ui.main.navigation.view.NavigationHipassView
+        android:id="@+id/hipass_guidance_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tbt_guidance_view"
+        android:layout_marginTop="4dp"
+        android:visibility="invisible" />
+
+    <com.kt.rozenavi.ui.main.navigation.view.NavigationRoadView
+        android:id="@+id/roadview_guidance_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tbt_guidance_view"
+        android:layout_marginTop="4dp"
+        android:visibility="invisible" />
+
+    <com.kt.rozenavi.ui.main.navigation.view.NavigationSpotView
+        android:id="@+id/spot_guidance_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/speed_value_layout"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="30dp" />
+
+    <ImageView
+        android:id="@+id/compass_button"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_above="@+id/remain_guidance_view"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginStart="20dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/btn_compass_heading" />
+
+    <com.kt.rozenavi.ui.component.SpeedMeterView
+        android:id="@+id/speed_value_layout"
+        android:layout_width="60dp"
+        android:layout_height="27dp"
+        android:layout_above="@+id/compass_button"
+        android:layout_marginBottom="20dp"
+        android:layout_marginStart="20dp" />
+
+    <com.kt.rozenavi.ui.main.navigation.view.NavigationLowestGasView
+        android:id="@+id/lowest_gas_guidance_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/remain_guidance_view"
+        android:layout_marginBottom="4dp"
+        android:visibility="invisible" />
+
+    <FrameLayout
+        android:id="@+id/navigation_menu"
+        android:layout_width="65dp"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:background="#CC000000">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center"
+            android:src="@drawable/navigation_menu_icon" />
+    </FrameLayout>
+
+    <com.kt.rozenavi.ui.main.navigation.view.NavigationRemainView
+        android:id="@+id/remain_guidance_view"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/navigation_menu"
+        android:background="#CC000000" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/navigation_menu">
+
+        <com.kt.rozenavi.ui.main.navigation.view.NavigationMenuView
+            android:id="@+id/drive_menu_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+    </FrameLayout>
+
+
+</RelativeLayout>

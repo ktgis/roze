@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2016 kt corp. All rights reserved.
+  ~
+  ~  This is a proprietary software of kt corp, and you may not use this file
+  ~  except in compliance with license agreement with kt corp. Any redistribution
+  ~  or use of this software, with or without modification shall be strictly
+  ~  prohibited without prior written approval of kt corp, and the copyright
+  ~  notice above does not evidence any actual or intended publication of such
+  ~  software.
+  -->
+
+<resources>
+    <color name="colorPrimary">#0f9d58</color>
+    <color name="colorPrimaryDark">#0c7e46</color>
+    <color name="colorAccent">@color/almost_balck</color>
+    <color name="bg">#fafafa</color>
+    <color name="text">#646464</color>
+    <!--<color name="colorAccent">#FF4081</color>-->
+    <color name="route_plan_alpha_white">#aaffffff</color>
+    <color name="route_plan_light_grey">#cccccc</color>
+
+    <color name="route_guidance_dark_grey">#333333</color>
+    <color name="route_guidance_grey">#999999</color>
+
+
+    <drawable name="route_plan_route_row_selected_background">@color/colorPrimary</drawable>
+    <drawable name="route_plan_route_row_default_background">@android:color/white</drawable>
+
+    <!-- B2B UI Color Palette -->
+    <color name="almost_balck">#1E2025</color>
+    <color name="almost_balck_alpha_80">#CC1E2025</color>
+    <color name="almost_balck_alpha_60">#991e2025</color>
+    <color name="almost_balck_alpha_40">#661E2025</color>
+
+    <color name="cool_red">#DD1F26</color>
+    <color name="elephant_grey">#9B9B9B</color>
+
+    <color name="dawm_grey">#F4F4F4</color>
+    <color name="dawm_grey_alpha_80">#CCF4F4F4</color>
+
+    <color name="black">#000000</color>
+    <color name="grey">#DEDEDE</color>
+    <color name="white">#FFFFFF</color>
+    <color name="sea_blue">#10acff</color>
+    <!-- 투명 컬러 적용 -->
+    <color name="tbt_popup_alpha_black">#E61E2024</color>
+
+</resources>

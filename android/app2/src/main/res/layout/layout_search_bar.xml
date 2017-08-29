@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~  Copyright (c) 2017 kt corp. All rights reserved.
+  ~
+  ~  This is a proprietary software of kt corp, and you may not use this file
+  ~  except in compliance with license agreement with kt corp. Any redistribution
+  ~  or use of this software, with or without modification shall be strictly
+  ~  prohibited without prior written approval of kt corp, and the copyright
+  ~   notice above does not evidence any actual or intended publication of such
+  ~  software.
+  ~
+  -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="45dp"
+    android:background="@drawable/search_bar_background">
+
+    <RelativeLayout
+        android:id="@+id/toggle_container"
+        android:layout_width="60dp"
+        android:layout_height="match_parent"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/toggle_button"
+            android:layout_width="14dp"
+            android:layout_height="16dp"
+            android:scaleType="center"
+            android:src="@drawable/search_bar_drawer_icon" />
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/edit_search_keyword"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="55dp"
+        android:background="@null"
+        android:drawableEnd="@drawable/search_bar_search_icon"
+        android:ems="10"
+        android:hint="장소, 주소 검색"
+        android:imeOptions="actionSearch"
+        android:inputType="text"
+        android:textAlignment="textStart"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        android:textSize="18sp" />
+
+    <RelativeLayout
+        android:id="@+id/cancel_container"
+        android:layout_width="60dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:gravity="center"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/cancel_button"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/search_bar_cancel_icon" />
+    </RelativeLayout>
+
+</RelativeLayout>

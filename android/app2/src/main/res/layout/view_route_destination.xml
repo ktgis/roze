@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/route_summary_header"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:paddingBottom="5dp"
+    android:paddingTop="5dp">
+
+    <LinearLayout
+        android:id="@+id/route_destination_change_layout"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="19dp"
+            android:layout_height="17dp"
+            android:src="@drawable/route_destination_change_icon" />
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/route_destination_recyclerview"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
+
+    <LinearLayout
+        android:id="@+id/route_destination_add_layout"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:gravity="center_horizontal|bottom"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="23dp"
+            android:layout_height="33dp"
+            android:src="@drawable/route_destination_add_icon" />
+    </LinearLayout>
+</LinearLayout>

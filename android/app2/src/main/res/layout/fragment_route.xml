@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~  Copyright (c) 2017 kt corp. All rights reserved.
+  ~
+  ~  This is a proprietary software of kt corp, and you may not use this file
+  ~  except in compliance with license agreement with kt corp. Any redistribution
+  ~  or use of this software, with or without modification shall be strictly
+  ~  prohibited without prior written approval of kt corp, and the copyright
+  ~   notice above does not evidence any actual or intended publication of such
+  ~  software.
+  ~
+  -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.kt.rozenavi.ui.main.MainActivity">
+
+
+    <ImageView
+        android:id="@+id/cancel_button"
+        android:layout_width="37dp"
+        android:layout_height="37dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/btn_cancel" />
+
+    <FrameLayout
+        android:id="@+id/loading_layout"
+        android:layout_width="match_parent"
+        android:layout_height="345dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/black"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="15dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="14dp"
+            android:src="@drawable/route_loading_text_icon" />
+
+        <ImageView
+            android:id="@+id/loading_car_imageview"
+            android:layout_width="70dp"
+            android:layout_height="28dp"
+            android:layout_marginTop="9dp"
+            android:src="@drawable/loading_car_drawable"
+            android:visibility="gone" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="310dp"
+        android:layout_alignParentBottom="true">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/route_summary_background"
+                android:orientation="vertical">
+
+                <com.kt.rozenavi.ui.main.route.view.RouteDestinationView
+                    android:id="@+id/route_destination_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="100dp" />
+
+                <com.kt.rozenavi.ui.main.route.view.RouteTypeView
+                    android:id="@+id/route_type_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </ScrollView>
+
+        <LinearLayout
+            android:id="@+id/route_tbt_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/route_summary_background"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <com.kt.rozenavi.ui.main.route.view.RouteTbtView
+                android:id="@+id/route_tbt_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/route_button_background"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/route_back_button"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="15dp"
+            android:layout_weight="1"
+            android:background="@drawable/round_black_background"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="뒤로"
+                android:textColor="#ffffff"
+                android:textSize="22sp" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/route_start_button"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="15dp"
+            android:layout_weight="1"
+            android:background="@drawable/round_red_background"
+            android:orientation="horizontal">
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="출발"
+                android:textColor="#ffffff"
+                android:textSize="22sp" />
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:id="@+id/click_disable_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</RelativeLayout>

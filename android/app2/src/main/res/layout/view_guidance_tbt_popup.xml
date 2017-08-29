@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~  Copyright (c) 2017 kt corp. All rights reserved.
+  ~
+  ~  This is a proprietary software of kt corp, and you may not use this file
+  ~  except in compliance with license agreement with kt corp. Any redistribution
+  ~  or use of this software, with or without modification shall be strictly
+  ~  prohibited without prior written approval of kt corp, and the copyright
+  ~   notice above does not evidence any actual or intended publication of such
+  ~  software.
+  ~
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tbt_popup"
+    android:layout_width="wrap_content"
+    android:layout_height="76dp"
+    android:background="@drawable/round_corner"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/tbt_popup_imageView"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_margin="10dp" />
+
+    <TextView
+        android:id="@+id/tbt_popup_remainView"
+        android:layout_width="wrap_content"
+        android:layout_height="54dp"
+        android:layout_marginBottom="11dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="11dp"
+        android:gravity="start|center"
+        android:minWidth="88dp"
+        android:textColor="@color/white"
+        android:textSize="25sp"
+        android:textStyle="normal|bold"
+        tools:text="6.7km" />
+</LinearLayout>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~  Copyright (c) 2017 kt corp. All rights reserved.
+  ~
+  ~  This is a proprietary software of kt corp, and you may not use this file
+  ~  except in compliance with license agreement with kt corp. Any redistribution
+  ~  or use of this software, with or without modification shall be strictly
+  ~  prohibited without prior written approval of kt corp, and the copyright
+  ~   notice above does not evidence any actual or intended publication of such
+  ~  software.
+  ~
+  -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.kt.rozenavi.ui.main.MainActivity">
+
+    <include
+        android:id="@+id/search_button"
+        layout="@layout/layout_search_bar"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"/>
+
+    <ImageView
+        android:id="@+id/location_button"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="20dp"
+        android:scaleType="fitXY"
+        android:layout_marginStart="20dp"
+        android:src="@drawable/btn_current_location_on" />
+
+    <ImageView
+        android:id="@+id/compass_button"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_above="@id/location_button"
+        android:scaleType="fitXY"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginStart="20dp"
+        android:src="@drawable/btn_compass_heading" />
+
+    <com.kt.rozenavi.ui.component.SpeedMeterView
+        android:id="@+id/speed_value_layout"
+        android:layout_width="60dp"
+        android:layout_height="27dp"
+        android:layout_above="@id/compass_button"
+        android:layout_marginBottom="20dp"
+        android:layout_marginStart="20dp" />
+</RelativeLayout>

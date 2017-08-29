@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/gmap"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg"
+        android:visibility="invisible">
+
+        <fragment
+            android:id="@+id/gmapfragment"
+            class="com.kt.maps.GMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:maxZoom="13.0" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@id/base_fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </FrameLayout>
+
+    <!--<com.kt.rozenavi.ui.main.drive.DriveView-->
+        <!--android:id="@+id/drive_view"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent" />-->
+
+    <!--<com.kt.rozenavi.ui.main.route.RouteView-->
+    <!--android:id="@+id/route_view"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"/>-->
+
+    <!--<com.kt.rozenavi.ui.main.navigation.NavigationView-->
+    <!--android:id="@+id/navigation_view"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"/>-->
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_gravity="bottom"></View>
+</FrameLayout>
