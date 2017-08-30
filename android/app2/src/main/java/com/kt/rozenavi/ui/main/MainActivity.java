@@ -56,13 +56,6 @@ import com.squareup.leakcanary.RefWatcher;
 
 import butterknife.BindView;
 
-// TODO: 2017-08-24
-/*
- * 0. 현재 코드에서 중복 코드도 많고 하드코딩 된 상수 값도 많아서 전체적으로 정리가 필요
- * rozetest flavor를 기준으로 모든 화면이 변경되어서 기존에 사용하지 않는 코드를 삭제 후 정리 필요
- *
- */
-
 /**
  * 메인 액티비티
  * 지도 및 안전운행 뷰, 경로검색 뷰, 경로안내 뷰가 포함

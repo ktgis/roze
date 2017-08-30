@@ -18,13 +18,6 @@ import com.kt.maps.GMap;
 import com.kt.maps.model.Viewpoint;
 import com.kt.roze.location.model.GeoLocation;
 
-// TODO: 2017-08-24
-/*
-* viewmodel로 작업해서 mainactivity와 lifecycle을 동기화 했는데 다른 화면에서 attach가 되지 않은시점
-* 에서는 viewmodel을 받아올수가 없어서 viewmodel로 자동화 하지 않고 lifecycleobserver를 달아서
-* 별도로 동기화 해야 할지도 모르겠음
-*
- */
 public class MainActivityViewModel extends ViewModel {
 
     public MutableLiveData<ViewpointChangeEventData> viewpointEventData = new MutableLiveData<>();

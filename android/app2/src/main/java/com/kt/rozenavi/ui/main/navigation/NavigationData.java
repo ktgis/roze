@@ -38,12 +38,6 @@ import com.kt.roze.guidance.model.TurnGuidance;
 
 import java.util.List;
 
-// TODO: 2017-08-24
-/*
-* viewmodel 로 하려다가 navigation fragment 동작 방식이 좀 달라서 해당 방식을 쓰게 될경우
-* guidance 정보를 놓치는 경우가 발생하여 일단 lifecycle observer를 이용한 방식으로 변경
-* mainactivityviewmodel 을 이방식으로 변경해야 할지도
- */
 /**
  * 경로안내정보 유실을 막기 위한 Data 클래스
  */

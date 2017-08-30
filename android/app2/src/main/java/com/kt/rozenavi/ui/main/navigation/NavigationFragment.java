@@ -87,16 +87,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-// TODO: 2017-08-21
-/*
-* 1. 종료시 기능을 현재는 getActivity().onBackpressed로 처리하는데 별도의 메소드로 빼야 할듯
-* 2. reroute시 guidance표시 하는 view를 경로 시작 전으로 초기화 해야 하는데 현재는 별도의 초기화 메소드
-* 없이 setvisibility와 resetmarker 등으로 처리하는데 별도의 처리 메소드 필요할듯
-* 3. guidance 관련 뷰를 현재 인터페이스 없이 별도로 생성을 하는데 guidance view에서 gmap 컨트롤도 필요하고 해서
-* initmap, releasemap, resetmarker 등과 같은 메소드도 필요하고 해서 인터페이스를 추가하고 처리 해야 할듯
-* 관련 기능 자동으로 처리되게
-*
- */
 public class NavigationFragment extends BaseFragment implements NavigationManager.RouteListener,
         WeakReferenceHandler.OnMessageHandler, NavigationManager.RerouteListener,
         NavigationManager.SoundListener {

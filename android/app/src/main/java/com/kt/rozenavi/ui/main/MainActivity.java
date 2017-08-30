@@ -121,7 +121,6 @@ public class MainActivity extends AppCompatActivity
         RozeResultCode initCode = NavigationManager.getInstance()
                 .initApplicationContext(getApplicationContext());
         if (initCode != RozeResultCode.SUCCESS) {
-            //TODO 실패 내용에 맞는 Dialog 필요
             showNaviInitFailDialog(initCode);
             return;
         }

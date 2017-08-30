@@ -16,7 +16,6 @@ import lombok.Data;
 
 /**
  * App 재 실행 시에 유지되어야 하는 Option Setting Class
- * //TODO Preference or DB or Cloud 등 차후 적절한 형태 선택 필요. 현재 Json
  */
 @Data
 class AppOptionData {
