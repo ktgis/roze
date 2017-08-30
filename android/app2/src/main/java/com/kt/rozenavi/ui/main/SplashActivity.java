@@ -25,6 +25,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.PermissionChecker;
 import android.support.v7.app.AlertDialog;
 
+import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.ndk.CrashlyticsNdk;
 import com.kt.rozenavi.R;
 import com.kt.rozenavi.ui.main.alarm.NightAlarmManager;
 import com.kt.rozenavi.utils.WeakReferenceHandler;
@@ -33,6 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
+import io.fabric.sdk.android.Fabric;
 
 /**
  * 간단한 Splash 역할을 하는 Activity
@@ -53,11 +56,13 @@ public class SplashActivity extends Activity implements WeakReferenceHandler.OnM
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics(), new CrashlyticsNdk());
+
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
 
         init();
-        //모든 권한이 승인되어있을경우 1초정도 화면을 보여주고 메인화면으로 전환
+        //모든 권한이 승인되어있을경우 1.5초정도 화면을 보여주고 메인화면으로 전환
         if (checkPermissions()) {
            handler.sendEmptyMessageDelayed(0, 1500);
         }
