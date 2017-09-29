@@ -17,7 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.kt.roze.search.model.SearchPlaceData;
+import com.kt.place.model.poi.Poi;
 import com.kt.rozenavi.R;
 
 import java.util.List;
@@ -30,21 +30,21 @@ import butterknife.ButterKnife;
  * 목적지 항목을 표출 할 수 있도록 처리하며 클릭시 이벤트를 반환하는 리스너를
  * 설정할 수 있는 기능을 제공
  */
-class SearchRecyclerViewAdapter
+public class SearchRecyclerViewAdapter
         extends RecyclerView.Adapter<SearchRecyclerViewAdapter.LocationViewHolder>
-        implements RecyclerAdapterDataModel<SearchPlaceData> {
+        implements RecyclerAdapterDataModel<Poi> {
 
     /**
      * 검색 결과 장소 리스트
      */
-    private List<SearchPlaceData> searchPlaceDataList = null;
+    private List<Poi> searchPlaceDataList = null;
     /**
      * 클릭 리스너
      */
     private View.OnClickListener onClickListener = null;
 
-    SearchRecyclerViewAdapter(
-            List<SearchPlaceData> searchPlaceDataList, View.OnClickListener listener) {
+    public SearchRecyclerViewAdapter(
+            List<Poi> searchPlaceDataList, View.OnClickListener listener) {
         this.searchPlaceDataList = searchPlaceDataList;
         this.onClickListener = listener;
     }
@@ -52,16 +52,16 @@ class SearchRecyclerViewAdapter
     @Override
     public LocationViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.adapter_search_row, parent, false);
+                .inflate(R.layout.view_search_row, parent, false);
         itemView.setOnClickListener(onClickListener);
         return new LocationViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(LocationViewHolder holder, int position) {
-        SearchPlaceData placeData = searchPlaceDataList.get(position);
-        holder.name.setText(placeData.name);
-        holder.address.setText(placeData.address);
+        Poi placeData = searchPlaceDataList.get(position);
+        holder.name.setText(placeData.getPoiName());
+        holder.address.setText(placeData.getNewAddress());
     }
 
     @Override
@@ -70,17 +70,17 @@ class SearchRecyclerViewAdapter
     }
 
     @Override
-    public void add(SearchPlaceData item) {
-        if (item == null) {
+    public void add(Poi poi) {
+        if (poi == null) {
             return;
         }
 
-        searchPlaceDataList.add(item);
+        searchPlaceDataList.add(poi);
         notifyDataSetChanged();
     }
 
     @Override
-    public SearchPlaceData getItem(int index) {
+    public Poi getItem(int index) {
         return searchPlaceDataList.get(index);
     }
 
@@ -93,8 +93,10 @@ class SearchRecyclerViewAdapter
      * 스크롤 이용한 추가 검색 중 신규 명칭으로 검색을 눌렀을 때, 기존 검색 결과 데이터 초기화
      */
     public void clearData() {
-        searchPlaceDataList.clear();
-        notifyDataSetChanged();
+        if(searchPlaceDataList != null) {
+            searchPlaceDataList.clear();
+            notifyDataSetChanged();
+        }
     }
 
     class LocationViewHolder extends RecyclerView.ViewHolder {

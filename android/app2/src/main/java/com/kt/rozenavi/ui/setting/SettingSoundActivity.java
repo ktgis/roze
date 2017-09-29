@@ -17,8 +17,6 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.widget.RadioGroup;
 
 import com.kt.roze.RozeOptions;
@@ -32,7 +30,7 @@ import com.kt.rozenavi.utils.UIUtils;
  * 경로안내시 음성안내 설정화면
  * 음성안내 설정 후 경로안내시 설정된 정보를 이용하여 음성안내
  */
-public class SettingSoundActivity extends SaveSettingActivity {
+public class SettingSoundActivity extends BaseSettingActivity {
     private ActivitySettingSoundBinding binding;
 
     @Override
@@ -54,57 +52,71 @@ public class SettingSoundActivity extends SaveSettingActivity {
     }
 
     private void init() {
-        initToolbar();
-    }
-
-    /**
-     * toolbar 타이틀 설정
-     * 뒤로가기 버튼 활성화
-     */
-    private void initToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-            getSupportActionBar().setTitle(R.string.activity_title_setting_sound_option);
-        }
+        initTitleBar(binding.titleBar, R.string.setting_sound_activity_title);
     }
 
     @Override
-    protected void asyncSaveOptionData() {
+    protected boolean asyncSaveOptionData() {
         RozeOptions rozeOptions = RozeOptions.getInstance();
 
         SoundOptions soundOptions = RozeOptions.getInstance().getSoundOption();
+        //고정식 카메라 옵션
         soundOptions.setFixedSpeedCamera(binding.soundOptionFixedSpeedCamera.isChecked());
+        //이동식 카메라 옵션
         soundOptions.setMovableSpeedCamera(binding.soundOptionMovableSpeedCamera.isChecked());
+        //신호위반 카메라 옵션
         soundOptions.setSignalViolationCamera(binding.soundOptionSignalViolationCamera.isChecked());
+        //버스전용 카메라 옵션
         soundOptions.setBusCamera(binding.soundOptionBusCamera.isChecked());
+        //교통정보수집 카메라 옵션
         soundOptions.setTrafficCamera(binding.soundOptionTrafficCamera.isChecked());
+        //주정차단속 카메라 옵션
         soundOptions.setStopCamera(binding.soundOptionStopCamera.isChecked());
+        //과적차량단속 카메라 옵션
         soundOptions.setOverloadCamera(binding.soundOptionOverloadCamera.isChecked());
+        //끼어들기단속 카메라 옵션
         soundOptions.setInterruptCamera(binding.soundOptionInterruptCamera.isChecked());
+        //방범CCTV 옵션
         soundOptions.setCctv(binding.soundOptionCctv.isChecked());
+        //갓길단속 옵션
         soundOptions.setShoulder(binding.soundOptionShoulder.isChecked());
+        //급회전구간 옵션
         soundOptions.setSharpCurve(binding.soundOptionSharpCurve.isChecked());
+        //사고다발구간 옵션
         soundOptions.setAccidentBlackSpot(binding.soundOptionAccidentBlackSpot.isChecked());
+        //좁아지는지역 옵션
         soundOptions.setLaneDecrease(binding.soundOptionLaneDecrease.isChecked());
+        //낙석주의 옵션
         soundOptions.setRockSlide(binding.soundOptionRockSlide.isChecked());
+        //미끄럼주의 옵션
         soundOptions.setSlipperySurface(binding.soundOptionSlipperySurface.isChecked());
+        //과속방지턱 옵션
         soundOptions.setSpeedBump(binding.soundOptionSpeedBump.isChecked());
+        //안개주의 옵션
         soundOptions.setFog(binding.soundOptionFog.isChecked());
+        //추락주의 옵션
         soundOptions.setFall(binding.soundOptionFall.isChecked());
+        //철길건널목 옵션
         soundOptions.setRailroadCrossing(binding.soundOptionRailroadCrossing.isChecked());
+        //급경사 옵션
         soundOptions.setScarp(binding.soundOptionScarp.isChecked());
+        //야생동물보호 옵션
         soundOptions.setDeerCrossing(binding.soundOptionDeerCrossing.isChecked());
+        //발성타입 옵션
+        saveOptionSoundType(rozeOptions, binding.soundTypeRadiogroup);
 
-        RadioGroup radioGroup = binding.soundTypeRadiogroup;
-        int index = radioGroup.indexOfChild(
-                radioGroup.findViewById(radioGroup.getCheckedRadioButtonId()));
+        rozeOptions.saveConfig();
+        return true;
+    }
+
+    /**
+     * 발성타입 옵션 설정
+     */
+    private void saveOptionSoundType(RozeOptions rozeOptions, RadioGroup radioGroup) {
+        int index = UIUtils.getCheckedRadioButtonIndex(radioGroup);
         RozeOptions.SoundType soundType = RozeOptions.SoundType.values()[index];
 
-        // 발성 옵션 체크해서 변경발생 시 발성데이터 초기화 처리
+        // 발성 옵션 변경발생 시 발성데이터 초기화 처리
         if (soundType != rozeOptions.getSoundType()) {
             if (SoundResourceManager.initSoundData(this, soundType)) {
                 rozeOptions.setSoundType(soundType);
@@ -112,50 +124,57 @@ public class SettingSoundActivity extends SaveSettingActivity {
                 UIUtils.showToast(this, R.string.toast_message_sound_init_fail);
             }
         }
-
-        rozeOptions.saveConfig();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // 툴바 뒤로가기 버튼 동작시 finish 동작
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     /**
      * RozeOptions에 현재 저장되어있는 정보 ui에 적용
      */
     private void setSavedSoundOption() {
-        //RozeOption에서 soundtype에 해당하는 정보를 받아와서 ui에 적용할 수 잇도록 수정
-        int index = RozeOptions.getInstance().getSoundType().ordinal();
-        RadioGroup radioGroup = binding.soundTypeRadiogroup;
-        radioGroup.check(radioGroup.getChildAt(index).getId());
+        //발성타입 옵션
+        UIUtils.checkRadioButton(binding.soundTypeRadiogroup, RozeOptions.getInstance().getSoundType().ordinal());
 
         SoundOptions soundOptions = RozeOptions.getInstance().getSoundOption();
+        //고정식 카메라 옵션
         binding.soundOptionFixedSpeedCamera.setChecked(soundOptions.isFixedSpeedCamera());
+        //이동식 카메라 옵션
         binding.soundOptionMovableSpeedCamera.setChecked(soundOptions.isMovableSpeedCamera());
+        //신호위반 카메라 옵션
         binding.soundOptionSignalViolationCamera.setChecked(soundOptions.isSignalViolationCamera());
+        //버스전용 카메라 옵션
         binding.soundOptionBusCamera.setChecked(soundOptions.isBusCamera());
+        //교통정보수집 카메라 옵션
         binding.soundOptionTrafficCamera.setChecked(soundOptions.isTrafficCamera());
+        //주정차단속 카메라 옵션
         binding.soundOptionStopCamera.setChecked(soundOptions.isStopCamera());
+        //과적차량단속 카메라 옵션
         binding.soundOptionOverloadCamera.setChecked(soundOptions.isOverloadCamera());
+        //끼어들기단속 카메라 옵션
         binding.soundOptionInterruptCamera.setChecked(soundOptions.isInterruptCamera());
+        //방범CCTV 옵션
         binding.soundOptionCctv.setChecked(soundOptions.isCctv());
+        //갓길단속 옵션
         binding.soundOptionShoulder.setChecked(soundOptions.isShoulder());
+        //급회전구간 옵션
         binding.soundOptionSharpCurve.setChecked(soundOptions.isSharpCurve());
+        //사고다발구간 옵션
         binding.soundOptionAccidentBlackSpot.setChecked(soundOptions.isAccidentBlackSpot());
+        //좁아지는지역 옵션
         binding.soundOptionLaneDecrease.setChecked(soundOptions.isLaneDecrease());
+        //낙석주의 옵션
         binding.soundOptionRockSlide.setChecked(soundOptions.isRockSlide());
+        //미끄럼주의 옵션
         binding.soundOptionSlipperySurface.setChecked(soundOptions.isSlipperySurface());
+        //과속방지턱 옵션
         binding.soundOptionSpeedBump.setChecked(soundOptions.isSpeedBump());
+        //안개주의 옵션
         binding.soundOptionFog.setChecked(soundOptions.isFog());
+        //추락주의 옵션
         binding.soundOptionFall.setChecked(soundOptions.isFall());
+        //철길건널목 옵션
         binding.soundOptionRailroadCrossing.setChecked(soundOptions.isRailroadCrossing());
+        //급경사 옵션
         binding.soundOptionScarp.setChecked(soundOptions.isScarp());
+        //야생동물보호 옵션
         binding.soundOptionDeerCrossing.setChecked(soundOptions.isDeerCrossing());
     }
 }

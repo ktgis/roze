@@ -41,11 +41,7 @@ public class NavigationLaneView extends RelativeLayout {
     @BindView(R.id.lane_remain_textview)
     protected TextView laneRemainTextView;
 
-    /**
-     * 차선 이미지 가로 크기정보
-     */
-    private int laneImageWidth;
-    private int laneImageMargin;
+    private static LinearLayout.LayoutParams params;
 
     public NavigationLaneView(Context context) {
         super(context);
@@ -66,9 +62,12 @@ public class NavigationLaneView extends RelativeLayout {
         View.inflate(context, R.layout.view_navigation_lane, this);
         ButterKnife.bind(this);
 
-        laneImageWidth = getResources().getDimensionPixelSize(R.dimen.lane_guidance_image_width);
-        laneImageMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics());
-
+        int laneImageWidth = getResources().getDimensionPixelSize(R.dimen.lane_guidance_image_width);
+        int laneImageMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1,
+                getResources().getDisplayMetrics());
+        params = new LinearLayout.LayoutParams(laneImageWidth,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        params.setMargins(laneImageMargin, 0, 0, 0);
     }
 
     /**
@@ -137,17 +136,11 @@ public class NavigationLaneView extends RelativeLayout {
      * @param resList 차선 이미지 리스트
      */
     private void addLaneImage(List<Integer> resList) {
-        laneLinearLayout.removeAllViews();
-
         ImageView laneImage;
-        LinearLayout.LayoutParams params;
+        laneLinearLayout.removeAllViews();
         for (int i = 0, size = resList.size(); i < size; i++) {
             laneImage = new ImageView(laneLinearLayout.getContext());
             laneImage.setImageResource(resList.get(i));
-            params = new LinearLayout.LayoutParams(laneImageWidth, LinearLayout.LayoutParams.MATCH_PARENT);
-            if (i > 0) {
-                params.setMargins(laneImageMargin, 0, 0, 0);
-            }
             laneLinearLayout.addView(laneImage, params);
         }
     }

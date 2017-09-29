@@ -17,10 +17,8 @@ import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.transition.TransitionInflater;
 
 import com.kt.rozenavi.R;
-import com.kt.rozenavi.ui.main.MainActivity;
 
 import butterknife.ButterKnife;
 
@@ -30,10 +28,23 @@ import butterknife.ButterKnife;
  */
 public abstract class BaseActivity extends AppCompatActivity implements LifecycleRegistryOwner {
     LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
+    private boolean isResumed = false;
 
     @Override
     public LifecycleRegistry getLifecycle() {
         return lifecycleRegistry;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isResumed = true;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        isResumed = false;
     }
 
     /**
@@ -58,23 +69,27 @@ public abstract class BaseActivity extends AppCompatActivity implements Lifecycl
      */
     public void replaceFragment(@NonNull Fragment screen) {
         Fragment current = getSupportFragmentManager().findFragmentById(
-                        R.id.base_fragment_container);
+                R.id.base_fragment_container);
 
         if (current != null && current instanceof BaseFragment) {
-            Object transition = ((BaseFragment)current).createExitTransition(this);
+            Object transition = ((BaseFragment) current).createExitTransition(this);
             if (transition != null) {
                 current.setExitTransition(transition);
             }
         }
 
         if (screen instanceof BaseFragment) {
-            Object transition =  ((BaseFragment)screen).createEnterTransition(this);
+            Object transition = ((BaseFragment) screen).createEnterTransition(this);
             if (transition != null) {
                 screen.setEnterTransition(transition);
             }
         }
 
-        replaceFragment(R.id.base_fragment_container, screen);
+        if (isResumed) {
+            replaceFragment(R.id.base_fragment_container, screen);
+        } else {
+            replaceFragmentByAllowingStateLoss(R.id.base_fragment_container, screen);
+        }
     }
 
     /**
@@ -85,6 +100,16 @@ public abstract class BaseActivity extends AppCompatActivity implements Lifecycl
      */
     public void replaceFragment(@IdRes int resId, @NonNull Fragment screen) {
         getSupportFragmentManager().beginTransaction().replace(resId, screen).commit();
+    }
+
+    /**
+     * replace fragment
+     *
+     * @param resId  container id
+     * @param screen fragment
+     */
+    public void replaceFragmentByAllowingStateLoss(@IdRes int resId, @NonNull Fragment screen) {
+        getSupportFragmentManager().beginTransaction().replace(resId, screen).commitAllowingStateLoss();
     }
 
     /**

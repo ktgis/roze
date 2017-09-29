@@ -18,7 +18,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.kt.geom.model.UTMK;
 import com.kt.roze.data.model.Link;
 import com.kt.roze.data.model.Route;
 import com.kt.roze.data.model.Turn;
@@ -39,9 +38,9 @@ import butterknife.OnClick;
 public class RouteTbtRecyclerViewAdapter extends RecyclerView.Adapter<RouteTbtRecyclerViewAdapter.ViewHolder> {
     private List<Turn> turnList = null;
     private List<Link> linkList = null;
-    private OnTbtItemEventListener tbtItemListener;
+    private RouteTbtView.OnTbtItemEventListener tbtItemListener;
 
-    RouteTbtRecyclerViewAdapter(Route route, OnTbtItemEventListener tbtItemListener) {
+    RouteTbtRecyclerViewAdapter(Route route, RouteTbtView.OnTbtItemEventListener tbtItemListener) {
         this.turnList = route.turns;
         this.linkList = route.links;
         this.tbtItemListener = tbtItemListener;
@@ -141,10 +140,4 @@ public class RouteTbtRecyclerViewAdapter extends RecyclerView.Adapter<RouteTbtRe
         }
     }
 
-    /**
-     * Tbt 정보 이벤트 리스너
-     */
-    public interface OnTbtItemEventListener {
-        void onTbtSelected(int index, UTMK utmk);
-    }
 }

@@ -185,6 +185,7 @@ public class TbtGuidancePopupService extends Service {
 
     @Override
     public void onDestroy() {
+        tbtGuidancePopupView = null;
         super.onDestroy();
     }
 

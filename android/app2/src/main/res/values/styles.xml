@@ -37,4 +37,44 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="RozeSettingBaseStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:paddingLeft">@dimen/common_margin_large</item>
+        <item name="android:paddingRight">@dimen/common_margin_large</item>
+    </style>
+
+    <style name="RozeCompoundButtonStyle" parent="RozeSettingBaseStyle">
+        <item name="android:layout_height">@dimen/setting_item_height</item>
+        <item name="android:button">@null</item>
+        <item name="android:background">@drawable/setting_item_background</item>
+    </style>
+
+    <style name="RozeTextViewStyle" parent="RozeSettingBaseStyle">
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textColor">@color/almost_balck</item>
+    </style>
+
+    <style name="RozeRadioItemStyle" parent="RozeCompoundButtonStyle">
+        <item name="android:drawableRight">@drawable/radio_button_icon</item>
+    </style>
+
+    <style name="RozeCheckBoxItemStyle" parent="RozeCompoundButtonStyle">
+        <item name="android:drawableRight">@drawable/checkbox_button_icon</item>
+    </style>
+
+    <style name="RozeSwitchStyle">
+        <item name="android:track">@drawable/switch_track</item>
+        <item name="android:thumb">@drawable/switch_thumb</item>
+    </style>
+
+    <style name="SettingSubtitleStyle" parent="@android:style/Widget.TextView">
+        <item name="android:layout_height">@dimen/setting_subtitle_height</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:paddingStart">@dimen/common_margin_large</item>
+        <item name="android:background">@color/dawm_grey</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:button">@null</item>
+        <item name="android:textColor">@color/elephant_grey</item>
+        <item name="android:textSize">@dimen/setting_subtitle_font_size</item>
+    </style>
 </resources>

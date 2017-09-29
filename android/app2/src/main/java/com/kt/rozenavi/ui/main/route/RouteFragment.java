@@ -62,9 +62,7 @@ import com.kt.rozenavi.ui.main.MainActivity;
 import com.kt.rozenavi.ui.main.MainActivityViewModel;
 import com.kt.rozenavi.ui.main.navigation.NavigationFragment;
 import com.kt.rozenavi.ui.main.route.data.LocationItem;
-import com.kt.rozenavi.ui.main.route.view.RouteDestinationRecyclerViewAdapter;
 import com.kt.rozenavi.ui.main.route.view.RouteDestinationView;
-import com.kt.rozenavi.ui.main.route.view.RouteTbtRecyclerViewAdapter;
 import com.kt.rozenavi.ui.main.route.view.RouteTbtView;
 import com.kt.rozenavi.ui.main.route.view.RouteTypeRecyclerViewAdapter;
 import com.kt.rozenavi.ui.main.route.view.RouteTypeView;
@@ -87,7 +85,7 @@ import butterknife.OnClick;
 public class RouteFragment extends BaseFragment implements RouteManager.RouteManagerListener,
         RouteTypeRecyclerViewAdapter.OnRouteTypeItemEventListener,
         WeakReferenceHandler.OnMessageHandler,
-        RouteTbtRecyclerViewAdapter.OnTbtItemEventListener {
+        RouteTbtView.OnTbtItemEventListener {
     @BindView(R.id.route_destination_view)
     protected RouteDestinationView routeDestinationView;
 
@@ -150,8 +148,8 @@ public class RouteFragment extends BaseFragment implements RouteManager.RouteMan
 
         if (requestCode == MainActivity.SEARCH_REQ_CODE) {
             //검색결과에서 목적지 좌표, 목적지 명칭 반환
-            int x = data.getIntExtra(SearchActivity.RESULT_EXTRA_COORD_X, 0);
-            int y = data.getIntExtra(SearchActivity.RESULT_EXTRA_COORD_Y, 0);
+            double x = data.getDoubleExtra(SearchActivity.RESULT_EXTRA_COORD_X, 0);
+            double y = data.getDoubleExtra(SearchActivity.RESULT_EXTRA_COORD_Y, 0);
             String name = data.getStringExtra(SearchActivity.RESULT_EXTRA_DESTINATION_NAME);
 
             routeDestinationView.setLocationData(x, y, name);
@@ -178,7 +176,7 @@ public class RouteFragment extends BaseFragment implements RouteManager.RouteMan
     private void initView() {
         //view에 대한 초기값 설정 및 상태값 변경
         routeDestinationView.initLocationData(destinationList,
-                new RouteDestinationRecyclerViewAdapter.OnDestinationItemEventListener() {
+                new RouteDestinationView.OnDestinationItemEventListener() {
                     @Override
                     public void onDestinationChanged(List<LocationItem> destinationList) {
                         requestRouteSummary(destinationList);

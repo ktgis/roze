@@ -6,24 +6,41 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="10dp">
+        android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/highway_name_textview"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="16sp" />
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/highway_distance_textview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp" />
+            <TextView
+                android:id="@+id/highway_name_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp" />
 
-        <GridLayout
-            android:id="@+id/hightway_extra_gridlayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/highway_distance_textview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp" />
+
+            <GridLayout
+                android:id="@+id/hightway_extra_gridlayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:alignmentMode="alignBounds"
+                android:columnCount="5"
+                android:layoutMode="clipBounds" />
+        </LinearLayout>
+
+        <View
+            android:id="@+id/hightway_traffic_info"
+            android:layout_width="10dp"
+            android:layout_height="match_parent" />
     </LinearLayout>
 </FrameLayout>

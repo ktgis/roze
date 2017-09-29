@@ -38,8 +38,7 @@ public class RouteDestinationView extends FrameLayout {
     @BindView(R.id.route_destination_recyclerview)
     protected RecyclerView recyclerView;
 
-    private RouteDestinationRecyclerViewAdapter.OnDestinationItemEventListener
-            onDestinationChangeListener;
+    private OnDestinationItemEventListener onDestinationChangeListener;
 
     private List<LocationItem> destinationList = new ArrayList<>();
     /**
@@ -118,7 +117,7 @@ public class RouteDestinationView extends FrameLayout {
      * @param y    y 좌표
      * @param name 명칭
      */
-    public void setLocationData(int x, int y, String name) {
+    public void setLocationData(double x, double y, String name) {
         LocationItem newLocationItem = new LocationItem(x, y, name);
 
         // 중복값 체크
@@ -146,17 +145,16 @@ public class RouteDestinationView extends FrameLayout {
      * @param locationList 장소정보 리스트
      */
     public void initLocationData(List<LocationItem> locationList,
-                                 RouteDestinationRecyclerViewAdapter.OnDestinationItemEventListener destinationChangeListener) {
+                                 OnDestinationItemEventListener destinationChangeListener) {
         this.onDestinationChangeListener = destinationChangeListener;
         destinationList.clear();
         destinationList.addAll(locationList);
         RouteDestinationRecyclerViewAdapter adapter =
                 new RouteDestinationRecyclerViewAdapter(destinationList,
-                        new RouteDestinationRecyclerViewAdapter.OnInternalItemEventListener() {
+                        new RouteDestinationRecyclerViewAdapter.OnAdapterClickListener() {
                             @Override
                             public void onItemClick(int index) {
                                 routeSelectLocationIndex = index;
-
                                 if (onDestinationChangeListener != null) {
                                     onDestinationChangeListener.onDestinationClick();
                                 }
@@ -179,5 +177,20 @@ public class RouteDestinationView extends FrameLayout {
         // RecyclerView 어뎁터 등록
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+    }
+
+    /**
+     * Destination 이벤트 리스너
+     */
+    public interface OnDestinationItemEventListener {
+        /**
+         * Destination 리스트 변경 이벤트
+         */
+        void onDestinationChanged(List<LocationItem> destinationList);
+
+        /**
+         * Destination 항목 클릭 이벤트
+         */
+        void onDestinationClick();
     }
 }

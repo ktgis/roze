@@ -37,14 +37,14 @@ public class RouteDestinationRecyclerViewAdapter extends
         RecyclerView.Adapter<RouteDestinationRecyclerViewAdapter.ViewHolder> {
 
     private List<LocationItem> destinationList = null;
-    private OnInternalItemEventListener onInternalItemEventListener = null;
-    private OnDestinationItemEventListener onDestinationChangeListener = null;
+    private OnAdapterClickListener onAdapterClickListener = null;
+    private RouteDestinationView.OnDestinationItemEventListener onDestinationChangeListener = null;
 
     RouteDestinationRecyclerViewAdapter(List<LocationItem> destinationList,
-                                        OnInternalItemEventListener onInternalItemEventListener,
-                                        OnDestinationItemEventListener onDestinationChangeListener) {
+                                        OnAdapterClickListener onAdapterClickListener,
+                                        RouteDestinationView.OnDestinationItemEventListener onDestinationChangeListener) {
         this.destinationList = destinationList;
-        this.onInternalItemEventListener = onInternalItemEventListener;
+        this.onAdapterClickListener = onAdapterClickListener;
         this.onDestinationChangeListener = onDestinationChangeListener;
     }
 
@@ -88,7 +88,6 @@ public class RouteDestinationRecyclerViewAdapter extends
         }
         return true;
     }
-
     class ViewHolder extends RecyclerView.ViewHolder {
 
         /**
@@ -168,39 +167,21 @@ public class RouteDestinationRecyclerViewAdapter extends
                 return;
             }
 
-            if (onInternalItemEventListener != null) {
-                onInternalItemEventListener.onDeleteClick(getAdapterPosition());
+            if (onAdapterClickListener != null) {
+                onAdapterClickListener.onDeleteClick(getAdapterPosition());
             }
         }
 
         @OnClick(R.id.route_destination_row)
         protected void onClickRow() {
-            if (onInternalItemEventListener != null) {
-                onInternalItemEventListener.onItemClick(getAdapterPosition());
+            if (onAdapterClickListener != null) {
+                onAdapterClickListener.onItemClick(getAdapterPosition());
             }
         }
     }
 
-    /**
-     * RouteDestinationView 내부에서 처리되는 이벤트 리스너
-     */
-    interface OnInternalItemEventListener {
+    interface OnAdapterClickListener {
         void onItemClick(int index);
         void onDeleteClick(int index);
-    }
-
-    /**
-     * Destination 이벤트 리스너
-     */
-    public interface OnDestinationItemEventListener {
-        /**
-         * Destination 리스트 변경 이벤트
-         */
-        void onDestinationChanged(List<LocationItem> destinationList);
-
-        /**
-         * Destination 항목 클릭 이벤트
-         */
-        void onDestinationClick();
     }
 }

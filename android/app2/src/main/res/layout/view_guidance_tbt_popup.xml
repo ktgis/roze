@@ -23,7 +23,8 @@
         android:id="@+id/tbt_popup_imageView"
         android:layout_width="56dp"
         android:layout_height="56dp"
-        android:layout_margin="10dp" />
+        android:layout_margin="10dp"
+        android:src="@drawable/tbt_straight" />
 
     <TextView
         android:id="@+id/tbt_popup_remainView"
@@ -35,7 +36,7 @@
         android:gravity="start|center"
         android:minWidth="88dp"
         android:textColor="@color/white"
-        android:textSize="25sp"
+        android:textSize="36sp"
         android:textStyle="normal|bold"
         tools:text="6.7km" />
 </LinearLayout>

@@ -12,18 +12,18 @@
 
 package com.kt.rozenavi.ui.main.navigation;
 
+import android.support.annotation.NonNull;
+
 import com.kt.geom.model.UTMK;
 import com.kt.maps.GMap;
 import com.kt.maps.ViewpointChange;
 import com.kt.maps.model.Point;
 import com.kt.maps.model.Viewpoint;
-import com.kt.roze.NavigationManager;
 import com.kt.roze.data.model.Link;
 import com.kt.roze.data.model.Route;
 import com.kt.roze.guidance.RGType;
 import com.kt.roze.guidance.model.TurnGuidance;
 import com.kt.roze.location.model.RouteLocation;
-import com.kt.rozenavi.utils.MapUtils;
 
 import java.util.List;
 
@@ -35,7 +35,7 @@ class ZoomChanger {
     /**
      * 줌레벨 변경시 애니메이션 타임
      */
-    private static final int ZOOM_CHANGE_DURATION = 500;
+    private static final int ZOOM_CHANGE_DURATION = 1000;
     /**
      * 속도타입 Speed.Low기준 최대 속도
      * 넘을시 Speed.Middle
@@ -55,11 +55,11 @@ class ZoomChanger {
      */
     private static final int ROAD_TURN_ZOOM_DISTANCE = 250;
 
-    public void setEnable(boolean isEnable) {
+    void setEnable(boolean isEnable) {
         this.isEnable = isEnable;
     }
 
-    public void releaseMap() {
+    void releaseMap() {
         gMap = null;
     }
 
@@ -114,8 +114,8 @@ class ZoomChanger {
      *
      * @param guidances TBT 정보 리스트
      */
-    void updateTbt(List<TurnGuidance> guidances) {
-        if (guidances == null || guidances.size() == 0) {
+    void updateTbt(@NonNull List<TurnGuidance> guidances) {
+        if (guidances.size() == 0) {
             return;
         }
         TurnGuidance turnGuidance = guidances.get(0);

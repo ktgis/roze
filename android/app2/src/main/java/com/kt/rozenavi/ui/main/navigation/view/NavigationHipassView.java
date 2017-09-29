@@ -18,12 +18,12 @@ import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Space;
 import android.widget.TextView;
 
 import com.kt.roze.guidance.model.HighwayGuidance;
 import com.kt.roze.guidance.model.TGGuidance;
 import com.kt.rozenavi.R;
+import com.kt.rozenavi.utils.CommonUtils;
 
 import java.util.List;
 
@@ -35,13 +35,18 @@ import butterknife.ButterKnife;
  */
 public class NavigationHipassView extends RelativeLayout {
     /**
-     * 하이패스 차로 정보
+     * 하이패스 차로 정보 View
      */
     @BindView(R.id.hipass_lane_layout)
-    protected LinearLayout hipass_lane_inform;
+    protected LinearLayout hipassView;
 
-    private int laneMargin;
-    private List<HighwayGuidance> guidances;
+    private TGGuidance tg;
+    private static final int SHOW_DISTANCE = 600;
+    private static final String LANE_SEPARATOR = "...";
+    private static final int INIT_LANE = -1;
+
+    private LinearLayout.LayoutParams params =
+            new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 
     public NavigationHipassView(Context context) {
         super(context);
@@ -62,111 +67,105 @@ public class NavigationHipassView extends RelativeLayout {
         View.inflate(context, R.layout.view_navigation_hipass, this);
         ButterKnife.bind(this);
 
-        laneMargin = (int) TypedValue.applyDimension(
+        int laneMargin = (int) TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP, 3, getResources().getDisplayMetrics());
+
+        params.leftMargin = laneMargin;
+        params.rightMargin = laneMargin;
+
     }
 
     /**
-     * 고속도로 안내점 정보를 개별 View에 전달한다.
+     * Hipass 정보를 전달한다. 현재 Guidance 가 TG가 아닐 경우 view 를 hide 처리 한다.
      *
-     * @param guidances 고속도로 안내점 정보
+     * @param guidance 고속도로 안내점 정보
      */
-    public void setHighwayGuidances(List<HighwayGuidance> guidances) {
-        this.guidances = guidances;
+    public void setHighwayGuidances(List<HighwayGuidance> guidance) {
+        hideHipassView();
 
-        if (guidances == null) {
-            setVisibility(View.INVISIBLE);
+        if (CommonUtils.isEmpty(guidance)) {
             return;
+        }
+
+        HighwayGuidance firstGuidance = guidance.get(0);
+        if (firstGuidance.getType() == HighwayGuidance.Type.TG) {
+            this.tg = (TGGuidance) firstGuidance;
         }
     }
 
+    /**
+     * 요금소에 <code>ShOW_DISTANCE</code> 만큼 근접하면 하이패스 정보를 표출한다
+     *
+     * @param distance 요금소와의 거리(m)
+     */
+    public void updateHipassView(int distance) {
+        if (checkHipassView(tg, distance)) {
+            updateHipassLanes(tg);
+        }
+    }
+
+    private boolean checkHipassView(TGGuidance tg, int distance) {
+        //첫 고속도로 안내점이 요금소 && 표출 거리 이내일 경우에 하이패스 정보를 표출한다
+        if (tg == null || distance >= SHOW_DISTANCE) {
+            return false;
+        }
+        //표출된 하이패스 정보가 있는 경우 중복으로 표출하지 않는다
+        if (hipassView.isShown()) {
+            return false;
+        }
+
+        setVisibility(View.VISIBLE);
+        return true;
+    }
+
+    /**
+     * Hipass View 숨김
+     */
+    private void hideHipassView() {
+        this.tg = null;
+        setVisibility(View.GONE);
+    }
+
+    /**
+     * 각 차선 번호를 TextView 에 Setting 하여 반환한다
+     * <UI Logic>
+     */
+    @SuppressWarnings("deprecation")
     private TextView getHipassItemView(Context context, int number) {
         TextView laneText = new TextView(context);
         if (number >= 0) {
             laneText.setText(String.format("%d", number));
         } else {
-            laneText.setText("...");
+            laneText.setText(LANE_SEPARATOR);
         }
         laneText.setTextColor(getResources().getColor(R.color.sea_blue));
-        laneText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
+        laneText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
         return laneText;
     }
 
     /**
-     * HIPASS 차로 정보를 View에 set한다.
+     * Hipass 차로 정보를 View 에 Add 한다.
+     * <UI Logic>
      *
      * @param tg 요금소 정보
      */
     private void updateHipassLanes(TGGuidance tg) {
-        if (tg == null) {
-            setVisibility(View.INVISIBLE);
-            return;
-        }
-
-        int laneCount = tg.getLaneCount();
         byte[] lanes = tg.getHighpassLanes();
 
-        if (lanes.length == 0) {
-            setVisibility(View.INVISIBLE);
+        if (CommonUtils.isEmpty(lanes) || tg.getLaneCount() == 0) {
+            hideHipassView();
             return;
         }
 
-        boolean ret = true;
-        boolean lastRet = true;
-        int size = lanes.length;
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT,
-                LayoutParams.WRAP_CONTENT);
-        params.leftMargin = laneMargin;
-        params.rightMargin = laneMargin;
-
-        hipass_lane_inform.removeAllViews();
-
-        for (int i = lanes[0]; i < laneCount; i++) {
-            for (byte b : lanes) {
-                if (b == i) {
-                    ret = true;
-                    break;
-                }
-                ret = false;
+        hipassView.removeAllViews();
+        Context ctx = getContext();
+        int prevLane = INIT_LANE;
+        for (int laneNumber : lanes) {
+            if (prevLane != INIT_LANE && Math.abs(prevLane - laneNumber) > 1) {
+                hipassView.addView(getHipassItemView(ctx, INIT_LANE), params);
             }
-
-            if (ret && lastRet) {
-                hipass_lane_inform.addView(getHipassItemView(getContext(), i + 1), params);
-            } else if (ret && !lastRet) {
-                hipass_lane_inform.addView(getHipassItemView(getContext(), -1), params);
-                hipass_lane_inform.addView(getHipassItemView(getContext(), i + 1), params);
-            }
-
-            if (lanes[size - 1] == i) {
-                break;
-            }
-            lastRet = ret;
-        }
-        setVisibility(View.VISIBLE);
-    }
-
-    /**
-     * 현재 위치에서 각 고속도로 안내점까지의 거리를 표시</br>
-     * 라이브러리에서는 현재 위치에서 첫번째 아이템까지의 거리만 전달한다.</br>
-     * 첫번째 이후 안내점은 전달된 거리를 이용하여 변화량을 계산하여 App에서 계산하도록 한다.
-     *
-     * @param distance 거리(m)
-     */
-    public void updateDistance(int distance) {
-        if (guidances == null || guidances.isEmpty()) {
-            return;
-        }
-
-        if (guidances != null && guidances.size() > 0 && distance < 600) {
-            HighwayGuidance firstGuidance = guidances.get(0);
-            if (firstGuidance.getType() == HighwayGuidance.Type.TG) {
-                TGGuidance tg = (TGGuidance) firstGuidance;
-                updateHipassLanes(tg);
-            } else {
-                updateHipassLanes(null);
-            }
-        } else {
-            updateHipassLanes(null);
+            hipassView.addView(getHipassItemView(ctx, laneNumber + 1), params);
+            prevLane = laneNumber;
         }
     }
 }

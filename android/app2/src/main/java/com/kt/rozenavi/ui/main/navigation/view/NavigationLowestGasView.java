@@ -20,13 +20,13 @@ import android.widget.TextView;
 
 import com.kt.maps.GMap;
 import com.kt.maps.model.Point;
-import com.kt.maps.model.ResourceDescriptorFactory;
 import com.kt.maps.overlay.Marker;
 import com.kt.roze.RozeOptions;
 import com.kt.roze.data.model.EnergyPrice;
 import com.kt.roze.guidance.model.OilPriceGuidance;
-import com.kt.roze.resource.GasStationResourceManager;
 import com.kt.rozenavi.R;
+import com.kt.rozenavi.ui.main.navigation.util.MapHelper;
+import com.kt.rozenavi.utils.CommonUtils;
 import com.kt.rozenavi.utils.NaviUtils;
 
 import java.util.ArrayList;
@@ -46,6 +46,8 @@ public class NavigationLowestGasView extends RelativeLayout {
     private List<EnergyPrice> gasPriceList;
     private List<Marker> gasPriceMarkerList = new ArrayList<>();
     private Marker lowestGasMarker;
+
+    private MapHelper mapHelper = MapHelper.getInstance();
 
     public NavigationLowestGasView(Context context) {
         super(context);
@@ -75,46 +77,11 @@ public class NavigationLowestGasView extends RelativeLayout {
      * 최저가 주유소 정보 리스트 설정
      */
     public void setLowestGasStationList(List<EnergyPrice> gasPriceList) {
-        if (gasPriceList == null || gasPriceList.isEmpty()) {
+        if (CommonUtils.isEmpty(gasPriceList)) {
             return;
         }
         this.gasPriceList = gasPriceList;
-        Marker oilMarker;
-        for (EnergyPrice energyPrice : gasPriceList) {
-            oilMarker = new Marker();
-            oilMarker.setPosition(energyPrice.coord);
-            oilMarker.setAnchor(new Point(1.0, 1.0));
-            int resId = GasStationResourceManager.getPoiGasResourceID((short) energyPrice.brand);
-            if (resId > 0) {
-                oilMarker.setIcon(ResourceDescriptorFactory.fromResource(resId));
-                oilMarker.setIconSize(new Point(30, 38));
-            }
-            oilMarker.setCaption(getEnergyPrice(energyPrice));
-            gasPriceMarkerList.add(oilMarker);
-            gMap.addOverlay(oilMarker);
-        }
-    }
-
-    private String getEnergyPrice(EnergyPrice energyPrice) {
-        int gasolinePrice = 0;
-        int diselPrice = 0;
-        int lpgPrice = 0;
-        for (int i = 0, size = energyPrice.energyTypes.size(); i < size; i++) {
-            EnergyPrice.EnergyType type = energyPrice.energyTypes.get(i);
-
-            switch (type) {
-                case GASOLINE:
-                    gasolinePrice = energyPrice.energyPrices.get(i);
-                    break;
-                case DIESEL:
-                    diselPrice = energyPrice.energyPrices.get(i);
-                    break;
-                case LPG:
-                    lpgPrice = energyPrice.energyPrices.get(i);
-                    break;
-            }
-        }
-        return "G:" + gasolinePrice + ",D:" + diselPrice + ",L:" + lpgPrice;
+        gasPriceMarkerList = mapHelper.setOilMarkers(gMap, gasPriceList);
     }
 
     public void updateLowestGasStation(boolean isShow, List<OilPriceGuidance> list) {
@@ -156,12 +123,7 @@ public class NavigationLowestGasView extends RelativeLayout {
     }
 
     public void clearOverlay() {
-        if (gMap == null) {
-            return;
-        }
-        for (Marker marker : gasPriceMarkerList) {
-            gMap.removeOverlay(marker);
-        }
+        mapHelper.removeOverlays(gMap, gasPriceMarkerList);
         gasPriceMarkerList.clear();
     }
 }

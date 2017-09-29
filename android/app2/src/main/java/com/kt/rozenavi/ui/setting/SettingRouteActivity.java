@@ -17,20 +17,19 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.widget.RadioGroup;
 
 import com.kt.rozenavi.R;
 import com.kt.rozenavi.databinding.ActivitySettingRouteBinding;
 import com.kt.rozenavi.utils.PreferenceUtils;
+import com.kt.rozenavi.utils.UIUtils;
 
 /**
  * 경로탐색시 경로타입 설정화면
  * 2개의 경로를 탐색할 수 있도록 2종류의 타입을 설정
  * 경로타입 설정후 경로검색시 설정된 정보를 이용하여 검색
  */
-public class SettingRouteActivity extends SaveSettingActivity
+public class SettingRouteActivity extends BaseSettingActivity
         implements RadioGroup.OnCheckedChangeListener {
     public static final int DEFAULT_ROUTE_TYPE_1 = 0;
     public static final int DEFAULT_ROUTE_TYPE_2 = 2;
@@ -65,55 +64,28 @@ public class SettingRouteActivity extends SaveSettingActivity
     }
 
     private void init() {
-        initToolbar();
+        initTitleBar(binding.titleBar, R.string.setting_route_activity_title);
         binding.routeType1Radiogroup.setOnCheckedChangeListener(this);
         binding.routeType2Radiogroup.setOnCheckedChangeListener(this);
     }
 
-    /**
-     * toolbar 타이틀 설정
-     * 뒤로가기 버튼 활성화
-     */
-    private void initToolbar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-            getSupportActionBar().setTitle(R.string.activity_title_setting_route_type);
-        }
-    }
-
     @Override
-    protected void asyncSaveOptionData() {
+    protected boolean asyncSaveOptionData() {
         PreferenceUtils.putInt(this, PreferenceUtils.KEY_ROUTE_TYPE_1, firstRouteSelectIndex);
         PreferenceUtils.putInt(this, PreferenceUtils.KEY_ROUTE_TYPE_2, secondRouteSelectIndex);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // 툴바 뒤로가기 버튼 동작시 finish 동작
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-        }
-
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     /**
-     * preference에 저장된 경로타입을 가져오고 없는경우 최적경로(0), 무료도로(2)로 설정
+     * 저장된 경로타입을 가져오고 없는경우 최적경로(0), 무료도로(2)로 설정
      */
     private void setSavedRouteType() {
-        RadioGroup radioGroup = binding.routeType1Radiogroup;
-        int index = PreferenceUtils.getInt(this, PreferenceUtils.KEY_ROUTE_TYPE_1,
-                DEFAULT_ROUTE_TYPE_1);
-        radioGroup.check(radioGroup.getChildAt(index).getId());
-
-        radioGroup = binding.routeType2Radiogroup;
-        index = PreferenceUtils.getInt(this, PreferenceUtils.KEY_ROUTE_TYPE_2,
-                DEFAULT_ROUTE_TYPE_2);
-        radioGroup.check(radioGroup.getChildAt(index).getId());
+        //첫번째 경로타입 설정
+        UIUtils.checkRadioButton(binding.routeType1Radiogroup,
+                PreferenceUtils.getInt(this, PreferenceUtils.KEY_ROUTE_TYPE_1, DEFAULT_ROUTE_TYPE_1));
+        //두번째 경로타입 설정
+        UIUtils.checkRadioButton(binding.routeType2Radiogroup,
+                PreferenceUtils.getInt(this, PreferenceUtils.KEY_ROUTE_TYPE_2, DEFAULT_ROUTE_TYPE_2));
     }
 
     /**
@@ -153,18 +125,18 @@ public class SettingRouteActivity extends SaveSettingActivity
      * @param id 버튼 index
      */
     private void selectSecondRouteType(int id) {
-        RadioGroup radioGroup2 = binding.routeType2Radiogroup;
-        secondRouteSelectIndex = radioGroup2.indexOfChild(radioGroup2.findViewById(id));
+        RadioGroup radioGroup = binding.routeType2Radiogroup;
+        secondRouteSelectIndex = radioGroup.indexOfChild(radioGroup.findViewById(id));
     }
 
     //--RadioGroup.OnCheckedChangeListener
     @Override
-    public void onCheckedChanged(RadioGroup radioGroup, int i) {
+    public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
         int id = radioGroup.getId();
         if (id == R.id.route_type_1_radiogroup) {
-            selectFirstRouteType(i);
+            selectFirstRouteType(checkedId);
         } else if (id == R.id.route_type_2_radiogroup) {
-            selectSecondRouteType(i);
+            selectSecondRouteType(checkedId);
         }
     }
 

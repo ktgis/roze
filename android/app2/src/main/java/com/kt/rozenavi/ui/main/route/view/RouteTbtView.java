@@ -26,16 +26,16 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
 /**
  * Tbt 정보 표시 View
  */
-public class RouteTbtView extends FrameLayout implements
-        RouteTbtRecyclerViewAdapter.OnTbtItemEventListener {
+public class RouteTbtView extends FrameLayout {
     @BindView(R.id.route_tbt_recyclerview)
     protected RecyclerView recyclerView;
 
     private List<Route> routeList;
-    private RouteTbtRecyclerViewAdapter.OnTbtItemEventListener onRouteTypeItemListener;
+    private OnTbtItemEventListener onRouteTypeItemListener;
 
     public RouteTbtView(Context context) {
         super(context);
@@ -62,21 +62,21 @@ public class RouteTbtView extends FrameLayout implements
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
-    public void setRouteInfo(List<Route> routeList, RouteTbtRecyclerViewAdapter.OnTbtItemEventListener onRouteTypeItemListener) {
+    public void setRouteInfo(List<Route> routeList, OnTbtItemEventListener onRouteTypeItemListener) {
         //경로정보 리스트
         this.routeList = routeList;
         this.onRouteTypeItemListener = onRouteTypeItemListener;
-        recyclerView.setAdapter(new RouteTbtRecyclerViewAdapter(routeList.get(0), this));
+        recyclerView.setAdapter(new RouteTbtRecyclerViewAdapter(routeList.get(0), onRouteTypeItemListener));
     }
 
     public void setRouteIndex(int routeIndex) {
-        recyclerView.setAdapter(new RouteTbtRecyclerViewAdapter(routeList.get(routeIndex), this));
+        recyclerView.setAdapter(new RouteTbtRecyclerViewAdapter(routeList.get(routeIndex), onRouteTypeItemListener));
     }
 
-    @Override
-    public void onTbtSelected(int index, UTMK utmk) {
-        if (onRouteTypeItemListener != null) {
-            onRouteTypeItemListener.onTbtSelected(index, utmk);
-        }
+    /**
+     * Tbt 정보 이벤트 리스너
+     */
+    public interface OnTbtItemEventListener {
+        void onTbtSelected(int index, UTMK utmk);
     }
 }

@@ -56,6 +56,7 @@ public class TbtGuidancePopupView extends RelativeLayout {
     public int yPosition;
 
     private static final int MAX_CLICK_DURATION = 100;
+    private static final int INIT_DISTANCE = 0;
     private long startClickTime;
 
     public TbtGuidancePopupView(Context context) {
@@ -77,6 +78,7 @@ public class TbtGuidancePopupView extends RelativeLayout {
         View.inflate(context, R.layout.view_guidance_tbt_popup, this);
         ButterKnife.bind(this);
         windowManager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+        NaviUtils.setSizeSpanDistance(tbtRemainTextView, INIT_DISTANCE);
     }
 
     /**

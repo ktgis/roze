@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical"
+        tools:context="com.kt.rozenavi.ui.setting.SettingCarActivity">
+
+        <include
+            android:id="@+id/title_bar"
+            layout="@layout/layout_setting_action_bar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/setting_title_height" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:overScrollMode="never">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/SettingSubtitleStyle"
+                    android:text="@string/setting_route_activity_subtitle_traffic" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/RozeTextViewStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/setting_item_height"
+                        android:layout_weight="1"
+                        android:text="@string/restrict_traffic_tsms_description"
+                        android:textSize="@dimen/setting_description_font_size" />
+
+                    <Switch
+                        android:id="@+id/route_option_traffic_switch"
+                        style="@style/RozeSwitchStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingRight="@dimen/common_margin_large" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/RozeTextViewStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/setting_item_height"
+                        android:layout_weight="1"
+                        android:text="@string/restrict_traffic_pattern_description"
+                        android:textSize="@dimen/setting_description_font_size" />
+
+                    <Switch
+                        android:id="@+id/route_option_traffic_pattern_switch"
+                        style="@style/RozeSwitchStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingRight="@dimen/common_margin_large" />
+                </LinearLayout>
+
+                <TextView
+                    style="@style/SettingSubtitleStyle"
+                    android:text="@string/setting_route_activity_subtitle_divided" />
+
+                <RadioGroup
+                    android:id="@+id/route_option_divided_radiogroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RadioButton
+                        android:id="@+id/route_option_divided_none"
+                        style="@style/RozeRadioItemStyle"
+                        android:text="@string/route_option_detour_none" />
+
+                    <RadioButton
+                        android:id="@+id/route_option_divided_total_avoid"
+                        style="@style/RozeRadioItemStyle"
+                        android:text="@string/route_option_detour_total" />
+
+                    <RadioButton
+                        android:id="@+id/route_option_divided_maximum_avoid"
+                        style="@style/RozeRadioItemStyle"
+                        android:text="@string/route_option_detour_maximum" />
+                </RadioGroup>
+
+                <TextView
+                    style="@style/SettingSubtitleStyle"
+                    android:text="@string/setting_route_activity_subtitle_lane" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/setting_item_background"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/RozeTextViewStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/setting_item_height"
+                        android:layout_weight="1"
+                        android:text="@string/restrict_lane_description"
+                        android:textSize="@dimen/setting_description_font_size" />
+
+                    <EditText
+                        android:id="@+id/route_option_lane_edittext"
+                        android:layout_width="@dimen/setting_edittext_width"
+                        android:layout_height="@dimen/setting_edittext_height"
+                        android:layout_marginRight="@dimen/common_margin_large"
+                        android:background="@drawable/round_grey_background"
+                        android:gravity="center"
+                        android:inputType="number"
+                        android:maxLength="2"
+                        android:textColor="@color/almost_balck"
+                        android:textSize="@dimen/setting_edittext_font_size" />
+                </LinearLayout>
+
+                <RadioGroup
+                    android:id="@+id/route_option_lane_radiogroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RadioButton
+                        android:id="@+id/route_option_lane_none"
+                        style="@style/RozeRadioItemStyle"
+                        android:text="@string/route_option_detour_none" />
+
+                    <RadioButton
+                        android:id="@+id/route_option_lane_total_avoid"
+                        style="@style/RozeRadioItemStyle"
+                        android:text="@string/route_option_detour_total" />
+
+                    <RadioButton
+                        android:id="@+id/route_option_lane_maximum_avoid"
+                        style="@style/RozeRadioItemStyle"
+                        android:text="@string/route_option_detour_maximum" />
+                </RadioGroup>
+
+                <TextView
+                    style="@style/SettingSubtitleStyle"
+                    android:text="@string/setting_route_activity_subtitle_height" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/setting_item_background"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/RozeTextViewStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/setting_item_height"
+                        android:layout_weight="1"
+                        android:text="@string/restrict_height_description"
+                        android:textSize="@dimen/setting_description_font_size" />
+
+                    <EditText
+                        android:id="@+id/route_option_height_edittext"
+                        android:layout_width="@dimen/setting_edittext_width"
+                        android:layout_height="@dimen/setting_edittext_height"
+                        android:layout_marginRight="@dimen/common_margin_large"
+                        android:background="@drawable/round_grey_background"
+                        android:gravity="center"
+                        android:inputType="numberDecimal"
+                        android:maxLength="6"
+                        android:textColor="@color/almost_balck"
+                        android:textSize="@dimen/setting_edittext_font_size" />
+                </LinearLayout>
+
+                <RadioGroup
+                    android:id="@+id/route_option_height_radiogroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RadioButton
+                        android:id="@+id/route_option_height_none"
+                        style="@style/RozeRadioItemStyle"
+                        android:text="@string/route_option_detour_none" />
+
+                    <RadioButton
+                        android:id="@+id/route_option_height_total_avoid"
+                        style="@style/RozeRadioItemStyle"
+                        android:text="@string/route_option_detour_total" />
+
+                    <RadioButton
+                        android:id="@+id/route_option_height_maximum_avoid"
+                        style="@style/RozeRadioItemStyle"
+                        android:text="@string/route_option_detour_maximum" />
+                </RadioGroup>
+
+                <TextView
+                    style="@style/SettingSubtitleStyle"
+                    android:text="@string/setting_route_activity_subtitle_weight" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/setting_item_background"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/RozeTextViewStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/setting_item_height"
+                        android:layout_weight="1"
+                        android:text="@string/restrict_weight_description"
+                        android:textSize="@dimen/setting_description_font_size" />
+
+                    <EditText
+                        android:id="@+id/route_option_weight_edittext"
+                        android:layout_width="@dimen/setting_edittext_width"
+                        android:layout_height="@dimen/setting_edittext_height"
+                        android:layout_marginRight="@dimen/common_margin_large"
+                        android:background="@drawable/round_grey_background"
+                        android:gravity="center"
+                        android:inputType="numberDecimal"
+                        android:maxLength="6"
+                        android:textColor="@color/almost_balck"
+                        android:textSize="@dimen/setting_edittext_font_size" />
+                </LinearLayout>
+
+                <RadioGroup
+                    android:id="@+id/route_option_weight_radiogroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RadioButton
+                        android:id="@+id/route_option_weight_none"
+                        style="@style/RozeRadioItemStyle"
+                        android:text="@string/route_option_detour_none" />
+
+                    <RadioButton
+                        android:id="@+id/route_option_weight_total_avoid"
+                        style="@style/RozeRadioItemStyle"
+                        android:text="@string/route_option_detour_total" />
+
+                    <RadioButton
+                        android:id="@+id/route_option_weight_maximum_avoid"
+                        style="@style/RozeRadioItemStyle"
+                        android:text="@string/route_option_detour_maximum" />
+                </RadioGroup>
+
+                <TextView
+                    style="@style/SettingSubtitleStyle"
+                    android:text="@string/setting_route_activity_subtitle_water" />
+
+                <RadioGroup
+                    android:id="@+id/route_option_water_radiogroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RadioButton
+                        android:id="@+id/route_option_water_none"
+                        style="@style/RozeRadioItemStyle"
+                        android:text="@string/route_option_detour_none" />
+
+                    <RadioButton
+                        android:id="@+id/route_option_water_total_avoid"
+                        style="@style/RozeRadioItemStyle"
+                        android:text="@string/route_option_detour_total" />
+
+                    <RadioButton
+                        android:id="@+id/route_option_water_maximum_avoid"
+                        style="@style/RozeRadioItemStyle"
+                        android:text="@string/route_option_detour_maximum" />
+                </RadioGroup>
+
+                <TextView
+                    style="@style/SettingSubtitleStyle"
+                    android:text="@string/setting_route_activity_subtitle_restrictions" />
+
+                <RadioGroup
+                    android:id="@+id/route_option_restrictions_radiogroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RadioButton
+                        android:id="@+id/route_option_restrictions_none"
+                        style="@style/RozeRadioItemStyle"
+                        android:text="@string/route_option_detour_none" />
+
+                    <RadioButton
+                        android:id="@+id/route_option_restrictions_total_avoid"
+                        style="@style/RozeRadioItemStyle"
+                        android:text="@string/route_option_detour_total" />
+
+                    <RadioButton
+                        android:id="@+id/route_option_restrictions_maximum_avoid"
+                        style="@style/RozeRadioItemStyle"
+                        android:text="@string/route_option_detour_maximum" />
+                </RadioGroup>
+
+                <TextView
+                    style="@style/SettingSubtitleStyle"
+                    android:text="@string/setting_route_activity_subtitle_narrow" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/setting_item_background"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/RozeTextViewStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/setting_item_height"
+                        android:layout_weight="1"
+                        android:text="@string/restrict_narrow_lane_description"
+                        android:textSize="@dimen/setting_description_font_size" />
+
+                    <EditText
+                        android:id="@+id/route_option_narrow_edittext"
+                        android:layout_width="@dimen/setting_edittext_width"
+                        android:layout_height="@dimen/setting_edittext_height"
+                        android:layout_marginRight="@dimen/common_margin_large"
+                        android:background="@drawable/round_grey_background"
+                        android:gravity="center"
+                        android:inputType="number"
+                        android:textColor="@color/almost_balck"
+                        android:textSize="@dimen/setting_edittext_font_size" />
+                </LinearLayout>
+
+                <RadioGroup
+                    android:id="@+id/route_option_narrow_radiogroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RadioButton
+                        android:id="@+id/route_option_narrow_none"
+                        style="@style/RozeRadioItemStyle"
+                        android:text="@string/route_option_detour_none" />
+
+                    <RadioButton
+                        android:id="@+id/route_option_narrow_total_avoid"
+                        style="@style/RozeRadioItemStyle"
+                        android:text="@string/route_option_detour_total" />
+
+                    <RadioButton
+                        android:id="@+id/route_option_narrow_maximum_avoid"
+                        style="@style/RozeRadioItemStyle"
+                        android:text="@string/route_option_detour_maximum" />
+                </RadioGroup>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+</layout>

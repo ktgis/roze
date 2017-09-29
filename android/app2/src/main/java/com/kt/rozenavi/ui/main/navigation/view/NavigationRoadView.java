@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.kt.rozenavi.R;
 
 import butterknife.BindView;
@@ -80,8 +81,9 @@ public class NavigationRoadView extends RelativeLayout {
         } else {
             Glide.with(getContext())
                     .load(imagePath)
-                    .bitmapTransform(new RoundedCornersTransformation(getContext(), radius, 0,
-                            RoundedCornersTransformation.CornerType.ALL)).into(roadview);
+                    .apply(RequestOptions.bitmapTransform(
+                            new RoundedCornersTransformation(radius, 0, RoundedCornersTransformation.CornerType.ALL)))
+                    .into(roadview);
         }
         toggleView();
     }

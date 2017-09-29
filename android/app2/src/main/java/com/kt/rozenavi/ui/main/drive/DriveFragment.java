@@ -118,8 +118,8 @@ public class DriveFragment extends BaseFragment implements WeakReferenceHandler.
 
         if (requestCode == MainActivity.SEARCH_REQ_CODE) {
             //검색결과에서 목적지 좌표, 목적지 명칭 반환
-            int x = data.getIntExtra(SearchActivity.RESULT_EXTRA_COORD_X, 0);
-            int y = data.getIntExtra(SearchActivity.RESULT_EXTRA_COORD_Y, 0);
+            double x = data.getDoubleExtra(SearchActivity.RESULT_EXTRA_COORD_X, 0);
+            double y = data.getDoubleExtra(SearchActivity.RESULT_EXTRA_COORD_Y, 0);
             String name = data.getStringExtra(SearchActivity.RESULT_EXTRA_DESTINATION_NAME);
 
             requestRouteSummary(x, y, name);
@@ -370,7 +370,7 @@ public class DriveFragment extends BaseFragment implements WeakReferenceHandler.
     /**
      * 경로 요청
      */
-    private void requestRouteSummary(int x, int y, String name) {
+    private void requestRouteSummary(double x, double y, String name) {
         //현재 gps가 사용가능한 상태인지 마지막 수신 정보 확인
         Location lastLocation = NavigationManager.getInstance().getLastGpsLocation();
         if (lastLocation == null) {

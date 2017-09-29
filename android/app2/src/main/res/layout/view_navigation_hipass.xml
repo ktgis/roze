@@ -22,8 +22,8 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="21dp"
+            android:layout_height="30dp"
             android:layout_marginBottom="2dp"
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"
@@ -33,9 +33,9 @@
         <LinearLayout
             android:id="@+id/hipass_lane_layout"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="30dp"
             android:layout_marginBottom="2dp"
-            android:layout_marginLeft="6dp"
+            android:layout_marginLeft="3dp"
             android:layout_marginRight="4dp"
             android:layout_marginTop="2dp"
             android:gravity="center"

@@ -11,12 +11,11 @@
   ~
   -->
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
+    android:background="@color/white"
     android:clickable="true"
     android:focusableInTouchMode="true"
     android:orientation="vertical">
@@ -30,46 +29,58 @@
         <TextView
             android:id="@+id/setting_car_textview"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="24dp"
-            android:paddingStart="20dp"
-            android:paddingTop="24dp"
-            android:text="차량설정"
-            android:textSize="18sp"/>
+            android:layout_height="@dimen/menu_item_height"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/common_margin_large"
+            android:text="@string/drawer_menu_setting_car"
+            android:textSize="@dimen/menu_item_font_size" />
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="#999999"/>
+            android:layout_height="1dp"
+            android:background="@color/dawm_grey" />
 
         <TextView
             android:id="@+id/setting_route_textview"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="24dp"
-            android:paddingStart="20dp"
-            android:paddingTop="24dp"
-            android:text="경로설정"
-            android:textSize="18sp"/>
+            android:layout_height="@dimen/menu_item_height"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/common_margin_large"
+            android:text="@string/drawer_menu_setting_route"
+            android:textSize="@dimen/menu_item_font_size" />
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="#999999"/>
+            android:layout_height="1dp"
+            android:background="@color/dawm_grey" />
+
+        <TextView
+            android:id="@+id/setting_route_adv_textview"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/menu_item_height"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/common_margin_large"
+            android:text="@string/drawer_menu_setting_route_adv"
+            android:textSize="@dimen/menu_item_font_size" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/dawm_grey" />
+
         <TextView
             android:id="@+id/setting_sound_textview"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="24dp"
-            android:paddingStart="20dp"
-            android:paddingTop="24dp"
-            android:text="음성안내설정"
-            android:textSize="18sp"/>
+            android:layout_height="@dimen/menu_item_height"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/common_margin_large"
+            android:text="@string/drawer_menu_setting_sound"
+            android:textSize="@dimen/menu_item_font_size" />
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="#999999"/>
+            android:layout_height="1dp"
+            android:background="@color/dawm_grey" />
     </LinearLayout>
 
     <TextView
@@ -77,8 +88,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:paddingStart="20dp"
-        android:paddingBottom="20dp"
-        tools:text="SDK Version 1.0.0"
-        android:textSize="12sp"/>
+        android:paddingBottom="@dimen/common_margin_large"
+        android:paddingLeft="@dimen/common_margin_large"
+        android:textSize="@dimen/menu_version_font_size"
+        tools:text="SDK Version 1.0.0" />
 </LinearLayout>

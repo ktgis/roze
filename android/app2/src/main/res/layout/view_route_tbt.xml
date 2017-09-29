@@ -7,6 +7,7 @@
         android:id="@+id/route_tbt_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:overScrollMode="never"
         android:clipToPadding="false"
         android:orientation="vertical"
         android:paddingBottom="70dp" />

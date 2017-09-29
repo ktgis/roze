@@ -23,6 +23,8 @@ import android.widget.RelativeLayout;
 
 import com.kt.roze.guidance.model.HighwayGuidance;
 import com.kt.rozenavi.R;
+import com.kt.rozenavi.ui.main.navigation.view.adapter.NavigationHighwayRecyclerViewAdapter;
+import com.kt.rozenavi.utils.CommonUtils;
 
 import java.util.List;
 
@@ -70,7 +72,7 @@ public class NavigationHighWayView extends RelativeLayout {
     public void setHighwayGuidances(List<HighwayGuidance> guidances) {
         this.guidances = guidances;
 
-        if (guidances == null) {
+        if (CommonUtils.isEmpty(guidances)) {
             setVisibility(View.INVISIBLE);
             return;
         }
@@ -87,7 +89,7 @@ public class NavigationHighWayView extends RelativeLayout {
      * @param distance 거리(m)
      */
     public void updateDistance(int distance) {
-        if (guidances == null || guidances.isEmpty()) {
+        if (CommonUtils.isEmpty(guidances)) {
             return;
         }
         int remainDistance = distance - guidances.get(0).getDistance();
@@ -96,7 +98,7 @@ public class NavigationHighWayView extends RelativeLayout {
         adapter.notifyDataSetChanged();
     }
 
-    class ItemMargin extends RecyclerView.ItemDecoration {
+    private class ItemMargin extends RecyclerView.ItemDecoration {
         int margin = 0;
 
         ItemMargin(int marginByPx) {

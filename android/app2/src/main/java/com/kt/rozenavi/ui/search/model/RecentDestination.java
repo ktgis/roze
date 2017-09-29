@@ -13,7 +13,7 @@
 package com.kt.rozenavi.ui.search.model;
 
 
-import com.kt.roze.search.model.SearchPlaceData;
+import com.kt.place.model.poi.Poi;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,10 +38,10 @@ public class RecentDestination {
     /**
      * 이전 검색 데이터 리스트
      */
-    private List<SearchPlaceData> destinations;
+    private List<Poi> destinations;
 
     public RecentDestination() {
-        this(new ArrayList<SearchPlaceData>());
+        this(new ArrayList<Poi>());
     }
 
     /**
@@ -49,7 +49,7 @@ public class RecentDestination {
      *
      * @return 이전 검색 데이터
      */
-    public List<SearchPlaceData> getDestinations() {
+    public List<Poi> getDestinations() {
         if (destinations == null) {
             destinations = new ArrayList<>();
         }
@@ -62,7 +62,7 @@ public class RecentDestination {
      *
      * @param data 검색 데이터
      */
-    public void addPlaceData(SearchPlaceData data) {
+    public void addPlaceData(Poi data) {
         int removeIndex = getPlaceDataIndex(data);
         if (removeIndex != -1) {
             destinations.remove(removeIndex);
@@ -83,11 +83,11 @@ public class RecentDestination {
      * @param data 검색 데이터 객체
      * @return 데이터 index
      */
-    private int getPlaceDataIndex(SearchPlaceData data) {
-        SearchPlaceData place;
+    private int getPlaceDataIndex(Poi data) {
+        Poi place;
         for (int i = 0; i < destinations.size(); i++) {
             place = destinations.get(i);
-            if (place.name.equalsIgnoreCase(data.name)) {
+            if (place.getPoiName().equalsIgnoreCase(data.getPoiName())) {
                 return i;
             }
         }

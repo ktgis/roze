@@ -12,13 +12,14 @@
 
 package com.kt.rozenavi.utils;
 
+import android.graphics.Color;
 import android.location.Location;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.RelativeSizeSpan;
 import android.widget.TextView;
 
-import com.kt.maps.overlay.RoutePath;
+import com.kt.geom.model.UTMK;
 import com.kt.roze.NavigationManager;
 import com.kt.roze.data.model.EnergyPrice;
 import com.kt.roze.guidance.RGType;
@@ -90,25 +91,26 @@ public class NaviUtils {
     }
 
     /**
-     * 거리정보를 포맷팅하여 반환할때 거리값과 단위값을 크기를 다르게 변형하여 반환
-     * 거리정보는 단위정보보다 1.5배로 키워서 반환
+     * 거리정보를 포맷팅하여 반환할때 거리값과 단위표시 크기를 다르게 변형하여 반환
+     * 단위표시를 거리값보다 작게 하여 상대적으로 거리값을 강조한다.
      *
      * @param textView 입력될 textview
      * @param distance 거리값
      */
     public static void setSizeSpanDistance(TextView textView, int distance) {
-        SpannableString spannableString;
+        SpannableString spannableString = new SpannableString(convertDistanceUnit(distance));
+        int offset;
         if (distance < 1000) { //m단위
-            spannableString = new SpannableString(convertDistanceUnit(distance));
-            //마지막 'm' 한글자 제외하고 1.5배로 변경
-            spannableString.setSpan(new RelativeSizeSpan(1.5f), 0, spannableString.length() - 1,
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            //뒤에서 1글자
+            offset = 1;
         } else { //km단위
-            spannableString = new SpannableString(convertDistanceUnit(distance));
-            //마지막 'km' 두글자 제외하고 1.5배로 변경
-            spannableString.setSpan(new RelativeSizeSpan(1.5f), 0, spannableString.length() - 2,
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            //뒤에서 2글자
+            offset = 2;
         }
+        //단위값만 0.7배로 변경
+        spannableString.setSpan(new RelativeSizeSpan(0.7f),
+                spannableString.length() - offset, spannableString.length(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         textView.setText(spannableString, TextView.BufferType.SPANNABLE);
     }
 
@@ -168,7 +170,6 @@ public class NaviUtils {
     }
 
     public static String convertRemainTimeByFormat(long timeInSecond) {
-
         StringBuilder builder = new StringBuilder();
         int hour = (int) (timeInSecond / 3600);
         if (hour > 0) {
@@ -408,6 +409,9 @@ public class NaviUtils {
             case RGType.CAUTION_BUMP_ONEWAY:
             case RGType.CAUTION_BUMP:
                 return R.drawable.img_speed_bump;
+            case RGType.CAUTION_HTRUCK_WATERPROTAREA_START:
+            case RGType.CAUTION_HTRUCK_WATERPROTAREA_END:
+                return R.drawable.r21;
             default:
                 return -1;
         }
@@ -482,5 +486,38 @@ public class NaviUtils {
                 break;
         }
         return resourceId;
+    }
+
+    /**
+     * 기준 좌표에서 angle방향으로 interval 만큼의 거리의 좌표를 반환
+     *
+     * @param angle    진행 각도
+     * @param frompt   기준 좌표
+     * @param interval 거리(m)
+     * @return 계산된 좌표
+     */
+    public static UTMK getPointOverLineDistance(short angle, UTMK frompt, int interval) {
+        double x = frompt.x + (interval * Math.sin(Math.toRadians(angle)));
+        double y = frompt.y + (interval * Math.cos(Math.toRadians(angle)));
+        return new UTMK(x, y);
+    }
+
+    public static int getHighwayTrafficColor(short trafficInfo) {
+        int color;
+        switch (trafficInfo) {
+            case 1:
+                color = Color.RED;
+                break;
+            case 2:
+                color = Color.YELLOW;
+                break;
+            case 3:
+                color = Color.GREEN;
+                break;
+            default:
+                color = Color.LTGRAY;
+                break;
+        }
+        return color;
     }
 }

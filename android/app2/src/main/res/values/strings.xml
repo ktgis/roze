@@ -107,13 +107,9 @@
     <!--common-->
     <string name="current_location">현재위치</string>
     <string name="common_ok">확인</string>
+    <string name="common_save">저장</string>
     <string name="common_cancel">취소</string>
     <string name="common_setting">설정</string>
-
-    <!--title-->
-    <string name="activity_title_setting_car_type">차량설정</string>
-    <string name="activity_title_setting_route_type">경로설정</string>
-    <string name="activity_title_setting_sound_option">음성안내설정</string>
 
     <!--log-->
     <string name="toast_message_log_save_success">GPS 정보를 저장하였습니다.</string>
@@ -133,22 +129,21 @@
     <string name="permission_draw_overlay_dialog_message">다른앱 위에 그리기 설정이 필요합니다.</string>
     <string name="permission_draw_overlay_introduce_message">길안내 중 다른 앱을 실행 시에, 미니창을 통해 계속 길안내를 받으시려면\n[다른 앱 위에 그리기] 사용을 허용해 주세요.</string>
 
+    <!--search bar-->
+    <string name="search_bar_hint">장소, 주소 검색</string>
+
+    <!--menu drawer-->
+    <string name="drawer_menu_setting_car">차량설정</string>
+    <string name="drawer_menu_setting_route">경로설정</string>
+    <string name="drawer_menu_setting_route_adv">경로추가설정</string>
+    <string name="drawer_menu_setting_sound">음성안내설정</string>
+
     <!--main-->
     <string name="toast_message_main_back_button">\'뒤로\'버튼을 한번 더 누르시면 종료됩니다.</string>
-    <string name="toast_message_navigation_stop">경로 안내를 종료합니다.</string>
-    <string name="toast_message_navigation_arrived_destination">목적지에 도착하여 경로안내를 종료합니다.</string>
-    <string name="toast_message_navigation_arrived_waypoint">경유지에 도착하였습니다. 다음장소로 이동합니다.</string>
-    <string name="toast_message_navigation_traffic_update">실시간 교통정보를 반영중입니다.</string>
-    <string name="toast_message_route_fail">경로 탐색에 실패하였습니다.</string>
-    <string name="toast_message_reroute_auto">교통상황이 변경되어 경로를 재탐색합니다.</string>
-    <string name="toast_message_location_deviated">경로를 이탈하여 재탐색 합니다.</string>
-    <string name="toast_message_location_did_not_enter">경로에 진입하지 못하여 재탐색 합니다.</string>
-    <string name="toast_message_sound_init_fail">사운드 초기화에 실패하였습니다.</string>
     <string name="toast_message_map_init_fail_result_success">Map SDK 초기화 성공</string>
     <string name="toast_message_map_init_fail_result_empty">AndroidManifest.xml에 giskey를 입력했는지 확인해 주세요</string>
     <string name="toast_message_map_init_fail_result_invalid">giskey형식이 올바르지 않습니다.전달받은 giskey를 정확하게 입력했는지 확인해 주세요</string>
     <string name="toast_message_map_init_fail_result_fail">giskey가 맞지 않습니다. 전달받은 giskey를 정확하게 입력했는지 확인해 주세요</string>
-
     <string name="dialog_navigation_init_fail_title">네비게이션 초기화 실패</string>
     <string name="dialog_navigation_init_fail_message">구글플레이 서비스가 업데이트가 필요합니다. 업데이트 후 다시 실행해
         주세요
@@ -158,6 +153,12 @@
     </string>
     <string name="dialog_navigation_init_fail_button">앱 종료</string>
 
+    <!--search-->
+    <string name="toast_message_save_recent_fail">데이터 저장에 실패 했습니다.</string>
+    <string name="toast_message_search_fail">목적지 검색에 실패 하였습니다.</string>
+    <string name="toast_message_last_search_result">마지막 검색 결과입니다.</string>
+    <string name="search_empty_recent_location_list">최근 목적지 없음</string>
+
     <!--route-->
     <string name="toast_message_gps_signal_not_found">gps가 잡히지 않았습니다. 잠시후 다시 시도해 주세요.</string>
     <string name="route_type_view_toggle_select_route">경로선택 하기</string>
@@ -165,10 +166,16 @@
     <string name="route_edit_view_waypoint_input_null">미 설정된 항목을 확인하세요.</string>
     <string name="route_edit_view_waypoint_location_overlay">해당 목적지는 등록된 목적지입니다.</string>
 
-    <!--search-->
-    <string name="toast_message_save_recent_fail">데이터 저장에 실패 했습니다.</string>
-    <string name="toast_message_search_fail">목적지 검색에 실패 하였습니다.</string>
-    <string name="toast_message_last_search_result">마지막 검색 결과입니다.</string>
+    <!--navigation-->
+    <string name="toast_message_navigation_stop">경로 안내를 종료합니다.</string>
+    <string name="toast_message_navigation_arrived_destination">목적지에 도착하여 경로안내를 종료합니다.</string>
+    <string name="toast_message_navigation_arrived_waypoint">경유지에 도착하였습니다. 다음장소로 이동합니다.</string>
+    <string name="toast_message_navigation_traffic_update">실시간 교통정보를 반영중입니다.</string>
+    <string name="toast_message_route_fail">경로 탐색에 실패하였습니다.</string>
+    <string name="toast_message_reroute_auto">교통상황이 변경되어 경로를 재탐색합니다.</string>
+    <string name="toast_message_location_deviated">경로를 이탈하여 재탐색 합니다.</string>
+    <string name="toast_message_location_did_not_enter">경로에 진입하지 못하여 재탐색 합니다.</string>
+    <string name="toast_message_navigation_start_fail">경로안내 시작에 실패했습니다.</string>
 
     <!--waypoint dialog-->
     <string name="waypoint_dialog_pass_waypoint">경유지 근방에 도착했습니다. 다음 목적지로 안내합니다.</string>
@@ -176,9 +183,6 @@
     <string name="waypoint_dialog_content">다음 목적지를 탐색하시겠습니까?</string>
     <string name="waypoint_dialog_button_positive">예</string>
     <string name="waypoint_dialog_button_negative">아니오</string>
-
-    <!--navigation-->
-    <string name="toast_message_navigation_start_fail">경로안내 시작에 실패했습니다.</string>
 
     <!--rgtype string-->
     <string name="rgtype_go_strait">직진</string>
@@ -233,10 +237,23 @@
     <string name="rgtype_destination">목적지</string>
 
     <!--settings-->
-    <string name="route_type_balanced">최적경로</string>
-    <string name="route_type_highway">고속도로 우선</string>
-    <string name="route_type_free_road">무료경로</string>
-    <string name="route_type_shortest">최단경로</string>
+    <string name="toast_message_option_save_success">저장되었습니다</string>
+    <string name="setting_option_save_success">저장완료</string>
+    <!--car-->
+    <string name="setting_car_activity_title">차량설정</string>
+    <string name="setting_car_activity_subtitle_type">차종선택</string>
+    <string name="setting_car_activity_subtitle_hipass">하이패스</string>
+    <string name="setting_car_activity_subtitle_gas">차량유종</string>
+    <string name="car_type_unknown">미정의(UNKNOWN)</string>
+    <string name="car_type_motorcycle">이륜차(MOTORCYCLE)</string>
+    <string name="car_type_car">승용차, 소형 승합차, 소형 화물차(CAR)</string>
+    <string name="car_type_mid_car">중형 승합차, 중형 화물차(MID_CAR)</string>
+    <string name="car_type_heavy_car">대형 승합차, 대형 화물차(2축)(HEAVY_CAR)</string>
+    <string name="car_type_truck">대형 화물차(3축)(TRUCK)</string>
+    <string name="car_type_specific_goods">특수 화물차(4축 이상)(SPECIFIC_GOODS)</string>
+    <string name="car_type_small_car">경차(SMALL_CAR)</string>
+    <string name="hipass_type_yes">사용</string>
+    <string name="hipass_type_no">사용하지 않음</string>
     <string name="energy_type_gasoline">휘발유</string>
     <string name="energy_type_premium_gasoline">고급휘발유</string>
     <string name="energy_type_diesel">경유</string>
@@ -245,5 +262,65 @@
     <string name="energy_type_cng">압축천연가스</string>
     <string name="energy_type_lng">액화천연가스</string>
     <string name="energy_type_electricity">전기</string>
+    <!--route-->
+    <string name="toast_message_narrow_lane_value_fail">좁은길 차선 입력해주세요</string>
+    <string name="toast_message_weight_value_fail">제한 중량 입력해주세요</string>
+    <string name="toast_message_height_value_fail">제한 높이 입력해주세요</string>
+    <string name="toast_message_uturn_lane_value_fail">제한 차선수 입력해주세요</string>
+    <string name="setting_route_activity_title">경로설정</string>
+    <string name="setting_route_activity_subtitle_route_1">경로선택 1</string>
+    <string name="setting_route_activity_subtitle_route_2">경로선택 2</string>
+    <string name="route_type_balanced">최적경로</string>
+    <string name="route_type_highway">고속도로 우선</string>
+    <string name="route_type_free_road">무료경로</string>
+    <string name="route_type_shortest">최단경로</string>
+    <string name="setting_route_adv_activity_title">경로추가설정</string>
+    <string name="setting_route_activity_subtitle_traffic">교통정보 사용</string>
+    <string name="setting_route_activity_subtitle_divided">비분리도로 유턴 회피</string>
+    <string name="setting_route_activity_subtitle_lane">차선수 제한 유턴 회피</string>
+    <string name="setting_route_activity_subtitle_height">높이 제한 회피</string>
+    <string name="setting_route_activity_subtitle_weight">중량 제한 회피</string>
+    <string name="setting_route_activity_subtitle_water">상수도 보호 구역 회피</string>
+    <string name="setting_route_activity_subtitle_restrictions">통행 제한 구역 회피</string>
+    <string name="setting_route_activity_subtitle_narrow">좁은길 회피</string>
+    <string name="restrict_traffic_tsms_description">실시간 교통정보</string>
+    <string name="restrict_traffic_pattern_description">교통 패턴정보</string>
+    <string name="restrict_lane_description">제한 차선 수</string>
+    <string name="restrict_height_description">제한 높이(m)</string>
+    <string name="restrict_weight_description">제한 중량(t)</string>
+    <string name="restrict_narrow_lane_description">좁은길 차선 수</string>
+    <string name="route_option_detour_none">사용 안함</string>
+    <string name="route_option_detour_total">완전 회피</string>
+    <string name="route_option_detour_maximum">가능한 회피</string>
+    <!--sound-->
+    <string name="toast_message_sound_init_fail">사운드 초기화에 실패하였습니다</string>
+    <string name="setting_sound_activity_title">음성안내설정</string>
+    <string name="setting_sound_activity_subtitle_type">음성타입설정</string>
+    <string name="setting_sound_activity_subtitle_option">음성안내선택</string>
+    <string name="sound_type_soft">차분</string>
+    <string name="sound_type_sporty">발랄</string>
+    <string name="sound_option_fixed_speed_camera">고정식 카메라</string>
+    <string name="sound_option_movable_speed_camera">이동식 카메라</string>
+    <string name="sound_option_signal_violation_camera">신호위반 카메라</string>
+    <string name="sound_option_bus_camera">버스전용 카메라</string>
+    <string name="sound_option_traffic_camera">교통정보 수집 카메라</string>
+    <string name="sound_option_stop_camera">주정차 단속 카메라</string>
+    <string name="sound_option_overload_camera">과적차량 단속 카메라</string>
+    <string name="sound_option_interrupt_camera">끼어들기 단속 카메라</string>
+    <string name="sound_option_cctv">방범CCTV</string>
+    <string name="sound_option_shoulder">갓길단속</string>
+    <string name="sound_option_sharp_curve">급회전 구간</string>
+    <string name="sound_option_accident_black_spot">사고다발 구간</string>
+    <string name="sound_option_lane_decrease">좁아지는 지역</string>
+    <string name="sound_option_rock_slide">낙석주의</string>
+    <string name="sound_option_slippery_surface">미끄럼주의</string>
+    <string name="sound_option_speed_bump">과속방지턱</string>
+    <string name="sound_option_fog">안개주의</string>
+    <string name="sound_option_fall">추락주의</string>
+    <string name="sound_option_railroad_crossing">철길건널목</string>
+    <string name="sound_option_scarp">급경사</string>
+    <string name="sound_option_deer_crossing">야생동물보호</string>
 
+    <!-- navigation view -->
+    <string name="navigation_turn_toll">요금 : %,d원</string>
 </resources>

@@ -21,38 +21,38 @@
         android:id="@+id/search_button"
         layout="@layout/layout_search_bar"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp"/>
+        android:layout_height="@dimen/search_bar_height"
+        android:layout_marginLeft="@dimen/common_margin_large"
+        android:layout_marginRight="@dimen/common_margin_large"
+        android:layout_marginTop="@dimen/common_margin_large" />
 
     <ImageView
         android:id="@+id/location_button"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="@dimen/map_control_button_size"
+        android:layout_height="@dimen/map_control_button_size"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="@dimen/common_margin_large"
+        android:layout_marginLeft="@dimen/common_margin_large"
         android:scaleType="fitXY"
-        android:layout_marginStart="20dp"
         android:src="@drawable/btn_current_location_on" />
 
     <ImageView
         android:id="@+id/compass_button"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="@dimen/map_control_button_size"
+        android:layout_height="@dimen/map_control_button_size"
         android:layout_above="@id/location_button"
-        android:scaleType="fitXY"
         android:layout_alignParentLeft="true"
-        android:layout_marginBottom="20dp"
-        android:layout_marginStart="20dp"
+        android:layout_marginBottom="@dimen/common_margin_large"
+        android:layout_marginLeft="@dimen/common_margin_large"
+        android:scaleType="fitXY"
         android:src="@drawable/btn_compass_heading" />
 
     <com.kt.rozenavi.ui.component.SpeedMeterView
         android:id="@+id/speed_value_layout"
-        android:layout_width="60dp"
-        android:layout_height="27dp"
+        android:layout_width="@dimen/speed_meter_width"
+        android:layout_height="@dimen/speed_meter_height"
         android:layout_above="@id/compass_button"
-        android:layout_marginBottom="20dp"
-        android:layout_marginStart="20dp" />
+        android:layout_marginBottom="@dimen/common_margin_large"
+        android:layout_marginLeft="@dimen/common_margin_large" />
 </RelativeLayout>

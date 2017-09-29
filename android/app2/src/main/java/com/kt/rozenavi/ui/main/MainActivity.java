@@ -36,9 +36,9 @@ import android.widget.Toast;
 
 import com.kt.maps.GMap;
 import com.kt.maps.GMapFragment;
+import com.kt.maps.GMapResultCode;
 import com.kt.maps.OnMapReadyListener;
 import com.kt.maps.model.Viewpoint;
-import com.kt.maps.util.GMapKeyManager;
 import com.kt.roze.NavigationManager;
 import com.kt.roze.RozeResultCode;
 import com.kt.roze.location.model.GeoLocation;
@@ -116,7 +116,7 @@ public class MainActivity extends BaseActivity
         NavigationManager navigationManager = NavigationManager.getInstance();
         //구글플레이서비스를 활용하지 못하는 상황일때 정상적인 내비기능을 활용하지 못하여
         //구글플레이서비스를 업데이트 하거나 사용가능하도록 변경하도록 안내 팝업을 표시 후 앱을 종료시킴
-        RozeResultCode initCode = navigationManager.initApplicationContext(getApplicationContext());
+        RozeResultCode initCode = navigationManager.initialize(getApplicationContext(), "전달받은 API Key 입력");
         if (initCode != RozeResultCode.SUCCESS) {
             showNaviInitFailDialog(initCode);
             return;
@@ -199,8 +199,8 @@ public class MainActivity extends BaseActivity
         if (tbtGuidancePopupService != null) {
             tbtGuidancePopupService.removeNotification();
             tbtGuidancePopupService.removeTbtPopupView();
-            unbindService(conn);
         }
+        unbindService(conn);
 
         //네비게이션엔진 종료
         navigationManager.stop();
@@ -309,7 +309,7 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void onFailReadyMap(GMapKeyManager.ResultCode code) {
+    public void onFailReadyMap(GMapResultCode code) {
         /**
          * Add Custom Code
          * Code Type

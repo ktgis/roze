@@ -11,7 +11,7 @@
         android:background="@drawable/navigation_lane_view_background"
         android:orientation="horizontal"
         android:paddingBottom="2dp"
-        android:paddingLeft="4dp"
+        android:paddingLeft="3dp"
         android:paddingRight="4dp"
         android:paddingTop="2dp" />
 

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~  Copyright (c) 2017 kt corp. All rights reserved.
+  ~
+  ~  This is a proprietary software of kt corp, and you may not use this file
+  ~  except in compliance with license agreement with kt corp. Any redistribution
+  ~  or use of this software, with or without modification shall be strictly
+  ~  prohibited without prior written approval of kt corp, and the copyright
+  ~   notice above does not evidence any actual or intended publication of such
+  ~  software.
+  ~
+  -->
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/setting_title_height"
+        android:background="@color/white">
+
+        <RelativeLayout
+            android:id="@+id/back_button_container"
+            android:layout_width="@dimen/setting_title_back_button_width"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="@dimen/setting_title_back_icon_width"
+                android:layout_height="@dimen/setting_title_back_icon_height"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/common_margin_large"
+                android:scaleType="center"
+                android:src="@drawable/btn_back" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/title_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/back_button_container"
+            android:gravity="center_vertical"
+            android:textColor="@color/almost_balck"
+            android:textSize="@dimen/setting_title_font_size" />
+
+        <RelativeLayout
+            android:id="@+id/save_button_container"
+            android:layout_width="@dimen/setting_title_save_button_width"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/common_margin_large"
+                android:src="@drawable/search_bar_cancel_icon"
+                android:text="@string/common_save"
+                android:textColor="@color/cool_red"
+                android:textSize="@dimen/setting_title_save_button_font_size" />
+        </RelativeLayout>
+    </RelativeLayout>
+</layout>

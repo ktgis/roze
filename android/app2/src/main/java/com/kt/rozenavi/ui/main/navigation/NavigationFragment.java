@@ -24,6 +24,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -57,6 +58,7 @@ import com.kt.roze.guidance.model.OilPriceGuidance;
 import com.kt.roze.guidance.model.SafetySpotGuidance;
 import com.kt.roze.guidance.model.Sound;
 import com.kt.roze.guidance.model.TurnGuidance;
+import com.kt.roze.location.LocationConfig;
 import com.kt.roze.location.model.GeoLocation;
 import com.kt.roze.location.model.RouteLocation;
 import com.kt.roze.resource.SoundResourceManager;
@@ -65,6 +67,10 @@ import com.kt.rozenavi.R;
 import com.kt.rozenavi.ui.component.SpeedMeterView;
 import com.kt.rozenavi.ui.component.core.BaseFragment;
 import com.kt.rozenavi.ui.main.MainActivityViewModel;
+import com.kt.rozenavi.ui.main.navigation.data.NavigationData;
+import com.kt.rozenavi.ui.main.navigation.data.model.LowestGasEventData;
+import com.kt.rozenavi.ui.main.navigation.data.model.RemainEventData;
+import com.kt.rozenavi.ui.main.navigation.data.model.SafetyEventData;
 import com.kt.rozenavi.ui.main.navigation.view.NavigationHighWayView;
 import com.kt.rozenavi.ui.main.navigation.view.NavigationHipassView;
 import com.kt.rozenavi.ui.main.navigation.view.NavigationLaneView;
@@ -75,6 +81,7 @@ import com.kt.rozenavi.ui.main.navigation.view.NavigationRoadView;
 import com.kt.rozenavi.ui.main.navigation.view.NavigationSpotView;
 import com.kt.rozenavi.ui.main.navigation.view.NavigationTbtView;
 import com.kt.rozenavi.ui.main.service.TbtGuidancePopupService;
+import com.kt.rozenavi.utils.CommonUtils;
 import com.kt.rozenavi.utils.MapUtils;
 import com.kt.rozenavi.utils.NaviUtils;
 import com.kt.rozenavi.utils.RouteListenerAdpater;
@@ -144,6 +151,10 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
     public static TbtGuidancePopupService tbtGuidancePopupService;
     private ZoomChanger zoomChanger = new ZoomChanger();
 
+    private RouteListenerAdpater routeListenerAdpater;
+    private RouteSummary routeSummary;
+    private int routeIndex;
+
     private MainActivityViewModel viewModel;
     private NavigationData navigationData;
 
@@ -165,7 +176,7 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
     }
 
     public NavigationFragment() {
-        navigationData = new NavigationData(this);
+        navigationData = new NavigationData();
         NavigationManager navigationManager = NavigationManager.getInstance();
         navigationManager.setRouteGuidanceEventListener(routeGuidanceListener);
         navigationManager.setRerouteListener(this);
@@ -176,6 +187,14 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
             @Nullable Bundle savedInstanceState) {
         //layout을 지정하면 자동으로 Butterknife bind
         return inflater.inflate(R.layout.fragment_navigation, container, false);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(NavigationManager.getInstance().getMode() == NavigationManager.Mode.TRACKING) {
+            getActivity().onBackPressed();
+        }
     }
 
     @Override
@@ -191,9 +210,8 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
         navigationManager.setRerouteListener(null);
         NavigationManager.getInstance().setSoundListener(null);
 
-        if (getActivity() != null && tbtGuidancePopupService != null) {
-            tbtGuidancePopupService.removeNotification();
-            tbtGuidancePopupService.removeTbtPopupView();
+        if (getActivity() != null) {
+            removeTbtPopupView();
             getActivity().unbindService(conn);
         }
 
@@ -210,6 +228,13 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
         NavigationManager.getInstance().stopNavigation(
                 NavigationManager.RouteFinishMode.USER_FINISH);
         super.onDestroy();
+    }
+
+    private void removeTbtPopupView() {
+        if (tbtGuidancePopupService != null) {
+            tbtGuidancePopupService.removeNotification();
+            tbtGuidancePopupService.removeTbtPopupView();
+        }
     }
 
     @Override
@@ -344,7 +369,7 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
         }
     }
 
-    private void initGuidanceView() {
+    private void resetGuidanceView() {
         tbtGuidanceView.clearOverlay();
         highwayGuidanceView.setVisibility(View.INVISIBLE);
         hipassGuidanceView.setVisibility(View.INVISIBLE);
@@ -354,7 +379,6 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
         spotGuidanceView.clearOverlay();
         lowestGasGuidanceView.setVisibility(View.INVISIBLE);
         lowestGasGuidanceView.clearOverlay();
-        lowestGasGuidanceView.setVisibility(View.INVISIBLE);
     }
 
     //getArguments() 및 초기 데이터 쿼리 관련 초기화
@@ -403,6 +427,7 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
                     gMap.animate(
                             ViewpointChange.builder()
                                     .rotateTo(isHeading ? angle : 0)
+                                    .tiltTo(isHeading ? 45 : 0)
                                     .panTo(coord)
                                     .pivot(currentPivot).build()
                             , 1000
@@ -442,9 +467,7 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
                                 setCurrentLocationMarker(UTMK.valueOf(markerLocation));
                             }
                         } else {
-                            currentLocationMarker.setRotation(
-                                    NavigationManager.getInstance().getLastBearing()
-                                            - gMap.getViewpoint().rotation);
+                            currentLocationMarker.setRotation(NavigationManager.getInstance().getLastBearing());
                         }
                     }
                 });
@@ -516,6 +539,9 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
         navigationData.turnEvent.observe(this, new Observer<List<TurnGuidance>>() {
             @Override
             public void onChanged(@Nullable List<TurnGuidance> turnGuidances) {
+                if (CommonUtils.isEmpty(turnGuidances)) {
+                    return;
+                }
                 updateTBTViews(turnGuidances);
             }
         });
@@ -529,10 +555,10 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
             }
         });
         navigationData.remainEvent.observe(this,
-                new Observer<NavigationData.RemainEventData>() {
+                new Observer<RemainEventData>() {
                     @Override
                     public void onChanged(
-                            @Nullable NavigationData.RemainEventData remainEventData) {
+                            @Nullable RemainEventData remainEventData) {
                         if (remainEventData == null) {
                             return;
                         }
@@ -541,10 +567,10 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
                 });
 
         navigationData.safetySpotEvent.observe(this,
-                new Observer<NavigationData.SafetyEventData>() {
+                new Observer<SafetyEventData>() {
                     @Override
                     public void onChanged(
-                            @Nullable NavigationData.SafetyEventData safetyEventData) {
+                            @Nullable SafetyEventData safetyEventData) {
                         if (safetyEventData == null) {
                             return;
                         }
@@ -570,10 +596,10 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
             }
         });
         navigationData.lowestGasEvent.observe(this,
-                new Observer<NavigationData.LowestGasEventData>() {
+                new Observer<LowestGasEventData>() {
                     @Override
                     public void onChanged(
-                            @Nullable NavigationData.LowestGasEventData lowestGasEventData) {
+                            @Nullable LowestGasEventData lowestGasEventData) {
                         if (lowestGasEventData == null) {
                             return;
                         }
@@ -678,6 +704,7 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
         }
         gMap.change(ViewpointChange.builder()
                 .rotateTo(isHeading ? angle : 0)
+                .tiltTo(isHeading ? 45 : 0)
                 .panTo(coord)
                 .pivot(currentPivot).build()
         );
@@ -687,18 +714,17 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
     public void setCurrentLocationMarker(UTMK coord) {
         if (currentLocationMarker == null) {
             currentLocationMarker = new Marker(new MarkerOptions()
+                    .flat(true)
                     .anchor(new Point(0.5, 0.5))
                     .icon(ResourceDescriptorFactory.fromResource(currentMarkerIcon))
-                    .iconSize(new Point(34, 47)).position(coord).visible(true));
+                    .iconSize(new Point(54, 54)).position(coord).visible(true));
             gMap.addOverlay(currentLocationMarker);
         } else {
             currentLocationMarker.setPosition(coord);
         }
 
-        currentLocationMarker.setRotation(
-                (isHeading && isFixedCurrentLocation) ? 0
-                        : NavigationManager.getInstance().getLastBearing()
-                                - gMap.getViewpoint().rotation);
+        currentLocationMarker.setRotation((isHeading && isFixedCurrentLocation) ?
+                gMap.getViewpoint().rotation : NavigationManager.getInstance().getLastBearing());
         currentLocationMarker.bringToFront();
 
         if (currentRoutePath != null) {
@@ -712,8 +738,7 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
      */
     private void applyDriveStyle() {
         gMap.setStyle(ResourceDescriptorFactory.fromResource(R.raw.day_drive));
-        gMap.setSyetemImage(ResourceDescriptorFactory
-                        .fromResource(R.drawable.com_kt_maps_totalimage),
+        gMap.setSyetemImage(ResourceDescriptorFactory.fromResource(R.drawable.com_kt_maps_totalimage),
                 ResourceDescriptorFactory.fromResource(R.raw.com_kt_maps_totalimage));
     }
 
@@ -739,10 +764,6 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
     public void handleMessage(Message msg) {
         setCurrentLocation();
     }
-
-    private RouteListenerAdpater routeListenerAdpater;
-    private RouteSummary routeSummary;
-    private int routeIndex;
 
     public void startNavigation(RouteSummary routeSummary, int routeIndex,
             RouteListenerAdpater routeListenerAdpater) {
@@ -799,7 +820,11 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
                 e.printStackTrace();
             }
 
-            getActivity().onBackPressed();
+           if(isResumed()) {
+               getActivity().onBackPressed();
+           } else {
+               removeTbtPopupView();
+           }
         } else {
             // 경유지 도착
             UIUtils.showToast(getActivity(), R.string.toast_message_navigation_arrived_waypoint);
@@ -827,10 +852,14 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
 
     @Override
     public void onRerouteEnd(NavigationManager.RouteMode mode, RouteSummary routeSummary) {
+        this.routeSummary = routeSummary;
+        if (!isAdded()) {
+            return;
+        }
         routeSummary.setActiveRoute(routeIndex);
         Route route = routeSummary.getActiveRoute();
 
-        initGuidanceView();
+        resetGuidanceView();
 
         NavigationManager navigationManager = NavigationManager.getInstance();
         lowestGasGuidanceView.setLowestGasStationList(navigationManager.getOilPricePOIList());
@@ -861,7 +890,7 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
     /**
      * TBT 정보 표시
      */
-    public void updateTBTViews(List<TurnGuidance> guidances) {
+    public void updateTBTViews(@NonNull List<TurnGuidance> guidances) {
         tbtGuidanceView.updateTBTViews(guidances);
         zoomChanger.updateTbt(guidances);
     }
@@ -932,7 +961,7 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
      */
     public void updateHighwayDistance(int distance) {
         highwayGuidanceView.updateDistance(distance);
-        hipassGuidanceView.updateDistance(distance);
+        hipassGuidanceView.updateHipassView(distance);
     }
 
     /**
@@ -1017,16 +1046,14 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
         @Override
         public void onRemainChangedEvent(int timeInSecond, int distanceInMeter) {
             super.onRemainChangedEvent(timeInSecond, distanceInMeter);
-            navigationData.remainEvent.setValue(
-                    new NavigationData.RemainEventData(timeInSecond, distanceInMeter));
+            navigationData.remainEvent.setValue(new RemainEventData(timeInSecond, distanceInMeter));
         }
 
         @Override
         public void onSafetySpotChangedEvent(
                 boolean isShow, List<SafetySpotGuidance> safetySpotGuidance) {
             super.onSafetySpotChangedEvent(isShow, safetySpotGuidance);
-            navigationData.safetySpotEvent.setValue(
-                    new NavigationData.SafetyEventData(isShow, safetySpotGuidance));
+            navigationData.safetySpotEvent.setValue(new SafetyEventData(isShow, safetySpotGuidance));
         }
 
         @Override
@@ -1043,8 +1070,7 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
         @Override
         public void onLowestGasStationChangedEvent(boolean isShow, List<OilPriceGuidance> list) {
             super.onLowestGasStationChangedEvent(isShow, list);
-            navigationData.lowestGasEvent.setValue(
-                    new NavigationData.LowestGasEventData(isShow, list));
+            navigationData.lowestGasEvent.setValue(new LowestGasEventData(isShow, list));
         }
 
         @Override
@@ -1090,5 +1116,9 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
         } else {
             soundManager.playExceedSound(sound);
         }
+    }
+
+    @Override
+    public void onSoundEnd() {
     }
 }

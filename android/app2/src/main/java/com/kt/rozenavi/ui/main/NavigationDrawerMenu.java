@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.kt.rozenavi.R;
 import com.kt.rozenavi.ui.setting.SettingCarActivity;
 import com.kt.rozenavi.ui.setting.SettingRouteActivity;
+import com.kt.rozenavi.ui.setting.SettingRouteAdvActivity;
 import com.kt.rozenavi.ui.setting.SettingSoundActivity;
 import com.kt.rozenavi.utils.UIUtils;
 
@@ -77,6 +78,14 @@ public class NavigationDrawerMenu extends RelativeLayout {
     @OnClick(R.id.setting_route_textview)
     protected void startSettingRouteActivity() {
         getContext().startActivity(SettingRouteActivity.newIntent(getContext()));
+        ((DrawerLayout) getParent()).closeDrawer(GravityCompat.START);
+    }
+    /**
+     * 경로 타입 추가설정화면으로 이동
+     */
+    @OnClick(R.id.setting_route_adv_textview)
+    protected void startSettingRouteAdvActivity() {
+        getContext().startActivity(SettingRouteAdvActivity.newIntent(getContext()));
         ((DrawerLayout) getParent()).closeDrawer(GravityCompat.START);
     }
 

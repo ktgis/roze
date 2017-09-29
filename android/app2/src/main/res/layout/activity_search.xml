@@ -1,60 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_search"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context="com.kt.rozenavi.ui.search.SearchActivity">
 
     <include
-        android:id="@+id/toolbar"
+        android:id="@+id/title_bar"
         layout="@layout/layout_search_bar"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginStart="20dp"
         android:layout_width="match_parent"
-        android:layout_height="45dp" />
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/common_margin_large"
+        android:layout_marginStart="@dimen/common_margin_large"
+        android:layout_marginTop="@dimen/common_margin_large" />
 
     <View
         android:id="@+id/view"
         android:layout_width="match_parent"
-        android:background="@color/dawm_grey"
-        android:layout_marginTop="18dp"
-        android:layout_below="@+id/toolbar"
-        android:layout_height="1dp"/>
+        android:layout_height="1dp"
+        android:layout_below="@+id/title_bar"
+        android:layout_marginTop="@dimen/common_margin_large"
+        android:background="@color/dawm_grey" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView_locations"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:longClickable="false"
-        android:scrollbars="vertical"
         android:layout_below="@+id/view"
-        tools:listitem="@layout/adapter_search_row"/>
+        android:longClickable="false"
+        android:overScrollMode="never"
+        android:scrollbars="vertical"
+        tools:listitem="@layout/view_search_row" />
 
     <TextView
         android:id="@+id/empty_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="20dp"
-        android:text="최근 목적지 없음"
-        android:textColor="@android:color/black"
-        android:textSize="18sp"
-        android:visibility="gone"
-        android:layout_below="@+id/view"/>
+        android:layout_below="@+id/view"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/common_margin_large"
+        android:text="@string/search_empty_recent_location_list"
+        android:textColor="@color/almost_balck"
+        android:textSize="@dimen/search_empty_list_text_size"
+        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/btn_top_button"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginBottom="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:src="@drawable/img_top"
-        android:visibility="gone"
+        android:layout_width="@dimen/search_move_top_icon_size"
+        android:layout_height="@dimen/search_move_top_icon_size"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"/>
-
+        android:layout_marginBottom="@dimen/common_margin_large"
+        android:src="@drawable/img_top"
+        android:visibility="gone" />
 </RelativeLayout>

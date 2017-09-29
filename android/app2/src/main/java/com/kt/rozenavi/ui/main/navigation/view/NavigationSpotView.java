@@ -13,7 +13,9 @@
 package com.kt.rozenavi.ui.main.navigation.view;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -21,30 +23,25 @@ import android.widget.TextView;
 
 import com.kt.geom.model.UTMK;
 import com.kt.maps.GMap;
-import com.kt.maps.model.Point;
 import com.kt.maps.model.ResourceDescriptorFactory;
 import com.kt.maps.overlay.Marker;
-import com.kt.maps.overlay.MarkerOptions;
 import com.kt.roze.data.model.Accident;
 import com.kt.roze.guidance.RGType;
 import com.kt.roze.guidance.model.IntervalSpeedSpotGuidance;
 import com.kt.roze.guidance.model.SafetySpotGuidance;
-import com.kt.roze.resource.AccidentResourceManager;
 import com.kt.roze.resource.RoadSignResourceManager;
 import com.kt.rozenavi.R;
 import com.kt.rozenavi.ui.component.SpeedMeterView;
+import com.kt.rozenavi.ui.main.navigation.util.MapHelper;
+import com.kt.rozenavi.utils.CommonUtils;
 import com.kt.rozenavi.utils.NaviUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
+import io.reactivex.disposables.Disposable;
 
 /**
  * 안전운행 관련 Route Guidance 표시 View
@@ -60,7 +57,10 @@ public class NavigationSpotView extends RelativeLayout {
     protected View intervalInfoLayout;
     @BindView(R.id.interval_average_textview)
     protected TextView averageTextView;
+    @BindView(R.id.restriction_value_textview)
+    protected TextView restrictionTextView;
 
+    private MapHelper mapHelper = MapHelper.getInstance();
     private GMap gMap;
 
     private List<Marker> safetyMarkerList = new ArrayList<>();
@@ -76,10 +76,10 @@ public class NavigationSpotView extends RelativeLayout {
             R.drawable.img_camera_warning02_02,
             R.drawable.img_camera_warning02_03
     };
-    private Subscription cameraSubscription;
-    private int iconIndex = 0;
+    private Disposable cameraDisposable;
     private int speed = 0;
     private Marker warningCamera;
+    private SafetySpotGuidance currentShowSpot;
 
     public NavigationSpotView(Context context) {
         super(context);
@@ -101,6 +101,25 @@ public class NavigationSpotView extends RelativeLayout {
         ButterKnife.bind(this);
     }
 
+    @Override
+    protected void onVisibilityChanged(@NonNull View changedView, int visibility) {
+        super.onVisibilityChanged(changedView, visibility);
+        if (changedView != this) {
+            return;
+        }
+
+        //visibility변경시 interval 및 기타 layout visibility 초기화
+        switch (visibility) {
+            case INVISIBLE:
+            case GONE:
+                hideSubView();
+                stopCameraWarningAnimation();
+                break;
+            case View.VISIBLE:
+                break;
+        }
+    }
+
     public void setSpeed(int speed) {
         this.speed = speed;
     }
@@ -109,23 +128,6 @@ public class NavigationSpotView extends RelativeLayout {
         this.gMap = gMap;
     }
 
-    public void setAccidentList(List<Accident> accidentList) {
-        if (accidentList == null || accidentList.isEmpty()) {
-            return;
-        }
-        Marker accidentMarker;
-        for (Accident accident : accidentList) {
-            accidentMarker = new Marker();
-            accidentMarker.setPosition(accident.coord);
-            int resId = AccidentResourceManager.getAccidentResourceID((short) accident.typeCode);
-            if (resId > 0) {
-                accidentMarker.setIcon(ResourceDescriptorFactory.fromResource(resId));
-                accidentMarker.setIconSize(new Point(30, 30));
-            }
-            accidentMarkerList.add(accidentMarker);
-            gMap.addOverlay(accidentMarker);
-        }
-    }
 
     /**
      * 안전운행 정보를 표시한다.
@@ -134,117 +136,129 @@ public class NavigationSpotView extends RelativeLayout {
      * @param list   {@link SafetySpotGuidance} list
      */
     public void updateSafetySpotView(boolean isShow, List<SafetySpotGuidance> list) {
-        /* isShow == true 주기적으로 계속 들어온다
-        *  이전에 작업한 내용과 새로 들어온 내용이 맞는지 확인 후 새로 작업을 할지 비교
-        *  ex) marker
+        /*
+        *  isShow == true 주기적으로 계속 들어온다
+        *  화면에 표시되는 전체 safety spot 리스트가 전달
         *
         *  isShow == false 그때그때 이벤트 방식으로 들어온다
-        *  이전에 작업한 내용과 들어온 내용을 비교해서 숨길지 말지를 결정하면 될듯
-        *  ex) marker
-        *
-        *  item.safetySpot.type == 방지턱
-        *  item.safetySpot.coord == 유니크하게 구분할수 있는 구분값으로 활용
+        *  화면에서 없어지는 safety spot 리스트가 전달
         * */
 
+        //interval 정보 표시중에는 일반 safety를 이벤트를 처리하지 않는다
+        if (isShowIntervalSafetySpot()) {
+            return;
+        }
+
         if (isShow) {
-            SafetySpotGuidance item = null;
+            showSafetySpot(list);
+        } else {
+            hideSafetySpot(list);
+        }
+    }
+
+    /**
+     * safety spot 정보 표시
+     */
+    private void showSafetySpot(List<SafetySpotGuidance> list) {
+        if (CommonUtils.isEmpty(list)) {
+            return;
+        }
+
+        SafetySpotGuidance speedCamSpot = null;
+        int safetyResId = RoadSignResourceManager.RESOURCE_NOT_FOUND;
+
+        for (SafetySpotGuidance spot : list) {
+            //스피드캠 safety spot 체크
+            boolean isSpeedCam = RGType.isSpeedCamera(spot.getType());
+            if (isSpeedCam && (safetyResId = RoadSignResourceManager.getResourceId(spot.getType()))
+                    != RoadSignResourceManager.RESOURCE_NOT_FOUND) {
+                speedCamSpot = spot;
+                break;
+            }
+        }
+        //기존마커랑 비교하여 신규로 추가가 필요한 마커를 지도에 추가
+        safetyMarkerList.addAll(mapHelper.addSpotMarker(gMap, getNewSafetySpots(list)));
+
+        if (speedCamSpot != null) {
+            showSafetyImage(speedCamSpot, safetyResId);
+            //제한속도가 0보다 작거나 현재속도가 제한속도보다 작을경우 카메라 경고 중지
+            if (speedCamSpot.getLimitSpeed() < 0 || speedCamSpot.getLimitSpeed() > speed) {
+                stopCameraWarningAnimation();
+            } else {
+                startCameraWarningAnimation(speedCamSpot.getCoord());
+            }
+        } else {
             for (SafetySpotGuidance spot : list) {
-                if (RGType.isSpeedCamera(spot.safetySpot.type)) {
-                    item = spot;
+                //safety spot 리스트에서 화면에 표시 가능한 첫번째 항목 표시
+                if ((safetyResId = RoadSignResourceManager.getResourceId(spot.getType()))
+                        != RoadSignResourceManager.RESOURCE_NOT_FOUND) {
+                    showSafetyImage(spot, safetyResId);
                     break;
                 }
             }
-
-            if (gMap != null) {
-                addSpotMarker(list);
-            }
-
-            if (item != null) {
-                setSafetyImage(item);
-                if (item.safetySpot.getLimitSpeed() < speed) {
-                    startCameraWarningAnimation(item.safetySpot.getCoord());
-                } else {
-                    stopCameraWarningAnimation();
-                }
-            } else {
-                for (SafetySpotGuidance safety : list) {
-                    if (safety.safetySpot.type != RGType.CAM_CCTV) {
-                        setSafetyImage(safety);
-                    }
-                }
-                stopCameraWarningAnimation();
-            }
-
-
-        } else {
-            if (gMap != null) {
-                removeSpotMarker(list);
-            }
             stopCameraWarningAnimation();
-            setSafetyImage(null);
         }
     }
 
-    private void addSpotMarker(List<SafetySpotGuidance> spotList) {
-        Marker marker;
-        UTMK coord;
-        List<Marker> addMarkerList = new ArrayList<>();
-        for (SafetySpotGuidance spot : spotList) {
-            marker = null;
-            coord = spot.safetySpot.getCoord();
-            for (Marker item : safetyMarkerList) {
-                if (coord.compareTo(item.getPosition()) == 0) {
-                    marker = item;
-                }
-            }
-            if (marker == null) {
-                createSpotMarker(spot, addMarkerList);
-            }
-        }
-        safetyMarkerList.addAll(addMarkerList);
-    }
-
-    private void createSpotMarker(SafetySpotGuidance spot, List<Marker> addMarkerList) {
-        int resourceId = NaviUtils.getRgTypeImage(spot.safetySpot.type);
-        if (resourceId > 0) {
-            MarkerOptions option = new MarkerOptions();
-            option.position(spot.safetySpot.getCoord());
-            option.icon(ResourceDescriptorFactory.fromResource(resourceId));
-            option.anchor(new Point(0.5, 0.5));
-            int iconSize = NaviUtils.getRgTypeIconSize(spot.safetySpot.type);
-            option.iconSize(new Point(iconSize, iconSize));
-            Marker marker = new Marker(option);
-            addMarkerList.add(marker);
-            gMap.addOverlay(marker);
-        }
-    }
-
-    private void removeSpotMarker(List<SafetySpotGuidance> spotList) {
-        if (spotList == null || spotList.size() == 0) {
+    /**
+     * 기존에 추가된 마커를 이용하여 새로 추가되어야 하는 guidance 정보만 추출
+     *
+     * @param list guidance 정보 리스트
+     * @return 신규 guidance 정보 리스트
+     */
+    private List<SafetySpotGuidance> getNewSafetySpots(List<SafetySpotGuidance> list) {
+        List<SafetySpotGuidance> newGuidances = new ArrayList<>();
+        boolean isContain;
+        //TODO 3차에서 수정 예정
+        for (SafetySpotGuidance s : list) {
+            isContain = false;
             for (Marker marker : safetyMarkerList) {
-                gMap.removeOverlay(marker);
-            }
-            safetyMarkerList.clear();
-        } else {
-            //현재 마커리스트를 복제한다
-            List<Marker> lastMarkerList = new ArrayList<>();
-            lastMarkerList.addAll(safetyMarkerList);
-
-            UTMK coord;
-            for (SafetySpotGuidance spot : spotList) {
-                coord = spot.safetySpot.getCoord();
-                for (Marker marker : safetyMarkerList) {
-                    if (coord.compareTo(marker.getPosition()) == 0) {
-                        gMap.removeOverlay(marker);
-                        //삭제되어야 하는 마커를 복제된 리스트에서 제거
-                        lastMarkerList.remove(marker);
-                    }
+                if (s.getCoord().compareTo(marker.getPosition()) == 0) {
+                    isContain = true;
+                    break;
                 }
             }
-            //기존 리스트를 정리한뒤 새로운 리스트로 대치
-            safetyMarkerList.clear();
-            safetyMarkerList = lastMarkerList;
+            if (!isContain) {
+                newGuidances.add(s);
+            }
         }
+        return newGuidances;
+    }
+
+    /**
+     * safety spot 정보 숨김
+     */
+    private void hideSafetySpot(List<SafetySpotGuidance> list) {
+        removeSpotMarker(list);
+        hideSafetyImage(list);
+    }
+
+    /**
+     * safety spot 마커 삭제
+     *
+     * @param spotList 화면에서 삭제되는 safety spot 리스트
+     */
+    private void removeSpotMarker(List<SafetySpotGuidance> spotList) {
+        if (CommonUtils.isEmpty(spotList)) {
+            return;
+        }
+
+        List<Marker> deleteMarkerList = new ArrayList<>();
+        for (SafetySpotGuidance spot : spotList) {
+            for (Marker marker : safetyMarkerList) {
+                if (spot.getCoord().compareTo(marker.getPosition()) == 0) {
+                    //삭제되어야 하는 마커를 현재 Marker List 에서 추출
+                    deleteMarkerList.add(marker);
+                }
+            }
+        }
+        //추출된 Marker 를 Map 과 현재 Marker List 에서 삭제
+        if (!CommonUtils.isEmpty(deleteMarkerList) && warningCamera != null
+                && deleteMarkerList.contains(warningCamera)) {
+            stopCameraWarningAnimation();
+        }
+        mapHelper.removeOverlays(gMap, deleteMarkerList);
+        safetyMarkerList.removeAll(deleteMarkerList);
     }
 
     /**
@@ -252,30 +266,40 @@ public class NavigationSpotView extends RelativeLayout {
      *
      * @param spot 표시 대상 SafetySpot Guidance
      */
-    private void setSafetyImage(SafetySpotGuidance spot) {
-        if (spot == null) {
-            if (!intervalInfoLayout.isShown()) {
-                setVisibility(View.INVISIBLE);
-            }
+    private void showSafetyImage(@NonNull SafetySpotGuidance spot, int resId) {
+        setVisibility(View.VISIBLE);
+        currentShowSpot = spot;
+
+        int distance = spot.getRemainDistance();
+        spotImageView.setImageResource(resId);
+        remainTextView.setText(NaviUtils.convertDistanceUnit(distance));
+        boolean isSpeedCamSpot = RGType.isSpeedCamera(spot.getType());
+        boolean isWeightSpot = RGType.CAUTION_WEIGHT == spot.getType();
+        boolean isHeightSpot = RGType.CAUTION_HEIGHT == spot.getType();
+        if (isSpeedCamSpot) {
+            speedMeterView.setSpeed(spot.getLimitSpeed());
+        } else if (isWeightSpot) {
+            restrictionTextView.setText(String.valueOf(spot.getLimitWeight()));
+        } else if (isHeightSpot) {
+            restrictionTextView.setText(String.valueOf(spot.getLimitHeight()));
+        }
+        speedMeterView.setVisibility(isSpeedCamSpot ? View.VISIBLE : View.INVISIBLE);
+        restrictionTextView.setVisibility((isWeightSpot || isHeightSpot) ? View.VISIBLE : View.INVISIBLE);
+
+    }
+
+    private void hideSafetyImage(List<SafetySpotGuidance> list) {
+        if (CommonUtils.isEmpty(list) || currentShowSpot == null || !list.contains(currentShowSpot)) {
             return;
         }
 
-        int distance = spot.getRemainDistance();
-        int resId = RoadSignResourceManager.getResourceId(spot.safetySpot.type);
-        if (resId != RoadSignResourceManager.RESOURCE_NOT_FOUND) {
-            setVisibility(View.VISIBLE);
-            spotImageView.setImageResource(resId);
-            remainTextView.setText(NaviUtils.convertDistanceUnit(distance));
-            if (RGType.isSpeedCamera(spot.safetySpot.type)) {
-                speedMeterView.setVisibility(View.VISIBLE);
-                speedMeterView.setSpeed(spot.safetySpot.getLimitSpeed());
-            } else {
-                speedMeterView.setVisibility(View.INVISIBLE);
-            }
-        } else {
-            //방범 카메라 등 목적지 안내에 필요없는 데이터는 보여주지 않는다.
-            setVisibility(View.INVISIBLE);
-        }
+        currentShowSpot = null;
+        hideAllView();
+
+    }
+
+    private boolean isShowIntervalSafetySpot() {
+        return intervalInfoLayout.isShown();
     }
 
     /**
@@ -285,13 +309,14 @@ public class NavigationSpotView extends RelativeLayout {
      */
     public void updateIntervalSafetySpotView(IntervalSpeedSpotGuidance intervalGuidance) {
         if (intervalGuidance == null) {
-            speedMeterView.setVisibility(View.GONE);
-            intervalInfoLayout.setVisibility(View.GONE);
-            averageTextView.setText("");
-            setVisibility(View.INVISIBLE);
+            hideAllView();
             return;
         }
 
+        showIntervalSafetySpot(intervalGuidance);
+    }
+
+    private void showIntervalSafetySpot(IntervalSpeedSpotGuidance intervalGuidance) {
         int resId = RoadSignResourceManager.getResourceId(RGType.CAM_SPEED);
         if (resId != RoadSignResourceManager.RESOURCE_NOT_FOUND) {
             spotImageView.setImageResource(resId);
@@ -302,15 +327,35 @@ public class NavigationSpotView extends RelativeLayout {
             intervalInfoLayout.setVisibility(View.VISIBLE);
             speedMeterView.setVisibility(View.VISIBLE);
             speedMeterView.setSpeed(intervalGuidance.getLimitSpeed());
-        } else {
-            //방범 카메라 등 목적지 안내에 필요없는 데이터는 보여주지 않는다.
-            intervalInfoLayout.setVisibility(View.INVISIBLE);
-            setVisibility(View.INVISIBLE);
+            setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void hideAllView() {
+        hideSubView();
+        setVisibility(View.INVISIBLE);
+    }
+
+    private void hideSubView() {
+        speedMeterView.setVisibility(View.INVISIBLE);
+        intervalInfoLayout.setVisibility(View.INVISIBLE);
+        averageTextView.setText("");
+        restrictionTextView.setVisibility(View.INVISIBLE);
+    }
+
+    private void stopCameraWarningAnimation() {
+        if (cameraDisposable == null) {
+            return;
+        }
+        cameraDisposable.dispose();
+        cameraDisposable = null;
+        if (warningCamera != null) {
+            warningCamera.setIcon(ResourceDescriptorFactory.fromResource(cameraResourceArray[0]));
         }
     }
 
     private void startCameraWarningAnimation(UTMK coord) {
-        if (cameraSubscription != null) {
+        if (cameraDisposable != null || coord == null) {
             return;
         }
 
@@ -320,32 +365,11 @@ public class NavigationSpotView extends RelativeLayout {
                 break;
             }
         }
-
-        iconIndex = 0;
-        cameraSubscription = rx.Observable.interval(100, TimeUnit.MILLISECONDS)
-                .subscribeOn(Schedulers.computation())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Long>() {
-                    @Override
-                    public void call(Long aLong) {
-                        if (iconIndex == cameraResourceArray.length) {
-                            iconIndex = 0;
-                        }
-                        warningCamera.setIcon(ResourceDescriptorFactory.fromResource
-                                (cameraResourceArray[iconIndex]));
-                        iconIndex += 1;
-                    }
-                });
-    }
-
-    private void stopCameraWarningAnimation() {
-        if (cameraSubscription == null || warningCamera == null) {
+        if (warningCamera == null) {
             return;
         }
-        cameraSubscription.unsubscribe();
-        cameraSubscription = null;
-        warningCamera.setIcon(ResourceDescriptorFactory.fromResource(cameraResourceArray[0]));
-        warningCamera = null;
+        cameraDisposable = mapHelper.startMarkerFrameAnimation(warningCamera,
+                cameraResourceArray);
     }
 
 
@@ -354,21 +378,22 @@ public class NavigationSpotView extends RelativeLayout {
         gMap = null;
     }
 
+    /**
+     * 안전운행 Marker 와 유고정보 marker 를 제거한다.
+     */
     public void clearOverlay() {
-        if (gMap == null) {
-            return;
-        }
-        for (Marker marker : safetyMarkerList) {
-            gMap.removeOverlay(marker);
-        }
+        mapHelper.removeOverlays(gMap, safetyMarkerList);
         safetyMarkerList.clear();
-
-        for (Marker marker : accidentMarkerList) {
-            gMap.removeOverlay(marker);
-        }
+        mapHelper.removeOverlays(gMap, accidentMarkerList);
         accidentMarkerList.clear();
     }
 
-
-
+    /**
+     * 유고 정보를 Map 에 Marker 로 표기 한다.
+     *
+     * @param accidentList 표시 대상 유고 정보 목록
+     */
+    public void setAccidentList(List<Accident> accidentList) {
+        mapHelper.setAccidentList(gMap, accidentList);
+    }
 }

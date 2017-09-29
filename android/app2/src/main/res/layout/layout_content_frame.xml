@@ -27,21 +27,6 @@
 
     </FrameLayout>
 
-    <!--<com.kt.rozenavi.ui.main.drive.DriveView-->
-        <!--android:id="@+id/drive_view"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent" />-->
-
-    <!--<com.kt.rozenavi.ui.main.route.RouteView-->
-    <!--android:id="@+id/route_view"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"/>-->
-
-    <!--<com.kt.rozenavi.ui.main.navigation.NavigationView-->
-    <!--android:id="@+id/navigation_view"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"/>-->
-
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
