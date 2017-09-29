@@ -654,4 +654,9 @@ public class NavigationView extends RelativeLayout
         }
     }
 
+    @Override
+    public void onSoundEnd() {
+
+    }
+
 }

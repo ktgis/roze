@@ -34,9 +34,9 @@ import android.widget.Toast;
 import com.kt.geom.model.Coord;
 import com.kt.maps.GMap;
 import com.kt.maps.GMapFragment;
+import com.kt.maps.GMapResultCode;
 import com.kt.maps.OnMapReadyListener;
 import com.kt.maps.model.Viewpoint;
-import com.kt.maps.util.GMapKeyManager;
 import com.kt.roze.NavigationManager;
 import com.kt.roze.RozeResultCode;
 import com.kt.rozenavi.R;
@@ -330,7 +330,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onFailReadyMap(GMapKeyManager.ResultCode code) {
+    public void onFailReadyMap(GMapResultCode code) {
         //since : sdk 0.9.5
         //지도 초기화 실패시 오류코드 반환
         /**
@@ -341,16 +341,17 @@ public class MainActivity extends AppCompatActivity
          * INVALID  : invalid key length
          * FAIL     : incorrect api key
          */
-        if (GMapKeyManager.ResultCode.EMPTY == code) {
-            Toast.makeText(this, R.string.toast_message_map_init_fail_result_empty,
-                    Toast.LENGTH_SHORT).show();
-        } else if (GMapKeyManager.ResultCode.INVALID == code) {
-            Toast.makeText(this, R.string.toast_message_map_init_fail_result_invalid,
-                    Toast.LENGTH_SHORT).show();
-        } else if (GMapKeyManager.ResultCode.FAIL == code) {
-            Toast.makeText(this, R.string.toast_message_map_init_fail_result_fail,
-                    Toast.LENGTH_SHORT).show();
+        int errorMessageRes;
+        if (GMapResultCode.EMPTY == code) {
+            errorMessageRes = R.string.toast_message_map_init_fail_result_empty;
+        } else if (GMapResultCode.INVALID == code) {
+            errorMessageRes = R.string.toast_message_map_init_fail_result_invalid;
+        } else if (GMapResultCode.FAIL == code) {
+            errorMessageRes = R.string.toast_message_map_init_fail_result_fail;
+        } else {
+            return;
         }
+        Toast.makeText(this, errorMessageRes, Toast.LENGTH_SHORT).show();
 
     }
 }

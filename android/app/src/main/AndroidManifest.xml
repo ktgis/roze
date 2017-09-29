@@ -34,9 +34,6 @@
             android:name="RozeHomeDir"
             android:value="{EXTERNAL}/navihome" />-->
         <meta-data
-            android:name="com.kt.rozenavi.RozeNaviGlideModule"
-            android:value="GlideModule"/>
-        <meta-data
             android:name="io.fabric.ApiKey"
             android:value="55bca5531e4bd44892f22fae84df6e5e3774836e"
             />

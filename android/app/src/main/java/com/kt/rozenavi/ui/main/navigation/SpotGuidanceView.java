@@ -31,7 +31,6 @@ import com.kt.roze.guidance.model.SafetySpotGuidance;
 import com.kt.roze.resource.RoadSignResourceManager;
 import com.kt.rozenavi.R;
 import com.kt.rozenavi.ui.main.MapController;
-import com.kt.rozenavi.ui.main.UIController;
 import com.kt.rozenavi.ui.main.drive.DriveView;
 import com.kt.rozenavi.utils.NaviUtils;
 
@@ -41,10 +40,11 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * 안전운행 관련 Route Guidance 표시 View
@@ -81,7 +81,7 @@ public class SpotGuidanceView extends RelativeLayout {
 
     private List<Marker> markerList = new ArrayList<>();
 
-    private Subscription subscription;
+    private Disposable subscription;
     private static int remainIntervalTime = -1;
 
     private int[] cameraResourceArray = new int[]{
@@ -94,7 +94,7 @@ public class SpotGuidanceView extends RelativeLayout {
             R.drawable.img_camera_warning02_02,
             R.drawable.img_camera_warning02_03
     };
-    private Subscription cameraSubscription;
+    private Disposable cameraSubscription;
     private int iconIndex = 0;
     private Marker warningCamera;
 
@@ -303,7 +303,7 @@ public class SpotGuidanceView extends RelativeLayout {
     public void updateIntervalSafetySpotView(IntervalSpeedSpotGuidance intervalGuidance) {
         if (intervalGuidance == null) {
             if (subscription != null) {
-                subscription.unsubscribe();
+                subscription.dispose();
                 subscription = null;
             }
             intervalSignLayout.setVisibility(View.GONE);
@@ -337,24 +337,22 @@ public class SpotGuidanceView extends RelativeLayout {
     private void updateIntervalTimer(int remainTime) {
         remainIntervalTime = remainTime;
         setIntervalRemainTimeText(remainTime);
-        subscription = rx.Observable.interval(1000, TimeUnit.MILLISECONDS)
+        subscription = Observable.interval(1000, TimeUnit.MILLISECONDS)
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Long>() {
+                .subscribe(new Consumer<Long>() {
                     @Override
-                    public void call(Long aLong) {
+                    public void accept(Long aLong) throws Exception {
                         remainIntervalTime -= 1;
                         setIntervalRemainTimeText(remainIntervalTime);
                         if (remainIntervalTime <= 0) {
                             if (subscription != null) {
-                                subscription.unsubscribe();
+                                subscription.dispose();
                                 subscription = null;
                             }
                         }
-
                     }
                 });
-
     }
 
     private void startCameraWarningAnimation(UTMK coord) {
@@ -370,12 +368,12 @@ public class SpotGuidanceView extends RelativeLayout {
         }
 
         iconIndex = 0;
-        cameraSubscription = rx.Observable.interval(100, TimeUnit.MILLISECONDS)
+        cameraSubscription = Observable.interval(100, TimeUnit.MILLISECONDS)
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<Long>() {
+                .subscribe(new Consumer<Long>() {
                     @Override
-                    public void call(Long aLong) {
+                    public void accept(Long aLong) throws Exception {
                         if (iconIndex == cameraResourceArray.length) {
                             iconIndex = 0;
                         }
@@ -390,7 +388,7 @@ public class SpotGuidanceView extends RelativeLayout {
         if (cameraSubscription == null || warningCamera == null) {
             return;
         }
-        cameraSubscription.unsubscribe();
+        cameraSubscription.dispose();
         cameraSubscription = null;
         warningCamera.setIcon(ResourceDescriptorFactory.fromResource(cameraResourceArray[0]));
         warningCamera = null;
