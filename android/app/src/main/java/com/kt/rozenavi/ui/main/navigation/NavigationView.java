@@ -654,7 +654,8 @@ public class NavigationView extends RelativeLayout
         }
     }
 
-    @Override
+    //since : sdk 1.0.4
+    //사운드 재생 완료 리스너 (이전
     public void onSoundEnd() {
 
     }
