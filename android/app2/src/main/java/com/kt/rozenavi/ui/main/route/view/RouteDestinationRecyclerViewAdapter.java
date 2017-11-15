@@ -41,8 +41,8 @@ public class RouteDestinationRecyclerViewAdapter extends
     private RouteDestinationView.OnDestinationItemEventListener onDestinationChangeListener = null;
 
     RouteDestinationRecyclerViewAdapter(List<LocationItem> destinationList,
-                                        OnAdapterClickListener onAdapterClickListener,
-                                        RouteDestinationView.OnDestinationItemEventListener onDestinationChangeListener) {
+            OnAdapterClickListener onAdapterClickListener,
+            RouteDestinationView.OnDestinationItemEventListener onDestinationChangeListener) {
         this.destinationList = destinationList;
         this.onAdapterClickListener = onAdapterClickListener;
         this.onDestinationChangeListener = onDestinationChangeListener;
@@ -88,6 +88,7 @@ public class RouteDestinationRecyclerViewAdapter extends
         }
         return true;
     }
+
     class ViewHolder extends RecyclerView.ViewHolder {
 
         /**
@@ -182,6 +183,7 @@ public class RouteDestinationRecyclerViewAdapter extends
 
     interface OnAdapterClickListener {
         void onItemClick(int index);
+
         void onDeleteClick(int index);
     }
 }

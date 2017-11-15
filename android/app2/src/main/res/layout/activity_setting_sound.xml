@@ -26,35 +26,42 @@
             android:layout_height="@dimen/setting_title_height" />
 
         <ScrollView
-            android:overScrollMode="never"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:overScrollMode="never">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <TextView
-                    style="@style/SettingSubtitleStyle"
-                    android:text="@string/setting_sound_activity_subtitle_type" />
-
-                <RadioGroup
-                    android:id="@+id/sound_type_radiogroup"
+                <LinearLayout
+                    android:id="@+id/sound_type_radiogroup_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <RadioButton
-                        android:id="@+id/sound_type_soft"
-                        style="@style/RozeRadioItemStyle"
-                        android:text="@string/sound_type_soft" />
+                    <TextView
+                        style="@style/SettingSubtitleStyle"
+                        android:text="@string/setting_sound_activity_subtitle_type" />
 
-                    <RadioButton
-                        android:id="@+id/sound_type_sporty"
-                        style="@style/RozeRadioItemStyle"
-                        android:text="@string/sound_type_sporty" />
-                </RadioGroup>
+                    <RadioGroup
+                        android:id="@+id/sound_type_radiogroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <RadioButton
+                            android:id="@+id/sound_type_soft"
+                            style="@style/RozeRadioItemStyle"
+                            android:text="@string/sound_type_soft" />
+
+                        <RadioButton
+                            android:id="@+id/sound_type_sporty"
+                            style="@style/RozeRadioItemStyle"
+                            android:text="@string/sound_type_sporty" />
+                    </RadioGroup>
+                </LinearLayout>
 
                 <TextView
                     style="@style/SettingSubtitleStyle"
@@ -170,6 +177,49 @@
                         android:id="@+id/sound_option_deer_crossing"
                         style="@style/RozeCheckBoxItemStyle"
                         android:text="@string/sound_option_deer_crossing" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/setting_item_background"
+                        android:padding="10dp"
+                        android:text="하단의 기능들은 현재 미구현입니다."
+                        android:textColor="@color/cool_red" />
+
+                    <CheckBox
+                        android:id="@+id/sound_option_school_zone"
+                        style="@style/RozeCheckBoxItemStyle"
+                        android:text="@string/sound_option_school_zone" />
+
+                    <CheckBox
+                        android:id="@+id/sound_option_bumper_to_bumper"
+                        style="@style/RozeCheckBoxItemStyle"
+                        android:text="@string/sound_option_bumper_to_bumper" />
+
+                    <CheckBox
+                        android:id="@+id/sound_option_height"
+                        style="@style/RozeCheckBoxItemStyle"
+                        android:text="@string/sound_option_height" />
+
+                    <CheckBox
+                        android:id="@+id/sound_option_weight"
+                        style="@style/RozeCheckBoxItemStyle"
+                        android:text="@string/sound_option_weight" />
+
+                    <CheckBox
+                        android:id="@+id/sound_option_lamp_metering"
+                        style="@style/RozeCheckBoxItemStyle"
+                        android:text="@string/sound_option_lamp_metering" />
+
+                    <CheckBox
+                        android:id="@+id/sound_option_restriction_area"
+                        style="@style/RozeCheckBoxItemStyle"
+                        android:text="@string/sound_option_restriction_area" />
+
+                    <CheckBox
+                        android:id="@+id/sound_option_water_prot_area"
+                        style="@style/RozeCheckBoxItemStyle"
+                        android:text="@string/sound_option_water_prot_area" />
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>

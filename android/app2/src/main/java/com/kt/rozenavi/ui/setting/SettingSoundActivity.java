@@ -17,8 +17,10 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.View;
 import android.widget.RadioGroup;
 
+import com.kt.roze.NavigationManager;
 import com.kt.roze.RozeOptions;
 import com.kt.roze.SoundOptions;
 import com.kt.roze.resource.SoundResourceManager;
@@ -102,6 +104,22 @@ public class SettingSoundActivity extends BaseSettingActivity {
         soundOptions.setScarp(binding.soundOptionScarp.isChecked());
         //야생동물보호 옵션
         soundOptions.setDeerCrossing(binding.soundOptionDeerCrossing.isChecked());
+
+        //하단의 기능은 현재 미구현 입니다.
+        //스쿨존 옵션
+        soundOptions.setSchoolZone(binding.soundOptionSchoolZone.isChecked());
+        //꼬리물기 옵션
+        soundOptions.setBumpertobumperCamera(binding.soundOptionBumperToBumper.isChecked());
+        //높이제한 옵션
+        soundOptions.setHeight(binding.soundOptionHeight.isChecked());
+        //중량제한 옵션
+        soundOptions.setWeight(binding.soundOptionWeight.isChecked());
+        //램프미터링 옵션
+        soundOptions.setLampMetering(binding.soundOptionLampMetering.isChecked());
+        //제한구역 옵션
+        soundOptions.setRestrictionArea(binding.soundOptionRestrictionArea.isChecked());
+        //상수도 보호구역 옵션
+        soundOptions.setWaterProtArea(binding.soundOptionWaterProtArea.isChecked());
         //발성타입 옵션
         saveOptionSoundType(rozeOptions, binding.soundTypeRadiogroup);
 
@@ -132,6 +150,10 @@ public class SettingSoundActivity extends BaseSettingActivity {
     private void setSavedSoundOption() {
         //발성타입 옵션
         UIUtils.checkRadioButton(binding.soundTypeRadiogroup, RozeOptions.getInstance().getSoundType().ordinal());
+        //현재 경로안내중일경우 발성타입 변경 방지를 위한 숨김처리
+        if (NavigationManager.getInstance().getMode() == NavigationManager.Mode.NAVIGATING) {
+            binding.soundTypeRadiogroupLayout.setVisibility(View.GONE);
+        }
 
         SoundOptions soundOptions = RozeOptions.getInstance().getSoundOption();
         //고정식 카메라 옵션
@@ -176,5 +198,21 @@ public class SettingSoundActivity extends BaseSettingActivity {
         binding.soundOptionScarp.setChecked(soundOptions.isScarp());
         //야생동물보호 옵션
         binding.soundOptionDeerCrossing.setChecked(soundOptions.isDeerCrossing());
+
+        //하단의 기능은 현재 미구현 입니다.
+        //스쿨존 옵션
+        binding.soundOptionSchoolZone.setChecked(soundOptions.isSchoolZone());
+        //꼬리물기 옵션
+        binding.soundOptionBumperToBumper.setChecked(soundOptions.isBumpertobumperCamera());
+        //높이제한 옵션
+        binding.soundOptionHeight.setChecked(soundOptions.isHeight());
+        //중량제한 옵션
+        binding.soundOptionWeight.setChecked(soundOptions.isWeight());
+        //램프미터링 옵션
+        binding.soundOptionLampMetering.setChecked(soundOptions.isLampMetering());
+        //제한구역 옵션
+        binding.soundOptionRestrictionArea.setChecked(soundOptions.isRestrictionArea());
+        //상수도 보호구역 옵션
+        binding.soundOptionWaterProtArea.setChecked(soundOptions.isWaterProtArea());
     }
 }

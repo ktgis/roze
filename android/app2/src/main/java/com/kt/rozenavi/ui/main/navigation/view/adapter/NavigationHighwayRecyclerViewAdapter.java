@@ -51,8 +51,7 @@ public class NavigationHighwayRecyclerViewAdapter extends
     private List<HighwayGuidance> highwayGuidanceList = null;
     private int remainDistance = 0;
 
-    public NavigationHighwayRecyclerViewAdapter(Context context,
-            List<HighwayGuidance> highwayGuidanceList) {
+    public NavigationHighwayRecyclerViewAdapter(Context context, List<HighwayGuidance> highwayGuidanceList) {
         this.highwayGuidanceList = highwayGuidanceList;
         extraIconSize = (int) TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP, 15, context.getResources().getDisplayMetrics());
@@ -83,8 +82,7 @@ public class NavigationHighwayRecyclerViewAdapter extends
         HighwayGuidance highway = highwayGuidanceList.get(position);
         Resources resources = holder.rootView.getResources();
         int textColor = position == 0 ?
-                resources.getColor(R.color.dawm_grey) :
-                resources.getColor(R.color.dawm_grey_alpha_80);
+                resources.getColor(R.color.dawm_grey) : resources.getColor(R.color.dawm_grey_alpha_80);
         //item background set
         holder.rootView.setBackgroundResource(getItemBackgroundColor(position));
 
@@ -93,8 +91,7 @@ public class NavigationHighwayRecyclerViewAdapter extends
         holder.nameTextView.setTextColor(textColor);
 
         //item distance set
-        holder.distanceTextView.setText(
-                NaviUtils.convertDistanceUnit(highway.getDistance() + remainDistance));
+        holder.distanceTextView.setText(NaviUtils.convertDistanceUnit(highway.getDistance() + remainDistance));
         holder.distanceTextView.setTextColor(textColor);
 
         //item traffic info set

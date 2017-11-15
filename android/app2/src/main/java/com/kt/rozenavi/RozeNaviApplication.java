@@ -15,6 +15,8 @@ package com.kt.rozenavi;
 import android.content.Context;
 import android.support.multidex.MultiDexApplication;
 
+import com.kt.maps.GMapShared;
+import com.kt.maps.util.GMapKeyManager;
 import com.kt.roze.RozeOptions;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
@@ -46,6 +48,10 @@ public class RozeNaviApplication extends MultiDexApplication {
         super.onCreate();
         //참조정보를 확인할 수 있는 refwatcher 생성
         refWatcher = LeakCanary.install(this);
+        //RozeOptions 초기화 누락될경우 getInstance 동작시 오류
         RozeOptions.initialize(this);
+        //GMap 초기화
+        GMapKeyManager.getInstance().init(getApplicationContext(), "f0e8dc5590b140d506a203349b72cb23d2e8ae767b6c3c258cfb4be3a55f552cd7422b9b");
+        GMapShared.getInstance(getApplicationContext());
     }
 }

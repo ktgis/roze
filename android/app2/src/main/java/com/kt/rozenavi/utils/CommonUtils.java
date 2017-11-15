@@ -22,7 +22,11 @@ public class CommonUtils {
         return (list == null || list.isEmpty());
     }
 
-    public static <E> boolean isEmpty(E...array) {
-        return (array == null || array.length == 0);
+    public static <E> boolean isEmpty(E... array) {
+        return array == null || array.length == 0 || (array.length == 1 && array[0] == null);
+    }
+
+    public static boolean isEmpty(String s) {
+        return s == null || s.length() == 0;
     }
 }

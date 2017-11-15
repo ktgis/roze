@@ -20,31 +20,25 @@ import com.kt.roze.RozeError;
 public class RouteListenerAdpater implements NavigationManager.RouteListener {
     @Override
     public void onRouteStarted() {
-
     }
 
     @Override
     public void onRouteStartFail(RozeError error) {
-
     }
 
     @Override
     public void onTrafficUpdate() {
-
     }
 
     @Override
     public void onArrived(short arrivedIndex) {
-
     }
 
     @Override
     public void onRouteDeviated(Location location) {
-
     }
 
     @Override
     public void onRouteDidNotEnter(Location location) {
-
     }
 }

@@ -30,6 +30,8 @@ import com.kt.rozenavi.utils.UIUtils;
 /**
  * 경로탐색시 추가옵션 설정화면
  * 회피옵션 설정후 경로검색시 설정된 정보를 이용하여 검색
+ *
+ * 현재 미구현 기능
  */
 public class SettingRouteAdvActivity extends BaseSettingActivity {
     private ActivitySettingRouteAdvBinding binding;

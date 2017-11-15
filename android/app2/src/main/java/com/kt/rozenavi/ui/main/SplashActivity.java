@@ -29,6 +29,7 @@ import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.ndk.CrashlyticsNdk;
 import com.kt.rozenavi.R;
 import com.kt.rozenavi.ui.main.alarm.NightAlarmManager;
+import com.kt.rozenavi.utils.CommonUtils;
 import com.kt.rozenavi.utils.WeakReferenceHandler;
 
 import java.util.ArrayList;
@@ -64,7 +65,7 @@ public class SplashActivity extends Activity implements WeakReferenceHandler.OnM
         init();
         //모든 권한이 승인되어있을경우 1.5초정도 화면을 보여주고 메인화면으로 전환
         if (checkPermissions()) {
-           handler.sendEmptyMessageDelayed(0, 1500);
+            handler.sendEmptyMessageDelayed(0, 1500);
         }
 
     }
@@ -124,11 +125,11 @@ public class SplashActivity extends Activity implements WeakReferenceHandler.OnM
     }
 
     @Override
-    public void onRequestPermissionsResult(
-            int requestCode, String[] permissions, int[] grantResults) {
-        if (grantResults == null || grantResults.length == 0) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (CommonUtils.isEmpty(grantResults)) {
             return;
         }
+
         int resultCode = RESULT_OK;
         // 모든 필요한 권한이 다 있어야 한다.
         // 필요한 권한 리스트와 결과 리스트가 다르면 누락된 권한이 있다고 판단

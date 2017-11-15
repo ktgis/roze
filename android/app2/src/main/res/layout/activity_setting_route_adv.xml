@@ -26,6 +26,13 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="하단의 기능들은 현재 미구현입니다."
+                    android:textColor="@color/cool_red" />
+
+                <TextView
                     style="@style/SettingSubtitleStyle"
                     android:text="@string/setting_route_activity_subtitle_traffic" />
 

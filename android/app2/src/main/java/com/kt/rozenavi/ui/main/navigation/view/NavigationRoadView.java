@@ -13,6 +13,8 @@
 package com.kt.rozenavi.ui.main.navigation.view;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -22,7 +24,12 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.FutureTarget;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.kt.rozenavi.R;
 
 import butterknife.BindView;
@@ -37,7 +44,14 @@ public class NavigationRoadView extends RelativeLayout {
     @BindView(R.id.roadview_imageview)
     protected ImageView roadview;
 
-    int radius;
+    /**
+     * 이미지 뷰 모서리 radius
+     */
+    private int radius;
+    /**
+     * glide 이미지 다운로드 futuretarget
+     */
+    private FutureTarget futureTarget = null;
 
     public NavigationRoadView(Context context) {
         super(context);
@@ -59,32 +73,52 @@ public class NavigationRoadView extends RelativeLayout {
 
     @OnClick(R.id.close_roadview)
     protected void onClickClose() {
-        toggleView();
+        closeView();
+    }
+
+    public void closeView() {
+        setAnimation(AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_out));
+        setVisibility(View.INVISIBLE);
+    }
+
+    public void showView() {
+        setAnimation(AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_in));
+        setVisibility(View.VISIBLE);
     }
 
     /**
-     * DriveMenuView 종료
+     * image path 정보에 따라 로드뷰 표시
      */
-    public void toggleView() {
-        if (isShown()) {
-            setAnimation(AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_out));
-            setVisibility(View.INVISIBLE);
-        } else {
-            setAnimation(AnimationUtils.loadAnimation(getContext(), android.R.anim.fade_in));
-            setVisibility(View.VISIBLE);
-        }
-    }
-
     public void updateRoadView(String imagePath) {
         if (TextUtils.isEmpty(imagePath)) {
+            if (futureTarget != null) {
+                futureTarget.cancel(true);
+                futureTarget = null;
+            }
             roadview.setImageBitmap(null);
+            closeView();
         } else {
-            Glide.with(getContext())
+            futureTarget = Glide.with(getContext())
                     .load(imagePath)
                     .apply(RequestOptions.bitmapTransform(
                             new RoundedCornersTransformation(radius, 0, RoundedCornersTransformation.CornerType.ALL)))
-                    .into(roadview);
+                    .listener(new RequestListener<Drawable>() {
+                        @Override
+                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target,
+                                boolean isFirstResource) {
+                            futureTarget = null;
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target,
+                                DataSource dataSource, boolean isFirstResource) {
+                            roadview.setImageDrawable(resource);
+                            futureTarget = null;
+                            showView();
+                            return false;
+                        }
+                    }).submit();
         }
-        toggleView();
     }
 }

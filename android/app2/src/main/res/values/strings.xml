@@ -320,7 +320,14 @@
     <string name="sound_option_railroad_crossing">철길건널목</string>
     <string name="sound_option_scarp">급경사</string>
     <string name="sound_option_deer_crossing">야생동물보호</string>
+    <string name="sound_option_school_zone">스쿨존</string>
+    <string name="sound_option_bumper_to_bumper">꼬리물기</string>
+    <string name="sound_option_height">높이제한</string>
+    <string name="sound_option_weight">중량제한</string>
+    <string name="sound_option_lamp_metering">램프미터링</string>
+    <string name="sound_option_restriction_area">제한구역</string>
+    <string name="sound_option_water_prot_area">상수도 보호구역</string>
 
     <!-- navigation view -->
-    <string name="navigation_turn_toll">요금 : %,d원</string>
+    <string name="navigation_turn_toll">[요금 : %,d원]</string>
 </resources>

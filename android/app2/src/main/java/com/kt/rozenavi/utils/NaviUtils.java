@@ -37,35 +37,6 @@ import java.util.GregorianCalendar;
  */
 public class NaviUtils {
     /**
-     * 안전운행 모드일때 기본 줌 정보
-     */
-    public static final double DRIVE_MODE_DEFAULT_ZOOM = 11.0;
-    /**
-     * 경로안내 모드일때 기본 줌 정보
-     */
-    public static final double NAVIGATION_MODE_DEFAULT_ZOOM = 12.0;
-    /**
-     * 기본 지도 틸트 값
-     */
-    public static final int MAP_TILT_DEFAULT = 45;
-    /**
-     * 지도상에 표출할 내차마커 가로/세로 크기
-     * dp사이즈
-     */
-    public static final int CAR_MARKER_ICON_SIZE = 65;
-
-    /**
-     * 지도상에 표출할 출발지/도착지/경유지 마커 가로 크기
-     * dp사이즈
-     */
-    public static final int ROUTE_LOCATION_MARKER_ICON_WIDTH = 47;
-    /**
-     * 지도상에 표출할 출발지/도착지/경유지 마커 세로 크기
-     * dp사이즈
-     */
-    public static final int ROUTE_LOCATION_MARKER_ICON_HEIGHT = 57;
-
-    /**
      * 지도상에 표출할 spot 마커 가로/세로 크기
      * dp사이즈
      */
@@ -216,57 +187,6 @@ public class NaviUtils {
      */
     public static String convertPrice(int price) {
         return String.format("%,d원", price);
-    }
-
-    /**
-     * gps상태와 네비게이션 모드에 따라서 마커 아이콘 리소스 아이디 반환
-     *
-     * @param isGpsOn gps 수신여부
-     * @return 리소스 아이디
-     */
-    public static int selectCarMarkerIconResourceId(boolean isGpsOn) {
-        int resId;
-
-        if (isGpsOn) {
-            resId = (NavigationManager.getInstance().getMode() == NavigationManager.Mode.TRACKING) ?
-                    R.drawable.tracking_on : R.drawable.car_on;
-            return resId;
-        } else {
-            resId = (NavigationManager.getInstance().getMode() == NavigationManager.Mode.TRACKING) ?
-                    R.drawable.tracking_off : R.drawable.car_off;
-            return resId;
-        }
-    }
-
-    /**
-     * 숫자에 해당하는 숫자 이미지 리소스 아이디 반환
-     *
-     * @param number 숫자
-     * @return 이미지 리소스 아이디
-     */
-    public static int getNumberResourceId(int number) {
-        switch (number) {
-            case 1:
-                return R.drawable.img_hfigure1;
-            case 2:
-                return R.drawable.img_hfigure2;
-            case 3:
-                return R.drawable.img_hfigure3;
-            case 4:
-                return R.drawable.img_hfigure4;
-            case 5:
-                return R.drawable.img_hfigure5;
-            case 6:
-                return R.drawable.img_hfigure6;
-            case 7:
-                return R.drawable.img_hfigure7;
-            case 8:
-                return R.drawable.img_hfigure8;
-            case 9:
-                return R.drawable.img_hfigure9;
-            default:
-                return R.drawable.img_hfigure0;
-        }
     }
 
     /**

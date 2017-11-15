@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.kt.rozenavi.R;
+import com.kt.rozenavi.utils.CommonUtils;
 
 import java.util.List;
 
@@ -64,7 +65,7 @@ public class AutocompleteRecyclerViewAdapter
 
     @Override
     public int getItemCount() {
-        return searchPlaceDataList.size();
+        return searchPlaceDataList == null ? 0 : searchPlaceDataList.size();
     }
 
     @Override
@@ -91,7 +92,7 @@ public class AutocompleteRecyclerViewAdapter
      * 스크롤 이용한 추가 검색 중 신규 명칭으로 검색을 눌렀을 때, 기존 검색 결과 데이터 초기화
      */
     public void clearData() {
-        if(searchPlaceDataList != null) {
+        if (!CommonUtils.isEmpty(searchPlaceDataList)) {
             searchPlaceDataList.clear();
             notifyDataSetChanged();
         }

@@ -19,6 +19,9 @@ import com.kt.roze.RozeOptions;
 
 public class NightAlarmBroadcastReceiver extends BroadcastReceiver {
 
+    public static final String ACTION = "com.kt.rozenavi.UPDATE_NIGHT_TIME";
+    public static final String EXTRA_IS_NIGHT = "isNight";
+
     /**
      * 알람 매니저 리시버 역할
      * 알람 수신 시 로즈 옵션의 주 / 야간 옵션을 변경(true / false)
@@ -29,5 +32,10 @@ public class NightAlarmBroadcastReceiver extends BroadcastReceiver {
         RozeOptions options = RozeOptions.getInstance();
         options.setNight(!options.isNight());
         NightAlarmManager.updateAlarmManager(context);
+
+        //주/야간 변경 상태를 broadcast로 알림
+        Intent sendIntent = new Intent(ACTION);
+        sendIntent.putExtra(EXTRA_IS_NIGHT, options.isNight());
+        context.sendBroadcast(sendIntent);
     }
 }

@@ -15,7 +15,6 @@ package com.kt.rozenavi.ui.main.navigation.view;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -368,8 +367,7 @@ public class NavigationSpotView extends RelativeLayout {
         if (warningCamera == null) {
             return;
         }
-        cameraDisposable = mapHelper.startMarkerFrameAnimation(warningCamera,
-                cameraResourceArray);
+        cameraDisposable = mapHelper.startMarkerFrameAnimation(warningCamera, cameraResourceArray);
     }
 
 
@@ -394,6 +392,10 @@ public class NavigationSpotView extends RelativeLayout {
      * @param accidentList 표시 대상 유고 정보 목록
      */
     public void setAccidentList(List<Accident> accidentList) {
-        mapHelper.setAccidentList(gMap, accidentList);
+        List markerList = mapHelper.setAccidentList(gMap, accidentList);
+        if (CommonUtils.isEmpty(markerList)) {
+            return;
+        }
+        accidentMarkerList.addAll(markerList);
     }
 }

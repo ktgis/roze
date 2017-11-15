@@ -295,7 +295,7 @@ public class MapHelper {
      * @return 표시한 유고 marker 목록
      */
     public List<Marker> setAccidentList(GMap gMap, List<Accident> accidentList) {
-        if (gMap == null || accidentList == null || accidentList.isEmpty()) {
+        if (gMap == null || CommonUtils.isEmpty(accidentList)) {
             return null;
         }
         List<Marker> accidentMarkerList = new ArrayList<>();

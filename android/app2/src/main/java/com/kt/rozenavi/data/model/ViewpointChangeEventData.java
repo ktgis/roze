@@ -10,18 +10,19 @@
  *
  */
 
-package com.kt.rozenavi.ui.main.navigation.data.model;
+package com.kt.rozenavi.data.model;
 
-import com.kt.roze.guidance.model.OilPriceGuidance;
+import com.kt.maps.GMap;
+import com.kt.maps.model.Viewpoint;
 
-import java.util.List;
+public class ViewpointChangeEventData {
+    public GMap gMap;
+    public Viewpoint viewpoint;
+    public boolean b;
 
-public class LowestGasEventData {
-    public final boolean isShow;
-    public final List<OilPriceGuidance> oilPriceList;
-
-    public LowestGasEventData(boolean isShow, List<OilPriceGuidance> oilPriceList) {
-        this.isShow = isShow;
-        this.oilPriceList = oilPriceList;
+    public ViewpointChangeEventData(GMap gMap, Viewpoint viewpoint, boolean b) {
+        this.gMap = gMap;
+        this.viewpoint = viewpoint;
+        this.b = b;
     }
 }
