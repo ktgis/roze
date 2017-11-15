@@ -24,6 +24,7 @@ import com.kt.roze.data.model.Route;
 import com.kt.roze.guidance.RGType;
 import com.kt.roze.guidance.model.TurnGuidance;
 import com.kt.roze.location.model.RouteLocation;
+import com.kt.rozenavi.utils.CommonUtils;
 
 import java.util.List;
 
@@ -115,7 +116,7 @@ class ZoomChanger {
      * @param guidances TBT 정보 리스트
      */
     void updateTbt(@NonNull List<TurnGuidance> guidances) {
-        if (guidances.size() == 0) {
+        if (CommonUtils.isEmpty(guidances)) {
             return;
         }
         TurnGuidance turnGuidance = guidances.get(0);
@@ -136,14 +137,11 @@ class ZoomChanger {
 
         Viewpoint viewPoint = gMap.getViewpoint();
         if (currentSpeed < LOW_SPEED_LIMIT_VALUE) {
-            setZoomlevelBySpeed(receiveTime, Speed.Low, routeLocation.location,
-                    viewPoint.zoom, 13);
+            setZoomlevelBySpeed(receiveTime, Speed.Low, routeLocation.location, viewPoint.zoom, 13);
         } else if (currentSpeed < MIDDLE_SPEED_LIMIT_VALUE) {
-            setZoomlevelBySpeed(receiveTime, Speed.Middle, routeLocation.location,
-                    viewPoint.zoom, 12);
+            setZoomlevelBySpeed(receiveTime, Speed.Middle, routeLocation.location, viewPoint.zoom, 12);
         } else {
-            setZoomlevelBySpeed(receiveTime, Speed.High, routeLocation.location,
-                    viewPoint.zoom, 11);
+            setZoomlevelBySpeed(receiveTime, Speed.High, routeLocation.location, viewPoint.zoom, 11);
         }
     }
 
@@ -176,7 +174,7 @@ class ZoomChanger {
      * @param distance TBT까지 남은 거리
      */
     void checkZoomlevel(int distance) {
-        if (route.links.size() == 0 || routeLocation == null || linkIndex < 0 || !isEnable) {
+        if (CommonUtils.isEmpty(route.links) || routeLocation == null || linkIndex < 0 || !isEnable) {
             return;
         }
 

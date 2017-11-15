@@ -95,18 +95,15 @@ public class NightAlarmManager {
      * 알람 매니저 설정
      */
     private static void setAlarmManager(Context context) {
-
         // AlarmManager 호출
         AlarmManager manager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         PendingIntent pendingIntent = pendingIntent(context, PendingIntent.FLAG_CANCEL_CURRENT);
 
         // OS Version별 AlarmManager 생성 관리
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            manager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,
-                    setCalendar().getTimeInMillis(), pendingIntent);
+            manager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, setCalendar().getTimeInMillis(), pendingIntent);
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            manager.setExact(AlarmManager.RTC_WAKEUP, setCalendar().getTimeInMillis(),
-                    pendingIntent);
+            manager.setExact(AlarmManager.RTC_WAKEUP, setCalendar().getTimeInMillis(), pendingIntent);
         } else {
             manager.set(AlarmManager.RTC_WAKEUP, setCalendar().getTimeInMillis(), pendingIntent);
         }

@@ -21,6 +21,7 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.kt.place.PlaceManager;
 import com.kt.roze.NavigationManager;
 import com.kt.rozenavi.BuildConfig;
 
@@ -145,7 +146,9 @@ public class UIUtils {
      */
     public static String getVersionString() {
         String version = "";
-        version = version + String.format("SDK Version %s", NavigationManager.getInstance().version());
+        version = version + String.format("Roze SDK Version %s", NavigationManager.getInstance().version());
+        version = version + "\n";
+        version = version + String.format("Place SDK Version %s", PlaceManager.getInstance().version());
         version = version + "\n";
         version = version + String.format("App Version %s", BuildConfig.VERSION_NAME);
         return version;
@@ -169,5 +172,17 @@ public class UIUtils {
      */
     public static int getCheckedRadioButtonIndex(RadioGroup radioGroup) {
         return radioGroup.indexOfChild(radioGroup.findViewById(radioGroup.getCheckedRadioButtonId()));
+    }
+
+    /**
+     * RadioGroup에 포함된 하위 RadioButton enabled 값 설정
+     *
+     * @param radioGroup radioGroup 객체
+     * @param isEnabled 활성화 여부
+     */
+    public static void setEnabledRadioGroup(RadioGroup radioGroup, boolean isEnabled) {
+        for (int i = 0; i < radioGroup.getChildCount(); i++) {
+            radioGroup.getChildAt(i).setEnabled(isEnabled);
+        }
     }
 }

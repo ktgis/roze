@@ -35,7 +35,9 @@ public class WeakReferenceHandler extends Handler {
     public void handleMessage(Message msg) {
         super.handleMessage(msg);
         OnMessageHandler messageHandler = target.get();
-        if (messageHandler == null) return;
+        if (messageHandler == null) {
+            return;
+        }
         messageHandler.handleMessage(msg);
     }
 

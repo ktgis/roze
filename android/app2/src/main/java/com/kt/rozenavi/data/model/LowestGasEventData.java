@@ -10,21 +10,18 @@
  *
  */
 
-package com.kt.rozenavi.utils;
+package com.kt.rozenavi.data.model;
 
-import android.view.animation.Animation;
+import com.kt.roze.guidance.model.OilPriceGuidance;
 
+import java.util.List;
 
-public class AnimationListenerAdapter implements Animation.AnimationListener {
-    @Override
-    public void onAnimationStart(Animation animation) {
-    }
+public class LowestGasEventData {
+    public final boolean isShow;
+    public final List<OilPriceGuidance> oilPriceList;
 
-    @Override
-    public void onAnimationEnd(Animation animation) {
-    }
-
-    @Override
-    public void onAnimationRepeat(Animation animation) {
+    public LowestGasEventData(boolean isShow, List<OilPriceGuidance> oilPriceList) {
+        this.isShow = isShow;
+        this.oilPriceList = oilPriceList;
     }
 }

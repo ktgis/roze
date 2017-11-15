@@ -145,7 +145,7 @@ public class RouteDestinationView extends FrameLayout {
      * @param locationList 장소정보 리스트
      */
     public void initLocationData(List<LocationItem> locationList,
-                                 OnDestinationItemEventListener destinationChangeListener) {
+            OnDestinationItemEventListener destinationChangeListener) {
         this.onDestinationChangeListener = destinationChangeListener;
         destinationList.clear();
         destinationList.addAll(locationList);

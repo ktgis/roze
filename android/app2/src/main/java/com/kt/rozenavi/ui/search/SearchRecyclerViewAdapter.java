@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.kt.place.model.poi.Poi;
 import com.kt.rozenavi.R;
+import com.kt.rozenavi.utils.CommonUtils;
 
 import java.util.List;
 
@@ -30,8 +31,7 @@ import butterknife.ButterKnife;
  * 목적지 항목을 표출 할 수 있도록 처리하며 클릭시 이벤트를 반환하는 리스너를
  * 설정할 수 있는 기능을 제공
  */
-public class SearchRecyclerViewAdapter
-        extends RecyclerView.Adapter<SearchRecyclerViewAdapter.LocationViewHolder>
+public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecyclerViewAdapter.LocationViewHolder>
         implements RecyclerAdapterDataModel<Poi> {
 
     /**
@@ -43,8 +43,7 @@ public class SearchRecyclerViewAdapter
      */
     private View.OnClickListener onClickListener = null;
 
-    public SearchRecyclerViewAdapter(
-            List<Poi> searchPlaceDataList, View.OnClickListener listener) {
+    public SearchRecyclerViewAdapter(List<Poi> searchPlaceDataList, View.OnClickListener listener) {
         this.searchPlaceDataList = searchPlaceDataList;
         this.onClickListener = listener;
     }
@@ -93,7 +92,7 @@ public class SearchRecyclerViewAdapter
      * 스크롤 이용한 추가 검색 중 신규 명칭으로 검색을 눌렀을 때, 기존 검색 결과 데이터 초기화
      */
     public void clearData() {
-        if(searchPlaceDataList != null) {
+        if (!CommonUtils.isEmpty(searchPlaceDataList)) {
             searchPlaceDataList.clear();
             notifyDataSetChanged();
         }

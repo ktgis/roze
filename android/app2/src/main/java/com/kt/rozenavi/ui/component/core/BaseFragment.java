@@ -11,16 +11,16 @@
  */
 package com.kt.rozenavi.ui.component.core;
 
-import android.arch.lifecycle.LifecycleFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.transition.TransitionInflater;
 
 import butterknife.ButterKnife;
 
@@ -28,7 +28,7 @@ import butterknife.ButterKnife;
 /**
  * ButterKnife 기본 적용 createView에서 생성된 View를 자동 bind
  */
-public abstract class BaseFragment extends LifecycleFragment {
+public abstract class BaseFragment extends Fragment {
     public void onNewIntent(Intent intent) {
     }
 

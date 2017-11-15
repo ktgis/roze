@@ -10,14 +10,21 @@
  *
  */
 
-package com.kt.rozenavi.ui.main.navigation.data.model;
+package com.kt.rozenavi.data.model;
 
-public class RemainEventData {
-    public final int timeInSecond;
-    public final int distanceInMeter;
+import com.kt.roze.guidance.model.SafetySpotGuidance;
 
-    public RemainEventData(int timeInSecond, int distanceInMeter) {
-        this.timeInSecond = timeInSecond;
-        this.distanceInMeter = distanceInMeter;
+import java.util.List;
+
+/**
+ * 안전운행 데이터 Wrapper
+ */
+public class SafetyEventData {
+    public final boolean isShow;
+    public final List<SafetySpotGuidance> safetyGuidanceList;
+
+    public SafetyEventData(boolean isShow, List<SafetySpotGuidance> safetyGuidanceList) {
+        this.isShow = isShow;
+        this.safetyGuidanceList = safetyGuidanceList;
     }
 }

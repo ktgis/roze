@@ -70,9 +70,7 @@ public class RouteTypeView extends FrameLayout {
      * @param routeTypes 요청 경로타입 리스트
      */
     public void setRouteInfo(List<Route> routeList, List<RoutePlan.RouteType> routeTypes,
-            RouteTypeRecyclerViewAdapter.OnRouteTypeItemEventListener
-                    onRouteTypeItemEventListener) {
-        recyclerView.setAdapter(new RouteTypeRecyclerViewAdapter(routeList, routeTypes,
-                onRouteTypeItemEventListener));
+            RouteTypeRecyclerViewAdapter.OnRouteTypeItemEventListener onRouteTypeItemEventListener) {
+        recyclerView.setAdapter(new RouteTypeRecyclerViewAdapter(routeList, routeTypes, onRouteTypeItemEventListener));
     }
 }

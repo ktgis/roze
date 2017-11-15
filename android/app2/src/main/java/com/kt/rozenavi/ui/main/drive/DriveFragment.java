@@ -13,7 +13,6 @@ package com.kt.rozenavi.ui.main.drive;
 
 import android.app.Activity;
 import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Build;
@@ -45,10 +44,12 @@ import com.kt.roze.routing.RouteManager;
 import com.kt.roze.routing.RoutePlan;
 import com.kt.roze.routing.RouteSummary;
 import com.kt.rozenavi.R;
+import com.kt.rozenavi.provider.LocationProvider;
+import com.kt.rozenavi.provider.MapProvider;
+import com.kt.rozenavi.data.model.ViewpointChangeEventData;
 import com.kt.rozenavi.ui.component.SpeedMeterView;
 import com.kt.rozenavi.ui.component.core.BaseFragment;
 import com.kt.rozenavi.ui.main.MainActivity;
-import com.kt.rozenavi.ui.main.MainActivityViewModel;
 import com.kt.rozenavi.ui.main.route.RouteFragment;
 import com.kt.rozenavi.ui.main.route.data.LocationItem;
 import com.kt.rozenavi.ui.search.SearchActivity;
@@ -77,7 +78,6 @@ public class DriveFragment extends BaseFragment implements WeakReferenceHandler.
     @BindView(R.id.search_button)
     protected View searchBarLayout;
 
-    private MainActivityViewModel viewModel;
 
     private GMap gMap;
     private WeakReferenceHandler handler = new WeakReferenceHandler(this);
@@ -128,8 +128,12 @@ public class DriveFragment extends BaseFragment implements WeakReferenceHandler.
 
     @Override
     public void onDestroy() {
-        if (currentLocationMarker != null) {
-            gMap.removeOverlay(currentLocationMarker);
+        if (gMap != null) {
+            if (currentLocationMarker != null) {
+                gMap.removeOverlay(currentLocationMarker);
+            }
+            gMap.setOnAnimationEndListener(null);
+            gMap = null;
         }
         super.onDestroy();
     }
@@ -157,8 +161,9 @@ public class DriveFragment extends BaseFragment implements WeakReferenceHandler.
     //getArguments() 및 초기 데이터 쿼리 관련 초기화
     private void initData() {
         //그외 데이터 쿼리 로직
-        viewModel = ViewModelProviders.of(getActivity()).get(MainActivityViewModel.class);
-        viewModel.geoLocation.observe(this, new Observer<GeoLocation>() {
+        LocationProvider locationProvider = LocationProvider.getInstance();
+        MapProvider mapProvider = MapProvider.getInstance();
+        locationProvider.location.observe(this, new Observer<GeoLocation>() {
             @Override
             public void onChanged(@Nullable GeoLocation geoLocation) {
                 if (geoLocation == null || !isResumed()) {
@@ -173,9 +178,7 @@ public class DriveFragment extends BaseFragment implements WeakReferenceHandler.
                     gMap.animate(
                             ViewpointChange.builder()
                                     .rotateTo(isHeading ? location.getBearing() : 0)
-                                    .panTo(UTMK.valueOf(
-                                            new LatLng(location.getLatitude(),
-                                                    location.getLongitude())))
+                                    .panTo(UTMK.valueOf(new LatLng(location.getLatitude(), location.getLongitude())))
                                     .pivot(currentPivot).build()
                             , 1000
                             , GMap.AnimationTiming.LINEAR);
@@ -184,12 +187,21 @@ public class DriveFragment extends BaseFragment implements WeakReferenceHandler.
                 }
             }
         });
+        locationProvider.isGpsOn.observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(@Nullable Boolean aBoolean) {
+                if (aBoolean == null) {
+                    return;
+                }
+                setCurrentMarkerIcon(aBoolean ? R.drawable.my_location_on : R.drawable.my_location_off);
+            }
+        });
 
-        viewModel.viewpointEventData.observe(this,
-                new Observer<MainActivityViewModel.ViewpointChangeEventData>() {
+        mapProvider.viewpointEventData.observe(this,
+                new Observer<ViewpointChangeEventData>() {
                     @Override
                     public void onChanged(
-                            @Nullable MainActivityViewModel.ViewpointChangeEventData
+                            @Nullable ViewpointChangeEventData
                                     viewpointChangeEventData) {
                         if (viewpointChangeEventData == null || !isResumed()) {
                             return;
@@ -208,30 +220,16 @@ public class DriveFragment extends BaseFragment implements WeakReferenceHandler.
                         }
                     }
                 });
-        viewModel.isGpsOn.observe(this, new Observer<Boolean>() {
+
+        mapProvider.gMap.observe(this, new Observer<GMap>() {
             @Override
-            public void onChanged(@Nullable Boolean aBoolean) {
-                if (aBoolean == null) {
+            public void onChanged(@Nullable GMap gMap) {
+                if (gMap == null) {
                     return;
                 }
-                setCurrentMarkerIcon(
-                        aBoolean ? R.drawable.my_location_on : R.drawable.my_location_off);
+                onMapReady(gMap);
             }
         });
-
-        if (viewModel.gMap.getValue() != null) {
-            onMapReady(viewModel.gMap.getValue());
-        } else {
-            viewModel.gMap.observe(this, new Observer<GMap>() {
-                @Override
-                public void onChanged(@Nullable GMap gMap) {
-                    if (gMap == null) {
-                        return;
-                    }
-                    onMapReady(gMap);
-                }
-            });
-        }
 
     }
 
@@ -301,8 +299,7 @@ public class DriveFragment extends BaseFragment implements WeakReferenceHandler.
      */
     private void applyDefaultStyle() {
         gMap.setStyle(ResourceDescriptorFactory.fromResource(R.raw.com_kt_maps_style));
-        gMap.setSyetemImage(ResourceDescriptorFactory
-                        .fromResource(R.drawable.com_kt_maps_totalimage),
+        gMap.setSyetemImage(ResourceDescriptorFactory.fromResource(R.drawable.com_kt_maps_totalimage),
                 ResourceDescriptorFactory.fromResource(R.raw.com_kt_maps_totalimage));
     }
 
@@ -333,8 +330,7 @@ public class DriveFragment extends BaseFragment implements WeakReferenceHandler.
 
         gMap.change(ViewpointChange.builder()
                 .rotateTo(isHeading ? NavigationManager.getInstance().getLastBearing() : 0)
-                .panTo(UTMK.valueOf(
-                        new LatLng(location.getLatitude(), location.getLongitude())))
+                .panTo(UTMK.valueOf(new LatLng(location.getLatitude(), location.getLongitude())))
                 .pivot(currentPivot).build());
 
         setCurrentLocationMarker(location);
@@ -348,8 +344,7 @@ public class DriveFragment extends BaseFragment implements WeakReferenceHandler.
         if (currentLocationMarker == null) {
             currentLocationMarker = new Marker();
             currentLocationMarker.setAnchor(new Point(0.5, 0.5));
-            currentLocationMarker.setIcon(
-                    ResourceDescriptorFactory.fromResource(currentMarkerIcon));
+            currentLocationMarker.setIcon(ResourceDescriptorFactory.fromResource(currentMarkerIcon));
             currentLocationMarker.setIconSize(new Point(30, 30));
             currentLocationMarker.setVisible(true);
             currentLocationMarker.setPosition(coord);
@@ -363,8 +358,7 @@ public class DriveFragment extends BaseFragment implements WeakReferenceHandler.
      * 내위치 마커 설정
      */
     public void setCurrentLocationMarker(Location location) {
-        setCurrentLocationMarker(
-                UTMK.valueOf(new LatLng(location.getLatitude(), location.getLongitude())));
+        setCurrentLocationMarker(UTMK.valueOf(new LatLng(location.getLatitude(), location.getLongitude())));
     }
 
     /**
@@ -379,8 +373,7 @@ public class DriveFragment extends BaseFragment implements WeakReferenceHandler.
         }
 
         UIUtils.showProgressDialog(getActivity());
-        UTMK startCoord =
-                UTMK.valueOf(new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude()));
+        UTMK startCoord = UTMK.valueOf(new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude()));
         //경로검색
         //출발지 좌표
         //도착지 좌표
@@ -406,7 +399,8 @@ public class DriveFragment extends BaseFragment implements WeakReferenceHandler.
                 //경로타입
                 .routeTypes(routeTypes);
 
-        if (viewModel.isGpsOn.getValue() != null && viewModel.isGpsOn.getValue()) {
+        Boolean isGpsOn = LocationProvider.getInstance().isGpsOn.getValue();
+        if (isGpsOn != null && isGpsOn) {
             //회전값
             builder.bearing(navigationManager.getLastBearing());
         }

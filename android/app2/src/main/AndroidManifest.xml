@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) 2016 kt corp. All rights reserved.
   ~
   ~  This is a proprietary software of kt corp, and you may not use this file
@@ -32,8 +31,7 @@
             android:value="{EXTERNAL}/telos" />
         <meta-data
             android:name="io.fabric.ApiKey"
-            android:value="55bca5531e4bd44892f22fae84df6e5e3774836e"
-            />
+            android:value="55bca5531e4bd44892f22fae84df6e5e3774836e" />
 
         <activity
             android:name=".ui.main.SplashActivity"
@@ -46,36 +44,35 @@
         </activity>
         <activity
             android:name=".ui.main.MainActivity"
-            android:screenOrientation="portrait"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.search.SearchActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.setting.SettingCarActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.setting.SettingRouteActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.setting.SettingRouteAdvActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateAlwaysHidden"
-            />
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".ui.setting.SettingSoundActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
 
-        <receiver android:name=".ui.main.alarm.NightAlarmBroadcastReceiver"
+        <receiver
+            android:name=".ui.main.alarm.NightAlarmBroadcastReceiver"
             android:enabled="true"
-            android:exported="false">
-        </receiver>
+            android:exported="false"/>
 
         <!--
      ATTENTION: This was auto-generated to add Google Play services to your project for
@@ -85,8 +82,7 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <service
-            android:name=".ui.main.service.TbtGuidancePopupService"/>
+        <service android:name=".ui.main.service.TbtGuidancePopupService" />
     </application>
 
 </manifest>

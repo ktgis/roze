@@ -13,16 +13,14 @@
 package com.kt.rozenavi.ui.main.navigation;
 
 import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
-import android.content.ComponentName;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.ServiceConnection;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -50,27 +48,29 @@ import com.kt.roze.RozeOptions;
 import com.kt.roze.SoundManager;
 import com.kt.roze.data.model.Lane;
 import com.kt.roze.data.model.Route;
+import com.kt.roze.data.model.SafetySummary;
 import com.kt.roze.data.model.WayPoint;
-import com.kt.roze.guidance.RouteGuidanceListener;
 import com.kt.roze.guidance.model.HighwayGuidance;
 import com.kt.roze.guidance.model.IntervalSpeedSpotGuidance;
 import com.kt.roze.guidance.model.OilPriceGuidance;
 import com.kt.roze.guidance.model.SafetySpotGuidance;
 import com.kt.roze.guidance.model.Sound;
 import com.kt.roze.guidance.model.TurnGuidance;
-import com.kt.roze.location.LocationConfig;
 import com.kt.roze.location.model.GeoLocation;
 import com.kt.roze.location.model.RouteLocation;
 import com.kt.roze.resource.SoundResourceManager;
 import com.kt.roze.routing.RouteSummary;
 import com.kt.rozenavi.R;
+import com.kt.rozenavi.data.NavigationData;
+import com.kt.rozenavi.data.model.LowestGasEventData;
+import com.kt.rozenavi.data.model.RemainEventData;
+import com.kt.rozenavi.data.model.SafetyEventData;
+import com.kt.rozenavi.data.model.ViewpointChangeEventData;
+import com.kt.rozenavi.provider.LocationProvider;
+import com.kt.rozenavi.provider.MapProvider;
 import com.kt.rozenavi.ui.component.SpeedMeterView;
 import com.kt.rozenavi.ui.component.core.BaseFragment;
-import com.kt.rozenavi.ui.main.MainActivityViewModel;
-import com.kt.rozenavi.ui.main.navigation.data.NavigationData;
-import com.kt.rozenavi.ui.main.navigation.data.model.LowestGasEventData;
-import com.kt.rozenavi.ui.main.navigation.data.model.RemainEventData;
-import com.kt.rozenavi.ui.main.navigation.data.model.SafetyEventData;
+import com.kt.rozenavi.ui.main.alarm.NightAlarmBroadcastReceiver;
 import com.kt.rozenavi.ui.main.navigation.view.NavigationHighWayView;
 import com.kt.rozenavi.ui.main.navigation.view.NavigationHipassView;
 import com.kt.rozenavi.ui.main.navigation.view.NavigationLaneView;
@@ -80,7 +80,6 @@ import com.kt.rozenavi.ui.main.navigation.view.NavigationRemainView;
 import com.kt.rozenavi.ui.main.navigation.view.NavigationRoadView;
 import com.kt.rozenavi.ui.main.navigation.view.NavigationSpotView;
 import com.kt.rozenavi.ui.main.navigation.view.NavigationTbtView;
-import com.kt.rozenavi.ui.main.service.TbtGuidancePopupService;
 import com.kt.rozenavi.utils.CommonUtils;
 import com.kt.rozenavi.utils.MapUtils;
 import com.kt.rozenavi.utils.NaviUtils;
@@ -148,15 +147,11 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
     @BindView(R.id.lowest_gas_guidance_view)
     protected NavigationLowestGasView lowestGasGuidanceView;
 
-    public static TbtGuidancePopupService tbtGuidancePopupService;
     private ZoomChanger zoomChanger = new ZoomChanger();
 
     private RouteListenerAdpater routeListenerAdpater;
     private RouteSummary routeSummary;
     private int routeIndex;
-
-    private MainActivityViewModel viewModel;
-    private NavigationData navigationData;
 
     private GMap gMap;
     private WeakReferenceHandler handler = new WeakReferenceHandler(this);
@@ -169,6 +164,8 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
     private boolean isFixedCurrentLocation = true;
     private boolean isHeading = true;
 
+    private boolean isArrived = false;
+
     //getInstance는 상황에 따라서 선택 사용
     //파라매터 없는 경우
     public static Fragment getInstance() {
@@ -176,9 +173,7 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
     }
 
     public NavigationFragment() {
-        navigationData = new NavigationData();
         NavigationManager navigationManager = NavigationManager.getInstance();
-        navigationManager.setRouteGuidanceEventListener(routeGuidanceListener);
         navigationManager.setRerouteListener(this);
     }
 
@@ -192,7 +187,11 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
     @Override
     public void onResume() {
         super.onResume();
-        if(NavigationManager.getInstance().getMode() == NavigationManager.Mode.TRACKING) {
+        if (routeListenerAdpater != null) {
+            routeListenerAdpater = null;
+        }
+
+        if (NavigationManager.getInstance().getMode() == NavigationManager.Mode.TRACKING && isArrived) {
             getActivity().onBackPressed();
         }
     }
@@ -206,35 +205,28 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
     @Override
     public void onDestroy() {
         NavigationManager navigationManager = NavigationManager.getInstance();
-        navigationManager.setRouteGuidanceEventListener(null);
         navigationManager.setRerouteListener(null);
         NavigationManager.getInstance().setSoundListener(null);
-
-        if (getActivity() != null) {
-            removeTbtPopupView();
-            getActivity().unbindService(conn);
-        }
 
         tbtGuidanceView.releaseMap();
         spotGuidanceView.releaseMap();
         lowestGasGuidanceView.releaseMap();
         zoomChanger.releaseMap();
 
-        if (currentLocationMarker != null) {
-            gMap.removeOverlay(currentLocationMarker);
+        if (gMap != null) {
+            if (currentLocationMarker != null) {
+                gMap.removeOverlay(currentLocationMarker);
+            }
+            gMap.setOnAnimationEndListener(null);
         }
+
         clearOverlay();
 
-        NavigationManager.getInstance().stopNavigation(
-                NavigationManager.RouteFinishMode.USER_FINISH);
-        super.onDestroy();
-    }
-
-    private void removeTbtPopupView() {
-        if (tbtGuidancePopupService != null) {
-            tbtGuidancePopupService.removeNotification();
-            tbtGuidancePopupService.removeTbtPopupView();
+        if (navigationManager.getMode() == NavigationManager.Mode.NAVIGATING) {
+            navigationManager.stopNavigation(NavigationManager.RouteFinishMode.USER_FINISH);
         }
+        unregisterReceiver();
+        super.onDestroy();
     }
 
     @Override
@@ -243,6 +235,8 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
         initData();
         //view 초기화
         initView();
+
+        registerReceiver();
     }
 
     //view에 대한 기본 parameter 초기화
@@ -250,9 +244,6 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
     private void initView() {
         //view에 대한 초기값 설정 및 상태값 변경
         NavigationManager navigationManager = NavigationManager.getInstance();
-        navigationManager.playRouteStateSound(SoundResourceManager.RouteState.ROUTE_START);
-
-        setBindService(getActivity());
 
         driveMenuView.setOnMenuClickListener(new NavigationMenuView.OnNavigationStopListener() {
             @Override
@@ -261,15 +252,24 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
             }
         });
 
-        lowestGasGuidanceView.setLowestGasStationList(navigationManager.getOilPricePOIList());
-        spotGuidanceView.setAccidentList(navigationManager.getAccidentPOIList());
-
         Route route = routeSummary.getActiveRoute();
-        drawRoute(route);
         tbtGuidanceView.setRoute(route);
         zoomChanger.setRoute(route);
 
         updateRemain(route.time, route.distance);
+    }
+
+    private void playStartSound(SafetySummary summary) {
+        Sound sound;
+        if (summary != null && summary.hasSafetySection) {
+            sound = SoundResourceManager.getSafetySummarySound(summary);
+        } else {
+            sound = SoundResourceManager.getRouteSound(SoundResourceManager.RouteState.ROUTE_START);
+        }
+
+        if (sound != null) {
+            NavigationManager.getInstance().playNavigationSound(sound);
+        }
     }
 
     @Override
@@ -290,8 +290,7 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
             public void onClick(
                     DialogInterface dialog, int id) {
                 try {
-                    NavigationManager.getInstance()
-                            .stopNavigation(NavigationManager.RouteFinishMode.USER_FINISH);
+                    NavigationManager.getInstance().stopNavigation(NavigationManager.RouteFinishMode.USER_FINISH);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -322,13 +321,11 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
         routePointList = new ArrayList<>();
 
         //waypoint
-        if (routeSummary.routePlan.waypoints != null
-                && !routeSummary.routePlan.waypoints.isEmpty()) {
+        if (!CommonUtils.isEmpty(routeSummary.routePlan.waypoints)) {
             for (UTMK coord : routeSummary.routePlan.waypoints) {
                 MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.anchor(new Point(0.5, 1.0))
-                        .icon(ResourceDescriptorFactory.fromResource(
-                                R.drawable.route_marker_waypoint))
+                        .icon(ResourceDescriptorFactory.fromResource(R.drawable.route_marker_waypoint))
                         .iconSize(new Point(30, 49))
                         .position(coord).visible(true);
                 Marker marker = new Marker(markerOptions);
@@ -340,8 +337,7 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
         //end point
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.anchor(new Point(0.5, 1.0))
-                .icon(ResourceDescriptorFactory.fromResource(
-                        R.drawable.route_marker_end))
+                .icon(ResourceDescriptorFactory.fromResource(R.drawable.route_marker_end))
                 .iconSize(new Point(30, 49))
                 .position(route.routePath().get(route.routePath().size() - 1)).visible(true);
         Marker marker = new Marker(markerOptions);
@@ -384,8 +380,9 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
     //getArguments() 및 초기 데이터 쿼리 관련 초기화
     private void initData() {
         //그외 데이터 쿼리 로직
-        viewModel = ViewModelProviders.of(getActivity()).get(MainActivityViewModel.class);
-        viewModel.geoLocation.observe(this, new Observer<GeoLocation>() {
+        LocationProvider locationProvider = LocationProvider.getInstance();
+        MapProvider mapProvider = MapProvider.getInstance();
+        locationProvider.location.observe(this, new Observer<GeoLocation>() {
             @Override
             public void onChanged(@Nullable GeoLocation geoLocation) {
                 if (geoLocation == null || gMap == null) {
@@ -395,8 +392,7 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
                     return;
                 }
 
-                int currentSpeed = geoLocation.location == null ?
-                        0 : NaviUtils.calculateSpeed(geoLocation.location);
+                int currentSpeed = geoLocation.location == null ? 0 : NaviUtils.calculateSpeed(geoLocation.location);
                 float angle;
                 UTMK coord;
                 if (geoLocation.hasRoutedLocation()) {
@@ -408,8 +404,7 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
                     }
 
                     if (currentSpeed > 0) {
-                        angle = geoLocation.location.hasBearing() ?
-                                geoLocation.location.getBearing() : 0;
+                        angle = geoLocation.location.hasBearing() ? geoLocation.location.getBearing() : 0;
                     } else {
                         angle = 0;
                     }
@@ -438,11 +433,22 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
             }
         });
 
-        viewModel.viewpointEventData.observe(this,
-                new Observer<MainActivityViewModel.ViewpointChangeEventData>() {
+        locationProvider.isGpsOn.observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(@Nullable Boolean aBoolean) {
+                if (aBoolean == null) {
+                    return;
+                }
+                setCurrentMarkerIcon(
+                        aBoolean ? R.drawable.my_location_navigation_on : R.drawable.my_location_navigation_off);
+            }
+        });
+
+        mapProvider.viewpointEventData.observe(this,
+                new Observer<ViewpointChangeEventData>() {
                     @Override
                     public void onChanged(
-                            @Nullable MainActivityViewModel.ViewpointChangeEventData
+                            @Nullable ViewpointChangeEventData
                                     viewpointChangeEventData) {
                         if (viewpointChangeEventData == null) {
                             return;
@@ -467,35 +473,25 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
                                 setCurrentLocationMarker(UTMK.valueOf(markerLocation));
                             }
                         } else {
-                            currentLocationMarker.setRotation(NavigationManager.getInstance().getLastBearing());
+                            if (currentLocationMarker != null) {
+                                currentLocationMarker.setRotation(NavigationManager.getInstance().getLastBearing());
+                            }
                         }
                     }
                 });
-        viewModel.isGpsOn.observe(this, new Observer<Boolean>() {
+
+
+        mapProvider.gMap.observe(this, new Observer<GMap>() {
             @Override
-            public void onChanged(@Nullable Boolean aBoolean) {
-                if (aBoolean == null) {
+            public void onChanged(@Nullable GMap gMap) {
+                if (gMap == null) {
                     return;
                 }
-                setCurrentMarkerIcon(
-                        aBoolean ? R.drawable.my_location_navigation_on
-                                : R.drawable.my_location_navigation_off);
+                onMapReady(gMap);
             }
         });
 
-        if (viewModel.gMap.getValue() != null) {
-            onMapReady(viewModel.gMap.getValue());
-        } else {
-            viewModel.gMap.observe(this, new Observer<GMap>() {
-                @Override
-                public void onChanged(@Nullable GMap gMap) {
-                    if (gMap == null) {
-                        return;
-                    }
-                    onMapReady(gMap);
-                }
-            });
-        }
+        NavigationData navigationData = NavigationData.getInstance();
 
         navigationData.laneEvent.observe(this, new Observer<Lane>() {
             @Override
@@ -514,7 +510,7 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
             }
         });
 
-        navigationData.roadViewPath.observe(this, new Observer<String>() {
+        navigationData.roadView.observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String path) {
                 updateRoadView(path);
@@ -543,6 +539,7 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
                     return;
                 }
                 updateTBTViews(turnGuidances);
+                hipassGuidanceView.setTurnGuidance(turnGuidances);
             }
         });
         navigationData.turnDistance.observe(this, new Observer<Integer>() {
@@ -552,6 +549,7 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
                     return;
                 }
                 updateTBTDistance(distance);
+                hipassGuidanceView.updateHipassView(distance);
             }
         });
         navigationData.remainEvent.observe(this,
@@ -574,8 +572,7 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
                         if (safetyEventData == null) {
                             return;
                         }
-                        updateSafetSpotView(safetyEventData.isShow,
-                                safetyEventData.safetyGuidanceList);
+                        updateSafetSpotView(safetyEventData.isShow, safetyEventData.safetyGuidanceList);
                     }
                 });
 
@@ -589,7 +586,7 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
         navigationData.nearWaypointEvent.observe(this, new Observer<List<WayPoint>>() {
             @Override
             public void onChanged(@Nullable List<WayPoint> wayPoints) {
-                if (wayPoints == null || wayPoints.isEmpty()) {
+                if (CommonUtils.isEmpty(wayPoints)) {
                     return;
                 }
                 showWaypointDialog();
@@ -639,12 +636,20 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
                 isFreezeMap = false;
             }
         });
-        applyDriveStyle();
+        applyDriveStyle(RozeOptions.getInstance().isNight());
+
+        Route route = routeSummary.getActiveRoute();
+        drawRoute(route);
 
         setHeadingPivot();
         tbtGuidanceView.initMap(gMap);
         spotGuidanceView.initMap(gMap);
         lowestGasGuidanceView.initMap(gMap);
+
+        NavigationManager navigationManager = NavigationManager.getInstance();
+        lowestGasGuidanceView.setLowestGasStationList(navigationManager.getOilPricePOIList());
+        spotGuidanceView.setAccidentList(navigationManager.getAccidentPOIList());
+
         zoomChanger.initMap(gMap);
         isFreezeMap = true;
         gMap.animate(
@@ -736,11 +741,14 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
      * 지도 스타일 적용
      * 도로 강조 스타일
      */
-    private void applyDriveStyle() {
-        gMap.setStyle(ResourceDescriptorFactory.fromResource(R.raw.day_drive));
+    private void applyDriveStyle(boolean isNight) {
+        this.isNight = isNight;
+        gMap.setStyle(ResourceDescriptorFactory.fromResource(isNight ? R.raw.night_drive : R.raw.day_drive));
         gMap.setSyetemImage(ResourceDescriptorFactory.fromResource(R.drawable.com_kt_maps_totalimage),
                 ResourceDescriptorFactory.fromResource(R.raw.com_kt_maps_totalimage));
     }
+
+    private boolean isNight = false;
 
     @OnClick(R.id.compass_button)
     protected void onClickCompassButton() {
@@ -754,7 +762,6 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
         }
     }
 
-
     @OnClick(R.id.navigation_menu)
     protected void onClickMenu() {
         driveMenuView.toggleMenu();
@@ -765,15 +772,15 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
         setCurrentLocation();
     }
 
-    public void startNavigation(RouteSummary routeSummary, int routeIndex,
-            RouteListenerAdpater routeListenerAdpater) {
+    public void startNavigation(RouteSummary routeSummary, int routeIndex, RouteListenerAdpater routeListenerAdpater) {
         this.routeListenerAdpater = routeListenerAdpater;
         this.routeSummary = routeSummary;
         this.routeIndex = routeIndex;
 
         routeSummary.setActiveRoute(routeIndex);
-        NavigationManager.getInstance().setSoundListener(this);
-        NavigationManager.getInstance().startRouting(routeSummary, this);
+        NavigationManager navigationManager = NavigationManager.getInstance();
+        navigationManager.setSoundListener(this);
+        navigationManager.startRouting(routeSummary, this);
     }
 
     private void requestReRoute(Location location, NavigationManager.RouteMode mode) {
@@ -790,6 +797,8 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
     public void onRouteStarted() {
         if (routeListenerAdpater != null) {
             routeListenerAdpater.onRouteStarted();
+            Route route = routeSummary.getActiveRoute();
+            playStartSound(route.safetySummary);
         }
     }
 
@@ -814,17 +823,16 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
             UIUtils.showToast(getActivity(), R.string.toast_message_navigation_arrived_destination);
 
             try {
-                navigationManager.stopNavigation(
-                        NavigationManager.RouteFinishMode.ARRIVED_DESTINATION);
+                navigationManager.stopNavigation(NavigationManager.RouteFinishMode.ARRIVED_DESTINATION);
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-           if(isResumed()) {
-               getActivity().onBackPressed();
-           } else {
-               removeTbtPopupView();
-           }
+            if (isResumed()) {
+                getActivity().onBackPressed();
+            } else {
+                isArrived = true;
+            }
         } else {
             // 경유지 도착
             UIUtils.showToast(getActivity(), R.string.toast_message_navigation_arrived_waypoint);
@@ -951,7 +959,6 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
      */
     public void updateHighwayView(List<HighwayGuidance> guidances) {
         highwayGuidanceView.setHighwayGuidances(guidances);
-        hipassGuidanceView.setHighwayGuidances(guidances);
     }
 
     /**
@@ -961,7 +968,6 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
      */
     public void updateHighwayDistance(int distance) {
         highwayGuidanceView.updateDistance(distance);
-        hipassGuidanceView.updateHipassView(distance);
     }
 
     /**
@@ -990,120 +996,6 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
         lowestGasGuidanceView.updateLowestGasStationDistance(distance);
     }
 
-    /**
-     * 경로 안내 UI 표시 용 정보를 수신하기 위한 Listener
-     * {@link RouteGuidanceListener}
-     */
-    private RouteGuidanceListener routeGuidanceListener = new RouteGuidanceListener() {
-        @Override
-        public void onLaneChangedEvent(Lane lane) {
-            super.onLaneChangedEvent(lane);
-            navigationData.laneEvent.setValue(lane);
-        }
-
-        @Override
-        public void onLaneDistanceChangedEvent(int distance) {
-            super.onLaneDistanceChangedEvent(distance);
-            navigationData.laneDistance.setValue(distance);
-        }
-
-        @Override
-        public void onRoadViewChangedEvent(String path) {
-            super.onRoadViewChangedEvent(path);
-            navigationData.roadViewPath.setValue(path);
-        }
-
-        @Override
-        public void onHighwayChangedEvent(List<HighwayGuidance> highwayGuidances) {
-            super.onHighwayChangedEvent(highwayGuidances);
-            navigationData.highwayEvent.setValue(highwayGuidances);
-        }
-
-        @Override
-        public void onHighwayDistanceEvent(int distance) {
-            super.onHighwayDistanceEvent(distance);
-            navigationData.highwayDistance.setValue(distance);
-        }
-
-        @Override
-        public void onTurnChangedEvent(List<TurnGuidance> turnGuidances) {
-            super.onTurnChangedEvent(turnGuidances);
-            navigationData.turnEvent.setValue(turnGuidances);
-            if (tbtGuidancePopupService != null) {
-                tbtGuidancePopupService.updateTBTViews(turnGuidances);
-            }
-        }
-
-        @Override
-        public void onTurnDistanceChangedEvent(int distance) {
-            super.onTurnDistanceChangedEvent(distance);
-            navigationData.turnDistance.setValue(distance);
-            if (tbtGuidancePopupService != null) {
-                tbtGuidancePopupService.updateTBTDistance(distance);
-            }
-        }
-
-        @Override
-        public void onRemainChangedEvent(int timeInSecond, int distanceInMeter) {
-            super.onRemainChangedEvent(timeInSecond, distanceInMeter);
-            navigationData.remainEvent.setValue(new RemainEventData(timeInSecond, distanceInMeter));
-        }
-
-        @Override
-        public void onSafetySpotChangedEvent(
-                boolean isShow, List<SafetySpotGuidance> safetySpotGuidance) {
-            super.onSafetySpotChangedEvent(isShow, safetySpotGuidance);
-            navigationData.safetySpotEvent.setValue(new SafetyEventData(isShow, safetySpotGuidance));
-        }
-
-        @Override
-        public void onIntervalSafetySpotChangedEvent(IntervalSpeedSpotGuidance intervalGuidance) {
-            super.onIntervalSafetySpotChangedEvent(intervalGuidance);
-            navigationData.intervalEvent.setValue(intervalGuidance);
-        }
-
-        @Override
-        public void onNearWayPointEvent(List<WayPoint> wayPoints) {
-            navigationData.nearWaypointEvent.setValue(wayPoints);
-        }
-
-        @Override
-        public void onLowestGasStationChangedEvent(boolean isShow, List<OilPriceGuidance> list) {
-            super.onLowestGasStationChangedEvent(isShow, list);
-            navigationData.lowestGasEvent.setValue(new LowestGasEventData(isShow, list));
-        }
-
-        @Override
-        public void onLowestGasStationDistanceChangedEvent(int distance) {
-            super.onLowestGasStationDistanceChangedEvent(distance);
-            navigationData.lowestGasDistance.setValue(distance);
-        }
-    };
-
-    /**
-     * 서비스 바인딩 시 콜백 메서드 구현
-     */
-    ServiceConnection conn = new ServiceConnection() {
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            TbtGuidancePopupService.TbtGuidancePopupBinder tbtGuidancePopupBinder =
-                    (TbtGuidancePopupService.TbtGuidancePopupBinder) service;
-            tbtGuidancePopupService = tbtGuidancePopupBinder.getService();
-            tbtGuidancePopupService.showNotification();
-        }
-
-        public void onServiceDisconnected(ComponentName name) {
-        }
-    };
-
-    /**
-     * 서비스 바인딩 호출
-     */
-    private void setBindService(Context context) {
-        // Bind to LocalService
-        Intent intent = new Intent(context, TbtGuidancePopupService.class);
-        context.bindService(intent, conn, Context.BIND_AUTO_CREATE);
-    }
-
     @Override
     public void onSoundStart(SoundManager soundManager, Sound sound) {
         soundManager.play(sound);
@@ -1121,4 +1013,23 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
     @Override
     public void onSoundEnd() {
     }
+
+    private void registerReceiver() {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(NightAlarmBroadcastReceiver.ACTION);
+        getActivity().registerReceiver(receiver, intentFilter);
+    }
+
+    private void unregisterReceiver() {
+        getActivity().unregisterReceiver(receiver);
+    }
+
+    private final BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (NightAlarmBroadcastReceiver.ACTION.equals(intent.getAction())) {
+                applyDriveStyle(intent.getBooleanExtra(NightAlarmBroadcastReceiver.EXTRA_IS_NIGHT, false));
+            }
+        }
+    };
 }

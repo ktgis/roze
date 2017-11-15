@@ -40,8 +40,7 @@ class RozeProgressDialog extends Dialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //가운데 이미지 뷰를 애니메이션 리소스를 이용해 회전동작을 시킴
-        iconImageView.startAnimation(
-                AnimationUtils.loadAnimation(getContext(), R.anim.progress_animation));
+        iconImageView.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.progress_animation));
     }
 
     private void init() {

@@ -22,11 +22,13 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.kt.roze.guidance.RGType;
 import com.kt.roze.guidance.RouteGuidanceListener;
 import com.kt.roze.guidance.model.TurnGuidance;
 import com.kt.roze.resource.TurnResourceManager;
 import com.kt.rozenavi.R;
 import com.kt.rozenavi.ui.main.MainActivity;
+import com.kt.rozenavi.utils.CommonUtils;
 import com.kt.rozenavi.utils.NaviUtils;
 
 import java.util.Calendar;
@@ -174,7 +176,8 @@ public class TbtGuidancePopupView extends RelativeLayout {
      * @see RouteGuidanceListener#onTurnChangedEvent(List)
      */
     public void updateTBTViews(List<TurnGuidance> guidances) {
-        if (guidances == null || guidances.size() == 0) {
+        if (CommonUtils.isEmpty(guidances)) {
+            tbtImageView.setImageResource(TurnResourceManager.getResourceId(RGType.GO_STRAIGHT));
             return;
         }
         updateFirstTurn(guidances.get(0));

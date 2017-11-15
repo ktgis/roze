@@ -24,49 +24,9 @@ import com.kt.geom.model.UTMK;
  */
 public class MapUtils {
     /**
-     * 지도 초기화 기본 좌표
-     */
-    public static final UTMK DEFAULT_COORD = new UTMK(958386, 1941448);
-    /**
-     * 지도 초기화 기본 줌 레벨
-     */
-    public static final float DEFAULT_ZOOM = 11.0f;
-    /**
-     * 지도 초기화 기본 기울기
-     */
-    public static final float DEFAULT_TILT = 0.0f;
-    /**
-     * 지도 초기화 기본 회전
-     */
-    public static final float DEFAULT_ROTATION = 0.0f;
-    /**
-     * 지도 초기화 최대 줌레벨
-     */
-    public static final float DEFAULT_MAX_ZOOM = 12.0f;
-    /**
-     * 지도 초기화 최소 줌레벨
-     */
-    public static final float DEFAULT_MIN_ZOOM = 0.0f;
-    /**
-     * 지도 경로 표시 path객체 width 보정용 상수
-     */
-    public static final float ROUTE_PATH_WIDTH_IN_DP = 9;
-    /**
      * TBT 표시 path 객체 width 보정용 상수
      */
     public static final float TBT_PATH_WIDTH_IN_DP = 7;
-    /**
-     * 위치 이동정보가 수신되었을때 내차 마커 이동 애니메이션 시간
-     */
-    public static final int MAP_ANIMATION_DURATION_IN_MILLISECOND_LOCATION_UPDATE = 1000;
-    /**
-     * 경로 검색을 하였을때 경로 요약정보가 표시되는 화면에서 지도 줌이 변경되는 애니메이션 시간
-     */
-    public static final int MAP_ANIMATION_DURATION_IN_MILLISECOND_ROUTE_VIEW = 400;
-    /**
-     * 지도를 제스쳐로 이동하였을때 현재 위치로 다시 고정되는데 필요한 시간
-     */
-    public static final long MAP_UPDATE_SUSPEND_IN_MILLISECOND = 4000;
 
     /**
      * location 객체를 UTMK 좌표 객체로 변환하여 반환

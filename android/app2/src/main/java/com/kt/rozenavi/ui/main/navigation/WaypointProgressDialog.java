@@ -45,8 +45,8 @@ public class WaypointProgressDialog extends Dialog {
 
     private NavigationManager navigationManager = NavigationManager.getInstance();
     private CountDownTimer dialogTimer;
-    private final long durationTime  = 3000;
-    private final long intervalTime  = 1000;
+    private final long durationTime = 3000;
+    private final long intervalTime = 1000;
 
     public WaypointProgressDialog(Context context) {
         super(context);
@@ -72,8 +72,7 @@ public class WaypointProgressDialog extends Dialog {
      * Dialog 애니메이션 설정
      */
     private void setAnimation() {
-        Animation rotateAnimation = AnimationUtils.loadAnimation(getContext(),
-                R.anim.rotate_animation);
+        Animation rotateAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.rotate_animation);
         progressView.startAnimation(rotateAnimation);
     }
 
@@ -88,8 +87,7 @@ public class WaypointProgressDialog extends Dialog {
             }
 
             public void onFinish() {
-                navigationManager.rerouteForPassingWayPoint(0,
-                        NavigationManager.RouteMode.USER_REROUTE);
+                navigationManager.rerouteForPassingWayPoint(0, NavigationManager.RouteMode.USER_REROUTE);
                 endDialog();
                 UIUtils.showToast(getContext(), R.string.waypoint_dialog_pass_waypoint);
             }
@@ -107,10 +105,8 @@ public class WaypointProgressDialog extends Dialog {
     @OnClick(R.id.waypoint_btn_Positive_textview)
     public void clickPositive() {
         endDialog();
-        navigationManager.rerouteForPassingWayPoint(0,
-                NavigationManager.RouteMode.USER_REROUTE);
-        UIUtils.showToast(getContext(),
-                R.string.waypoint_dialog_pass_waypoint);
+        navigationManager.rerouteForPassingWayPoint(0, NavigationManager.RouteMode.USER_REROUTE);
+        UIUtils.showToast(getContext(), R.string.waypoint_dialog_pass_waypoint);
     }
 
     /**

@@ -11,7 +11,7 @@
  */
 package com.kt.rozenavi.ui.main;
 
-import android.arch.lifecycle.ViewModelProviders;
+import android.arch.lifecycle.Observer;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -23,6 +23,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
@@ -38,12 +39,14 @@ import com.kt.maps.GMap;
 import com.kt.maps.GMapFragment;
 import com.kt.maps.GMapResultCode;
 import com.kt.maps.OnMapReadyListener;
-import com.kt.maps.model.Viewpoint;
 import com.kt.roze.NavigationManager;
 import com.kt.roze.RozeResultCode;
-import com.kt.roze.location.model.GeoLocation;
+import com.kt.roze.guidance.model.TurnGuidance;
 import com.kt.rozenavi.R;
 import com.kt.rozenavi.RozeNaviApplication;
+import com.kt.rozenavi.data.NavigationData;
+import com.kt.rozenavi.provider.LocationProvider;
+import com.kt.rozenavi.provider.MapProvider;
 import com.kt.rozenavi.ui.component.core.BaseActivity;
 import com.kt.rozenavi.ui.component.core.BaseFragment;
 import com.kt.rozenavi.ui.main.alarm.NightAlarmManager;
@@ -54,6 +57,8 @@ import com.kt.rozenavi.utils.PreferenceUtils;
 import com.kt.rozenavi.utils.UIUtils;
 import com.squareup.leakcanary.RefWatcher;
 
+import java.util.List;
+
 import butterknife.BindView;
 
 /**
@@ -61,10 +66,7 @@ import butterknife.BindView;
  * 지도 및 안전운행 뷰, 경로검색 뷰, 경로안내 뷰가 포함
  * 지도에 대한 이벤트리스너를 처리하는 클래스
  */
-public class MainActivity extends BaseActivity
-        implements OnMapReadyListener,
-        NavigationManager.LocationListener, GMap.OnViewpointChangeListener,
-        NavigationManager.GpsSignalListener {
+public class MainActivity extends BaseActivity implements OnMapReadyListener {
     /**
      * 목적지 검색 요청 코드 상수
      */
@@ -111,7 +113,7 @@ public class MainActivity extends BaseActivity
         initView();
 
         // service bind
-        setBindService(this);
+        bindTbtService();
 
         NavigationManager navigationManager = NavigationManager.getInstance();
         //구글플레이서비스를 활용하지 못하는 상황일때 정상적인 내비기능을 활용하지 못하여
@@ -121,9 +123,6 @@ public class MainActivity extends BaseActivity
             showNaviInitFailDialog(initCode);
             return;
         }
-
-        navigationManager.setLocationListener(this);
-        navigationManager.setGpsSignalListener(this);
 
         //gps 수신을 위해 내비게이션 시작
         navigationManager.startTracking();
@@ -140,14 +139,60 @@ public class MainActivity extends BaseActivity
         }
     }
 
-    private MainActivityViewModel viewModel;
-
     private void initData() {
-        viewModel = ViewModelProviders.of(this).get(MainActivityViewModel.class);
+        NavigationManager navigationManager = NavigationManager.getInstance();
+        navigationManager.setListener(new NavigationManager.Listener() {
+            @Override
+            public void onNavigationModeChanged(NavigationManager.Mode mode) {
+                if (mode == NavigationManager.Mode.NAVIGATING) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            NavigationData.getInstance().init();
+                        }
+                    });
+                }
+            }
+        });
+        LocationProvider locationProvider = LocationProvider.getInstance();
+        locationProvider.bindNavigationManager(NavigationManager.getInstance());
+
+        NavigationData navigationData = NavigationData.getInstance();
+        navigationData.bindNavigationManager(navigationManager);
+
+        navigationData.turnEvent.observeAlways(this, new Observer<List<TurnGuidance>>() {
+            @Override
+            public void onChanged(@Nullable List<TurnGuidance> turnGuidances) {
+                if (tbtGuidancePopupService != null) {
+                    tbtGuidancePopupService.updateTBTViews(turnGuidances);
+                }
+            }
+        });
+        navigationData.turnDistance.observeAlways(this, new Observer<Integer>() {
+            @Override
+            public void onChanged(@Nullable Integer distance) {
+                if (tbtGuidancePopupService != null) {
+                    tbtGuidancePopupService.updateTBTDistance(distance == null ? 0 : distance);
+                }
+            }
+        });
+
+        getLifecycle().addObserver(MapProvider.getInstance());
+        getLifecycle().addObserver(navigationData);
+        getLifecycle().addObserver(locationProvider);
     }
 
     private void initView() {
         replaceFragment(DriveFragment.getInstance());
+    }
+
+    @Override
+    protected void onResume() {
+        // Popup View 삭제
+        if (conn != null && tbtGuidancePopupService != null) {
+            tbtGuidancePopupService.removeTbtPopupView();
+        }
+        super.onResume();
     }
 
     /**
@@ -184,8 +229,7 @@ public class MainActivity extends BaseActivity
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         NavigationManager navigationManager = NavigationManager.getInstance();
-        navigationManager.setLocationListener(null);
-        navigationManager.setGpsSignalListener(null);
+        navigationManager.setListener(null);
         //최종 좌표 저장
         Location lastLocation = navigationManager.getLastGpsLocation();
         if (lastLocation != null) {
@@ -195,12 +239,7 @@ public class MainActivity extends BaseActivity
                     String.valueOf(lastLocation.getLongitude()));
         }
 
-        // service Unbind
-        if (tbtGuidancePopupService != null) {
-            tbtGuidancePopupService.removeNotification();
-            tbtGuidancePopupService.removeTbtPopupView();
-        }
-        unbindService(conn);
+        unbindTbtService();
 
         //네비게이션엔진 종료
         navigationManager.stop();
@@ -279,33 +318,10 @@ public class MainActivity extends BaseActivity
     @Override
     public void onMapReady(GMap gMap) {
         map = gMap;
-        //지도 viewpoint 변경 이벤트 리스너 설정
-        gMap.setOnViewpointChangeListener(this);
-
-        viewModel.gMap.setValue(gMap);
+        MapProvider.getInstance().bindMap(gMap);
 
         //초기화전 지도화면을 숨겨두었다가 완료후 표출
         mapView.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void onViewpointChange(GMap map, Viewpoint viewpoint, boolean gesture) {
-        viewModel.viewpointEventData.setValue(new MainActivityViewModel.ViewpointChangeEventData(map, viewpoint, gesture));
-    }
-
-    @Override
-    public void onGpsLost() {
-        viewModel.isGpsOn.setValue(false);
-    }
-
-    @Override
-    public void onGpsAvailable() {
-        viewModel.isGpsOn.setValue(true);
-    }
-
-    @Override
-    public void onLocationUpdated(GeoLocation geoLocation) {
-        viewModel.geoLocation.setValue(geoLocation);
     }
 
     @Override
@@ -339,6 +355,9 @@ public class MainActivity extends BaseActivity
      */
     @Override
     protected void onUserLeaveHint() {
+        if (tbtGuidancePopupService == null) {
+            return;
+        }
         // Bind to LocalService
         if (NavigationManager.getInstance().getMode() == NavigationManager.Mode.NAVIGATING) {
             // 앱 그리기 권한 설정
@@ -354,9 +373,8 @@ public class MainActivity extends BaseActivity
     /**
      * 서비스 바인딩 시 콜백 메서드 구현
      */
-    ServiceConnection conn = new ServiceConnection() {
-        public void onServiceConnected(ComponentName name,
-                                       IBinder service) {
+    private ServiceConnection conn = new ServiceConnection() {
+        public void onServiceConnected(ComponentName name, IBinder service) {
             // 서비스와 연결되었을 때 호출되는 메서드
             // 서비스 객체를 전역변수로 저장
             TbtGuidancePopupService.TbtGuidancePopupBinder tbtGuidancePopupBinder =
@@ -366,26 +384,33 @@ public class MainActivity extends BaseActivity
         }
 
         public void onServiceDisconnected(ComponentName name) {
-            // 서비스와 연결이 끊겼을 때 호출되는 메서드
+            // 서비스와 연결이 예기치 못하게 끊겼을 때 호출되는 메서드
+            // 서비스가 충돌했거나 중단되었거나 했을때 호출되며 사용자가 unBind를 한다고 호출되진 않음
         }
     };
 
     /**
-     * 서비스 바인딩 호출
+     * TBT 서비스 연결 요청
      */
-    private void setBindService(Context context) {
+    private void bindTbtService() {
+        Context context = getApplicationContext();
         // Bind to LocalService
         Intent intent = new Intent(context, TbtGuidancePopupService.class);
         context.bindService(intent, conn, Context.BIND_AUTO_CREATE);
     }
 
-    @Override
-    protected void onResume() {
-        // Popup View 삭제
-        if (conn != null && tbtGuidancePopupService != null) {
+    /**
+     * TBT 서비스 연결해제 요청
+     */
+    private void unbindTbtService() {
+        Context context = getApplicationContext();
+        // service Unbind
+        if (tbtGuidancePopupService != null) {
+            tbtGuidancePopupService.removeNotification();
             tbtGuidancePopupService.removeTbtPopupView();
+            tbtGuidancePopupService = null;
         }
-        super.onResume();
+        context.unbindService(conn);
     }
 
     /**

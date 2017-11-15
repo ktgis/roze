@@ -65,8 +65,7 @@ public class NavigationRemainView extends RelativeLayout {
     @OnClick(R.id.remain_data_layout)
     protected void onRemainTimeToggle() {
         isShowRemainTime = !isShowRemainTime;
-        remainTimeTextView.setText(
-                isShowRemainTime ? convertRemainTime(remainTime) : convertArrivedTime(remainTime));
+        remainTimeTextView.setText(isShowRemainTime ? convertRemainTime(remainTime) : convertArrivedTime(remainTime));
     }
 
     /**
@@ -79,8 +78,7 @@ public class NavigationRemainView extends RelativeLayout {
     public void updateRemain(int timeInSecond, int distanceInMeter) {
         remainTime = timeInSecond;
         remainTimeTextView.setText(
-                isShowRemainTime ?
-                        convertRemainTime(timeInSecond) : convertArrivedTime(timeInSecond));
+                isShowRemainTime ? convertRemainTime(timeInSecond) : convertArrivedTime(timeInSecond));
         remainDistanceTextView.setText(NaviUtils.convertDistanceUnit(distanceInMeter));
     }
 }

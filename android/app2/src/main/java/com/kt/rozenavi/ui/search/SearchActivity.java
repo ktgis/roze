@@ -45,6 +45,7 @@ import com.kt.place.model.poi.SpecifiablePoi;
 import com.kt.roze.util.JsonFileUtil;
 import com.kt.rozenavi.R;
 import com.kt.rozenavi.ui.search.model.RecentDestination;
+import com.kt.rozenavi.utils.CommonUtils;
 import com.kt.rozenavi.utils.UIUtils;
 
 import java.io.File;
@@ -94,7 +95,7 @@ public class SearchActivity extends AppCompatActivity implements OnKeyboardVisib
     private int subTotalCount;
     private final int RESULT_COUNT = 20;
     private long baseTime;
-
+ 
     @BindView(R.id.recyclerView_locations)
     protected RecyclerView searchResultView;
     @BindView(R.id.autocomplete_container)
@@ -318,7 +319,7 @@ public class SearchActivity extends AppCompatActivity implements OnKeyboardVisib
 
     private List<Poi> setResidentialAddressPois(Place placeData) {
         List<Poi> placePois = new ArrayList<>();
-        if (placeData.getResidentialAddress() != null) {
+        if (!CommonUtils.isEmpty(placeData.getResidentialAddress())) {
             List<GeocodeAddress> geocodeAddresses = placeData.getResidentialAddress();
             for (GeocodeAddress geocodeAddress : geocodeAddresses) {
                 placePois.addAll(setResidentialAddressDetailPois(geocodeAddress.getParcelAddress(), PARCELADDRESS));
@@ -330,7 +331,7 @@ public class SearchActivity extends AppCompatActivity implements OnKeyboardVisib
 
     private List<Poi> setResidentialAddressDetailPois(List<GeocodeAddressDetail> detailAddressList, int detailType) {
         List<Poi> placePois = new ArrayList<>();
-        if (detailAddressList != null) {
+        if (!CommonUtils.isEmpty(detailAddressList)) {
             for (GeocodeAddressDetail detailAddress : detailAddressList) {
                 Poi poi = null;
                 Address address = convertAddressToGeocodeAddress(detailAddress);
@@ -463,7 +464,7 @@ public class SearchActivity extends AppCompatActivity implements OnKeyboardVisib
      * @param placeList 검색 데이터 리스트
      */
     private void setRecentDestination(List<Poi> placeList) {
-        if (placeList.size() == 0) {
+        if (CommonUtils.isEmpty(placeList)) {
             emptyTextView.setVisibility(View.VISIBLE);
         } else {
             emptyTextView.setVisibility(View.GONE);
@@ -533,7 +534,8 @@ public class SearchActivity extends AppCompatActivity implements OnKeyboardVisib
 
         setKeyboardVisibilityListener(this);
 
-        placeManager = new PlaceManager("전달받은 API Key 입력");
+		placeManager = PlaceManager.getInstance();
+		placeManager.init(this, "전달받은 API Key 입력");
         recentDestination = new RecentDestination();
         initAutocompleRecyclerview();
         initPoiRecyclerview();

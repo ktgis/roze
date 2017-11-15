@@ -27,9 +27,9 @@ import butterknife.OnClick;
 
 /**
  * 길 안내 모드 시 활성화 되는 View로 아래와 같은 기능을 갖는다.
- *  - 경로 저장 - 주행 중 GPS 저장 기능 제공.
- *  - 재탐색 - 수동 재탐색 기능 제공.
- *  - 경로 취소 - 주행 중인 경로를 취소 하고 Tracking Mode로 전환.
+ * - 경로 저장 - 주행 중 GPS 저장 기능 제공.
+ * - 재탐색 - 수동 재탐색 기능 제공.
+ * - 경로 취소 - 주행 중인 경로를 취소 하고 Tracking Mode로 전환.
  */
 public class NavigationMenuView extends RelativeLayout {
 
@@ -75,8 +75,7 @@ public class NavigationMenuView extends RelativeLayout {
         Toast.makeText(getContext(), "경로 안내를 종료합니다.", Toast.LENGTH_SHORT).show();
 
         try {
-            NavigationManager.getInstance().stopNavigation(
-                    NavigationManager.RouteFinishMode.USER_FINISH);
+            NavigationManager.getInstance().stopNavigation(NavigationManager.RouteFinishMode.USER_FINISH);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -79,6 +79,13 @@ public class NavigationTbtView extends RelativeLayout {
     private int firstTurnIndex = -1;
     private int secondTurnIndex = -1;
 
+    private GMap gMap;
+    private Path firstTbt;
+    private Path secondTbt;
+
+    private List<Link> links;
+    private SparseArray<Turn> turns;
+
     public NavigationTbtView(Context context) {
         super(context);
         initView(context);
@@ -144,13 +151,21 @@ public class NavigationTbtView extends RelativeLayout {
      */
     private String getDirectionInfo(TurnGuidance turn) {
         String directionText = "";
-
-        if (turn.getToll() != 0) {
-            directionText = getContext().getString(R.string.navigation_turn_toll, turn.getToll());
+        if (TurnGuidance.isNodeType(turn.turnCode) && !CommonUtils.isEmpty(turn.nodeName)) {
+            directionText = turn.nodeName + " ";
         } else if (turn.directionNames != null && turn.directionNames.size() > 0) {
             for (String s : turn.directionNames) {
                 directionText = directionText + s + " ";
             }
+        }
+
+        if (turn.getToll() != 0) {
+            if (CommonUtils.isEmpty(directionText)) {
+                directionText = getContext().getString(R.string.navigation_turn_toll, turn.getToll());
+            } else {
+                directionText += getContext().getString(R.string.navigation_turn_toll, turn.getToll());
+            }
+
         }
         return directionText;
     }
@@ -196,13 +211,6 @@ public class NavigationTbtView extends RelativeLayout {
         }
     }
 
-    private GMap gMap;
-    private Path firstTbt;
-    private Path secondTbt;
-
-    private List<Link> links;
-    private SparseArray<Turn> turns;
-
     public void clearOverlay() {
         mapHelper.removeOverlay(gMap, firstTbt);
         mapHelper.removeOverlay(gMap, secondTbt);
@@ -230,12 +238,10 @@ public class NavigationTbtView extends RelativeLayout {
      */
     public void updateTbtPath() {
         if (firstTbt != null && firstTurnIndex >= 0) {
-            firstTbt = mapHelper.drawTBTPath(gMap, turns.get(firstTurnIndex), firstTbt,
-                    links);
+            firstTbt = mapHelper.drawTBTPath(gMap, turns.get(firstTurnIndex), firstTbt, links);
         }
         if (secondTbt != null && secondTurnIndex > 0) {
-            secondTbt = mapHelper.drawTBTPath(gMap, turns.get(secondTurnIndex), secondTbt,
-                    links);
+            secondTbt = mapHelper.drawTBTPath(gMap, turns.get(secondTurnIndex), secondTbt, links);
         }
     }
 }

@@ -13,7 +13,6 @@ package com.kt.rozenavi.ui.main.route;
 
 import android.app.Activity;
 import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -57,9 +56,11 @@ import com.kt.roze.routing.RouteManager;
 import com.kt.roze.routing.RoutePlan;
 import com.kt.roze.routing.RouteSummary;
 import com.kt.rozenavi.R;
+import com.kt.rozenavi.data.model.ViewpointChangeEventData;
+import com.kt.rozenavi.provider.LocationProvider;
+import com.kt.rozenavi.provider.MapProvider;
 import com.kt.rozenavi.ui.component.core.BaseFragment;
 import com.kt.rozenavi.ui.main.MainActivity;
-import com.kt.rozenavi.ui.main.MainActivityViewModel;
 import com.kt.rozenavi.ui.main.navigation.NavigationFragment;
 import com.kt.rozenavi.ui.main.route.data.LocationItem;
 import com.kt.rozenavi.ui.main.route.view.RouteDestinationView;
@@ -69,6 +70,7 @@ import com.kt.rozenavi.ui.main.route.view.RouteTypeView;
 import com.kt.rozenavi.ui.search.SearchActivity;
 import com.kt.rozenavi.ui.setting.SettingRouteActivity;
 import com.kt.rozenavi.utils.AnimationListenerAdapter;
+import com.kt.rozenavi.utils.CommonUtils;
 import com.kt.rozenavi.utils.MapUtils;
 import com.kt.rozenavi.utils.PreferenceUtils;
 import com.kt.rozenavi.utils.RouteListenerAdpater;
@@ -100,8 +102,6 @@ public class RouteFragment extends BaseFragment implements RouteManager.RouteMan
 
     private LoadingAnimationHelper loadingAnimationHelper;
     private WeakReferenceHandler handler = new WeakReferenceHandler(this);
-
-    private MainActivityViewModel viewModel;
 
     private GMap gMap;
 
@@ -194,15 +194,6 @@ public class RouteFragment extends BaseFragment implements RouteManager.RouteMan
         routeTbtView.setRouteInfo(routeSummary.routes, this);
 
         loadingAnimationHelper = new LoadingAnimationHelper(getView());
-
-        setRoutePath();
-        //test
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                setZoomtoFitRoute();
-            }
-        }, 500);
     }
 
     private void setZoomtoFitRoute() {
@@ -241,14 +232,12 @@ public class RouteFragment extends BaseFragment implements RouteManager.RouteMan
     //getArguments() 및 초기 데이터 쿼리 관련 초기화
     private void initData() {
         //그외 데이터 쿼리 로직
-        viewModel = ViewModelProviders.of(getActivity()).get(MainActivityViewModel.class);
-        viewModel.viewpointEventData.observe(this,
-                new Observer<MainActivityViewModel.ViewpointChangeEventData>() {
+        MapProvider mapProvider = MapProvider.getInstance();
+        mapProvider.viewpointEventData.observe(this,
+                new Observer<ViewpointChangeEventData>() {
                     @Override
-                    public void onChanged(
-                            @Nullable MainActivityViewModel.ViewpointChangeEventData
-                                    viewpointChangeEventData) {
-                        if (viewpointChangeEventData == null || routePathList.isEmpty()) {
+                    public void onChanged(@Nullable ViewpointChangeEventData viewpointChangeEventData) {
+                        if (viewpointChangeEventData == null || CommonUtils.isEmpty(routePathList)) {
                             return;
                         }
 
@@ -257,19 +246,15 @@ public class RouteFragment extends BaseFragment implements RouteManager.RouteMan
                         }
                     }
                 });
-        if (viewModel.gMap.getValue() != null) {
-            onMapReady(viewModel.gMap.getValue());
-        } else {
-            viewModel.gMap.observe(this, new Observer<GMap>() {
-                @Override
-                public void onChanged(@Nullable GMap gMap) {
-                    if (gMap == null) {
-                        return;
-                    }
-                    onMapReady(gMap);
+        mapProvider.gMap.observe(this, new Observer<GMap>() {
+            @Override
+            public void onChanged(@Nullable GMap gMap) {
+                if (gMap == null) {
+                    return;
                 }
-            });
-        }
+                onMapReady(gMap);
+            }
+        });
     }
 
     private List<LocationItem> getDestinationList(LocationItem destination) {
@@ -284,14 +269,14 @@ public class RouteFragment extends BaseFragment implements RouteManager.RouteMan
     }
 
     private void clearOverlay() {
-        if (routePathList != null && routePathList.size() > 0) {
+        if (!CommonUtils.isEmpty(routePathList)) {
             for (RoutePath routePath : routePathList) {
                 gMap.removeOverlay(routePath);
             }
             routePathList.clear();
         }
 
-        if (markerList != null || markerList.size() > 0) {
+        if (!CommonUtils.isEmpty(markerList)) {
             for (Marker marker : markerList) {
                 gMap.removeOverlay(marker);
             }
@@ -414,6 +399,13 @@ public class RouteFragment extends BaseFragment implements RouteManager.RouteMan
      */
     private void onMapReady(GMap gMap) {
         this.gMap = gMap;
+        setRoutePath();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                setZoomtoFitRoute();
+            }
+        }, 500);
     }
 
     /**
@@ -448,7 +440,8 @@ public class RouteFragment extends BaseFragment implements RouteManager.RouteMan
                 //경로타입
                 .routeTypes(routeTypes);
 
-        if (viewModel.isGpsOn.getValue() != null && viewModel.isGpsOn.getValue()) {
+        Boolean isGpsOn = LocationProvider.getInstance().isGpsOn.getValue();
+        if (isGpsOn != null && isGpsOn) {
             //회전값
             builder.bearing(navigationManager.getLastBearing());
         }
@@ -500,7 +493,6 @@ public class RouteFragment extends BaseFragment implements RouteManager.RouteMan
         routeTypes.add(RoutePlan.RouteType.values()[routeType2Index]);
         return routeTypes;
     }
-
 
     @Override
     public void onRouteCalculateFinished(RouteSummary routeSummary) {
