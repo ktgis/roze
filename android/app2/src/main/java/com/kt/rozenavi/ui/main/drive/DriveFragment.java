@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -494,6 +495,12 @@ public class DriveFragment extends BaseFragment implements WeakReferenceHandler.
     @Override
     public void onRouteCalculateFailed(RozeError rozeError) {
         UIUtils.dismissProgressDialog();
-        Toast.makeText(getActivity(), rozeError.message, Toast.LENGTH_SHORT).show();
+        // ~ 1.1.1 버전
+        //UIUtils.showToast(getActivity(), rozeError.message);
+        //1.1.2 ~ 버전
+        //서버 api 오류 코드 추가 : RozeError.rozeErrorCode
+        //서버 api 오류 코드는 가이드 문서 참고
+        UIUtils.showToast(getActivity(),
+                TextUtils.isEmpty(rozeError.rozeErrorCode) ? rozeError.message : rozeError.rozeErrorCode);
     }
 }

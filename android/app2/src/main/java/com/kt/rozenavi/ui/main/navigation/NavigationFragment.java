@@ -26,6 +26,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -882,7 +883,13 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
 
     @Override
     public void onRerouteFailed(NavigationManager.RouteMode mode, RozeError error) {
-        UIUtils.showToast(getActivity(), R.string.toast_message_route_fail);
+        // ~ 1.1.1 버전
+        //UIUtils.showToast(getActivity(), R.string.toast_message_route_fail);
+        //1.1.2 ~ 버전
+        //서버 api 오류 코드 추가 : RozeError.rozeErrorCode
+        //서버 api 오류 코드는 가이드 문서 참고
+        UIUtils.showToast(getActivity(),
+                TextUtils.isEmpty(error.rozeErrorCode) ? error.message : error.rozeErrorCode);
         if (mode.isReusePreviousRoute()) {
             return;
         }

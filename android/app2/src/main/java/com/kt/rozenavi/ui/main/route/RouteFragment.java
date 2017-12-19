@@ -386,8 +386,15 @@ public class RouteFragment extends BaseFragment implements RouteManager.RouteMan
             }
 
             @Override
-            public void onRouteStartFail(RozeError error) {
+                public void onRouteStartFail(RozeError error) {
                 Log.e("Roze", "onRouteStartFail");
+                // ~ 1.1.1 버전
+                //UIUtils.showToast(getActivity(), rozeError.message);
+                //1.1.2 ~ 버전
+                //서버 api 오류 코드 추가 : RozeError.rozeErrorCode
+                //서버 api 오류 코드는 가이드 문서 참고
+                UIUtils.showToast(getActivity(),
+                        TextUtils.isEmpty(error.rozeErrorCode) ? error.message : error.rozeErrorCode);
             }
         });
     }
@@ -513,7 +520,13 @@ public class RouteFragment extends BaseFragment implements RouteManager.RouteMan
     public void onRouteCalculateFailed(RozeError rozeError) {
         UIUtils.dismissProgressDialog();
         loadingAnimationHelper.stopAnimation();
-        Toast.makeText(getActivity(), rozeError.message, Toast.LENGTH_SHORT).show();
+        // ~ 1.1.1 버전
+        //UIUtils.showToast(getActivity(), rozeError.message);
+        //1.1.2 ~ 버전
+        //서버 api 오류 코드 추가 : RozeError.rozeErrorCode
+        //서버 api 오류 코드는 가이드 문서 참고
+        UIUtils.showToast(getActivity(),
+                TextUtils.isEmpty(rozeError.rozeErrorCode) ? rozeError.message : rozeError.rozeErrorCode);
     }
 
     @Override
