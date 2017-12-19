@@ -14,6 +14,7 @@ package com.kt.rozenavi.ui.main.navigation;
 
 import android.content.Context;
 import android.location.Location;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
@@ -444,12 +445,19 @@ public class NavigationView extends RelativeLayout
     }
 
     @Override
-    public void onRouteStartFail(RozeError error) {
+    public void onRouteStartFail(final RozeError error) {
         UIUtils.dismissProgressDialog();
         getHandler().post(new Runnable() {
             @Override
             public void run() {
-                UIUtils.showToast(getContext(), R.string.toast_message_navigation_start_fail);
+                // ~ 1.1.1 버전
+                //UIUtils.showToast(getContext(), R.string.toast_message_navigation_start_fail);
+                //1.1.2 ~ 버전
+                //서버 api 오류 코드 추가 : RozeError.rozeErrorCode
+                //서버 api 오류 코드는 가이드 문서 참고
+                UIUtils.showToast(getContext(),
+                        TextUtils.isEmpty(error.rozeErrorCode) ? error.message : error.rozeErrorCode);
+
                 UIController.getInstance().setMode(UIController.MODE_DRIVE);
             }
         });
@@ -629,7 +637,14 @@ public class NavigationView extends RelativeLayout
 
     @Override
     public void onRerouteFailed(NavigationManager.RouteMode mode, RozeError error) {
-        UIUtils.showToast(getContext(), R.string.toast_message_route_fail);
+        // ~ 1.1.1 버전
+        //UIUtils.showToast(getContext(), R.string.toast_message_route_fail);
+        //1.1.2 ~ 버전
+        //서버 api 오류 코드 추가 : RozeError.rozeErrorCode
+        //서버 api 오류 코드는 가이드 문서 참고
+        UIUtils.showToast(getContext(),
+                TextUtils.isEmpty(error.rozeErrorCode) ? error.message : error.rozeErrorCode);
+
 		//since : sdk 0.9.3
 		//사용자 재탐색 / 자동 재탐색(주기적) 일 경우 실패 시 기존경로를 이용하여 주행하도록 변경.
 		if (mode.isReusePreviousRoute()) {

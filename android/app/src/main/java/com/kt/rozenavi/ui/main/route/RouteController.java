@@ -14,6 +14,8 @@ package com.kt.rozenavi.ui.main.route;
 
 import android.content.Context;
 import android.location.Location;
+import android.text.TextUtils;
+import android.widget.Toast;
 
 import com.kt.geom.model.LatLng;
 import com.kt.geom.model.UTMK;
@@ -330,8 +332,13 @@ class RouteController implements RouteManager.RouteManagerListener {
     @Override
     public void onRouteCalculateFailed(RozeError error) {
         UIUtils.dismissProgressDialog();
+        // ~ 1.1.1 버전
+        //UIUtils.showToast(UIController.getInstance().mainActivity, R.string.toast_message_route_fail);
+        //1.1.2 ~ 버전
+        //서버 api 오류 코드 추가 : RozeError.rozeErrorCode
+        //서버 api 오류 코드는 가이드 문서 참고
         UIUtils.showToast(UIController.getInstance().mainActivity,
-                R.string.toast_message_route_fail);
+                TextUtils.isEmpty(error.rozeErrorCode) ? error.message : error.rozeErrorCode);
     }
     //--RouteManager.RouteManagerListener
 }
