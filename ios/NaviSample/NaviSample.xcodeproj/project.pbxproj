@@ -1,0 +1,635 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		49812A2C1FD635F800D9F7E1 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49812A2B1FD635F800D9F7E1 /* Preferences.swift */; };
+		49FB643F1FD6728800417C82 /* ZoomChanger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49FB643E1FD6728800417C82 /* ZoomChanger.swift */; };
+		7343B0AE1FA8604700BAB42D /* SettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7343B0AD1FA8604700BAB42D /* SettingsTableViewCell.swift */; };
+		7343B0B01FA8983300BAB42D /* SettingsDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7343B0AF1FA8983300BAB42D /* SettingsDetailViewController.swift */; };
+		7383629C1FEA4B2000A8749C /* SearchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7383629B1FEA4B2000A8749C /* SearchManager.swift */; };
+		7383629E1FEA4B2E00A8749C /* SearchPlaceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7383629D1FEA4B2E00A8749C /* SearchPlaceData.swift */; };
+		73A838071FA9B85B00468435 /* SettingsDetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73A838061FA9B85B00468435 /* SettingsDetailTableViewCell.swift */; };
+		73CAFB7D1FAAD32300551073 /* SettingsUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73CAFB7C1FAAD32300551073 /* SettingsUtil.swift */; };
+		73D7F0F71FA71922009E4843 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73D7F0F61FA71922009E4843 /* SettingsViewController.swift */; };
+		73DFFCEC1FCFBE30003EEB8D /* Search.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 73DFFCEB1FCFBE30003EEB8D /* Search.storyboard */; };
+		73DFFCEE1FCFBEC9003EEB8D /* VCUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73DFFCED1FCFBEC9003EEB8D /* VCUtil.swift */; };
+		73ECE9891FFDC86B00073555 /* Pods_NaviSample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD7C63110462C57059230DC8 /* Pods_NaviSample.framework */; };
+		A515C97B1F723CAA00CEEE1F /* Setting.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A515C97A1F723CAA00CEEE1F /* Setting.storyboard */; };
+		A538715E1F7CCAEC0019210F /* HighwayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A538715D1F7CCAEB0019210F /* HighwayView.swift */; };
+		A53871601F7CCC7A0019210F /* SafetyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A538715F1F7CCC7A0019210F /* SafetyView.swift */; };
+		A54728E31F7CE8AE00660839 /* TBTView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54728E21F7CE8AE00660839 /* TBTView.swift */; };
+		A57297821F7B34C800541964 /* LaneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A57297811F7B34C800541964 /* LaneView.swift */; };
+		A59A74E71F960DB7004EBCE3 /* GpsLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A59A74E41F960DB6004EBCE3 /* GpsLocation.swift */; };
+		A5B5F0891F79D44C0075273E /* MapUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5B5F0881F79D44C0075273E /* MapUtil.swift */; };
+		A5B5F1CC1F7A474A0075273E /* NaviInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5B5F1CA1F7A474A0075273E /* NaviInfoView.swift */; };
+		A5B5F1CD1F7A474A0075273E /* NaviInfoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A5B5F1CB1F7A474A0075273E /* NaviInfoView.xib */; };
+		A5BCC54C1F948AE000680AD3 /* RouteSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BCC54B1F948AE000680AD3 /* RouteSearch.swift */; };
+		A5BCC5501F94B6DD00680AD3 /* RouteSummaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5BCC54F1F94B6DD00680AD3 /* RouteSummaryViewController.swift */; };
+		A5C24BF11F6FEC3B005FFCCE /* RecentPlaces.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C24BF01F6FEC3B005FFCCE /* RecentPlaces.swift */; };
+		A5C9FABF1FCD204C0094695D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A5C9FABC1FCD204C0094695D /* Assets.xcassets */; };
+		A5DF99391F7399CB00ED9B75 /* MapPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DF99371F7399CB00ED9B75 /* MapPresenter.swift */; };
+		A5DF993A1F7399CB00ED9B75 /* TrackingMapPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DF99381F7399CB00ED9B75 /* TrackingMapPresenter.swift */; };
+		A5DF993D1F73A25500ED9B75 /* SearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DF993B1F73A25500ED9B75 /* SearchTableViewCell.swift */; };
+		A5DF993E1F73A25500ED9B75 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DF993C1F73A25500ED9B75 /* SearchViewController.swift */; };
+		A5DF99441F73B77C00ED9B75 /* RouteDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DF99431F73B77C00ED9B75 /* RouteDetailViewController.swift */; };
+		A5DF99481F7497B300ED9B75 /* RxEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DF99471F7497B300ED9B75 /* RxEvent.swift */; };
+		A5DF994A1F74980E00ED9B75 /* RxEventQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DF99491F74980E00ED9B75 /* RxEventQueue.swift */; };
+		A5DF994C1F74985000ED9B75 /* ScreenTypeEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DF994B1F74985000ED9B75 /* ScreenTypeEvent.swift */; };
+		A5DF994E1F749FF800ED9B75 /* RouteMapPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DF994D1F749FF800ED9B75 /* RouteMapPresenter.swift */; };
+		A5DF99501F74A01800ED9B75 /* RoadGuiderPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DF994F1F74A01800ED9B75 /* RoadGuiderPresenter.swift */; };
+		A5DF99521F75137900ED9B75 /* RouteSelectEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DF99511F75137900ED9B75 /* RouteSelectEvent.swift */; };
+		A5DF99911F77ED0600ED9B75 /* RouteSummaryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5DF99901F77ED0600ED9B75 /* RouteSummaryTableViewCell.swift */; };
+		A5EBBDBF1F681ED0005B99D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5EBBDBE1F681ED0005B99D9 /* AppDelegate.swift */; };
+		A5EBBDC11F681ED0005B99D9 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5EBBDC01F681ED0005B99D9 /* MainViewController.swift */; };
+		A5EBBDC41F681ED0005B99D9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A5EBBDC21F681ED0005B99D9 /* Main.storyboard */; };
+		A5EBBDC91F681ED0005B99D9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A5EBBDC71F681ED0005B99D9 /* LaunchScreen.storyboard */; };
+		A5EC99E71F6925C000736ECC /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5EC99E61F6925C000736ECC /* CoreLocation.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		A5EE2D151F68BFE80096A876 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		1F886EA2F7689B6C238EAE94 /* Pods-NaviSample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NaviSample.release.xcconfig"; path = "Pods/Target Support Files/Pods-NaviSample/Pods-NaviSample.release.xcconfig"; sourceTree = "<group>"; };
+		49812A2B1FD635F800D9F7E1 /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
+		49FB643E1FD6728800417C82 /* ZoomChanger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomChanger.swift; sourceTree = "<group>"; };
+		7343B0AD1FA8604700BAB42D /* SettingsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewCell.swift; sourceTree = "<group>"; };
+		7343B0AF1FA8983300BAB42D /* SettingsDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsDetailViewController.swift; sourceTree = "<group>"; };
+		7383629B1FEA4B2000A8749C /* SearchManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchManager.swift; sourceTree = "<group>"; };
+		7383629D1FEA4B2E00A8749C /* SearchPlaceData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchPlaceData.swift; sourceTree = "<group>"; };
+		73A838061FA9B85B00468435 /* SettingsDetailTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsDetailTableViewCell.swift; sourceTree = "<group>"; };
+		73CAFB7C1FAAD32300551073 /* SettingsUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsUtil.swift; sourceTree = "<group>"; };
+		73D7F0F61FA71922009E4843 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		73DFFCEB1FCFBE30003EEB8D /* Search.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Search.storyboard; sourceTree = "<group>"; };
+		73DFFCED1FCFBEC9003EEB8D /* VCUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VCUtil.swift; sourceTree = "<group>"; };
+		A515C97A1F723CAA00CEEE1F /* Setting.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Setting.storyboard; sourceTree = "<group>"; };
+		A538715D1F7CCAEB0019210F /* HighwayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HighwayView.swift; sourceTree = "<group>"; };
+		A538715F1F7CCC7A0019210F /* SafetyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafetyView.swift; sourceTree = "<group>"; };
+		A54728E21F7CE8AE00660839 /* TBTView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TBTView.swift; sourceTree = "<group>"; };
+		A57297811F7B34C800541964 /* LaneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaneView.swift; sourceTree = "<group>"; };
+		A59A74E41F960DB6004EBCE3 /* GpsLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GpsLocation.swift; sourceTree = "<group>"; };
+		A5B5F0881F79D44C0075273E /* MapUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapUtil.swift; sourceTree = "<group>"; };
+		A5B5F1CA1F7A474A0075273E /* NaviInfoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NaviInfoView.swift; sourceTree = "<group>"; };
+		A5B5F1CB1F7A474A0075273E /* NaviInfoView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NaviInfoView.xib; sourceTree = "<group>"; };
+		A5BCC54B1F948AE000680AD3 /* RouteSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteSearch.swift; sourceTree = "<group>"; };
+		A5BCC54F1F94B6DD00680AD3 /* RouteSummaryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteSummaryViewController.swift; sourceTree = "<group>"; };
+		A5C24BF01F6FEC3B005FFCCE /* RecentPlaces.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecentPlaces.swift; sourceTree = "<group>"; };
+		A5C9FABC1FCD204C0094695D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A5DF99371F7399CB00ED9B75 /* MapPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapPresenter.swift; sourceTree = "<group>"; };
+		A5DF99381F7399CB00ED9B75 /* TrackingMapPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrackingMapPresenter.swift; sourceTree = "<group>"; };
+		A5DF993B1F73A25500ED9B75 /* SearchTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTableViewCell.swift; sourceTree = "<group>"; };
+		A5DF993C1F73A25500ED9B75 /* SearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		A5DF99431F73B77C00ED9B75 /* RouteDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteDetailViewController.swift; sourceTree = "<group>"; };
+		A5DF99471F7497B300ED9B75 /* RxEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxEvent.swift; sourceTree = "<group>"; };
+		A5DF99491F74980E00ED9B75 /* RxEventQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxEventQueue.swift; sourceTree = "<group>"; };
+		A5DF994B1F74985000ED9B75 /* ScreenTypeEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenTypeEvent.swift; sourceTree = "<group>"; };
+		A5DF994D1F749FF800ED9B75 /* RouteMapPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteMapPresenter.swift; sourceTree = "<group>"; };
+		A5DF994F1F74A01800ED9B75 /* RoadGuiderPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoadGuiderPresenter.swift; sourceTree = "<group>"; };
+		A5DF99511F75137900ED9B75 /* RouteSelectEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteSelectEvent.swift; sourceTree = "<group>"; };
+		A5DF99901F77ED0600ED9B75 /* RouteSummaryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteSummaryTableViewCell.swift; sourceTree = "<group>"; };
+		A5EBBDBB1F681ED0005B99D9 /* NaviSample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NaviSample.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A5EBBDBE1F681ED0005B99D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		A5EBBDC01F681ED0005B99D9 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		A5EBBDC31F681ED0005B99D9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		A5EBBDC81F681ED0005B99D9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		A5EBBDCA1F681ED0005B99D9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A5EC99E61F6925C000736ECC /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		BC28C655D8D465767D95A2BC /* Pods-NaviSample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NaviSample.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NaviSample/Pods-NaviSample.debug.xcconfig"; sourceTree = "<group>"; };
+		BD7C63110462C57059230DC8 /* Pods_NaviSample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NaviSample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A5EBBDB81F681ED0005B99D9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				73ECE9891FFDC86B00073555 /* Pods_NaviSample.framework in Frameworks */,
+				A5EC99E71F6925C000736ECC /* CoreLocation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0DE27BD7F25775F05A281254 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				BC28C655D8D465767D95A2BC /* Pods-NaviSample.debug.xcconfig */,
+				1F886EA2F7689B6C238EAE94 /* Pods-NaviSample.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		731124071FD54C7300E1C504 /* search */ = {
+			isa = PBXGroup;
+			children = (
+				7383629D1FEA4B2E00A8749C /* SearchPlaceData.swift */,
+				7383629B1FEA4B2000A8749C /* SearchManager.swift */,
+				A5DF993B1F73A25500ED9B75 /* SearchTableViewCell.swift */,
+				A5DF993C1F73A25500ED9B75 /* SearchViewController.swift */,
+			);
+			name = search;
+			sourceTree = "<group>";
+		};
+		A55D1B5E1F6A5E1A00F2966F /* Event */ = {
+			isa = PBXGroup;
+			children = (
+				A5DF99471F7497B300ED9B75 /* RxEvent.swift */,
+				A5DF99511F75137900ED9B75 /* RouteSelectEvent.swift */,
+				A5DF99491F74980E00ED9B75 /* RxEventQueue.swift */,
+				A5DF994B1F74985000ED9B75 /* ScreenTypeEvent.swift */,
+			);
+			name = Event;
+			sourceTree = "<group>";
+		};
+		A55D1B5F1F6A5E7B00F2966F /* Presenter */ = {
+			isa = PBXGroup;
+			children = (
+				A5DF99371F7399CB00ED9B75 /* MapPresenter.swift */,
+				A5DF99381F7399CB00ED9B75 /* TrackingMapPresenter.swift */,
+				A5DF994D1F749FF800ED9B75 /* RouteMapPresenter.swift */,
+				A5DF994F1F74A01800ED9B75 /* RoadGuiderPresenter.swift */,
+			);
+			name = Presenter;
+			sourceTree = "<group>";
+		};
+		A59A74E91F960F05004EBCE3 /* NaviViews */ = {
+			isa = PBXGroup;
+			children = (
+				A54728E21F7CE8AE00660839 /* TBTView.swift */,
+				A538715F1F7CCC7A0019210F /* SafetyView.swift */,
+				A538715D1F7CCAEB0019210F /* HighwayView.swift */,
+				A5B5F1CA1F7A474A0075273E /* NaviInfoView.swift */,
+				A57297811F7B34C800541964 /* LaneView.swift */,
+				A5B5F1CB1F7A474A0075273E /* NaviInfoView.xib */,
+			);
+			name = NaviViews;
+			sourceTree = "<group>";
+		};
+		A59EF1A71F6929F600EDDD48 /* Storyboard */ = {
+			isa = PBXGroup;
+			children = (
+				A5EBBDC71F681ED0005B99D9 /* LaunchScreen.storyboard */,
+				A5EBBDC21F681ED0005B99D9 /* Main.storyboard */,
+				A515C97A1F723CAA00CEEE1F /* Setting.storyboard */,
+				73DFFCEB1FCFBE30003EEB8D /* Search.storyboard */,
+			);
+			name = Storyboard;
+			sourceTree = "<group>";
+		};
+		A5B5F0861F78FDD10075273E /* MapUtil */ = {
+			isa = PBXGroup;
+			children = (
+				A5B5F0881F79D44C0075273E /* MapUtil.swift */,
+				73CAFB7C1FAAD32300551073 /* SettingsUtil.swift */,
+				73DFFCED1FCFBEC9003EEB8D /* VCUtil.swift */,
+			);
+			name = MapUtil;
+			sourceTree = "<group>";
+		};
+		A5EBBDB21F681ED0005B99D9 = {
+			isa = PBXGroup;
+			children = (
+				A5EBBDBD1F681ED0005B99D9 /* NaviSample */,
+				A5EBBDBC1F681ED0005B99D9 /* Products */,
+				A5EBBDD71F6820CA005B99D9 /* Frameworks */,
+				0DE27BD7F25775F05A281254 /* Pods */,
+			);
+			sourceTree = "<group>";
+		};
+		A5EBBDBC1F681ED0005B99D9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A5EBBDBB1F681ED0005B99D9 /* NaviSample.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A5EBBDBD1F681ED0005B99D9 /* NaviSample */ = {
+			isa = PBXGroup;
+			children = (
+				731124071FD54C7300E1C504 /* search */,
+				A5C9FABC1FCD204C0094695D /* Assets.xcassets */,
+				A5EBBDCA1F681ED0005B99D9 /* Info.plist */,
+				A5EBBDBE1F681ED0005B99D9 /* AppDelegate.swift */,
+				A59A74E41F960DB6004EBCE3 /* GpsLocation.swift */,
+				A5EBBDC01F681ED0005B99D9 /* MainViewController.swift */,
+				A5C24BF01F6FEC3B005FFCCE /* RecentPlaces.swift */,
+				A5DF99431F73B77C00ED9B75 /* RouteDetailViewController.swift */,
+				A5BCC54B1F948AE000680AD3 /* RouteSearch.swift */,
+				A5DF99901F77ED0600ED9B75 /* RouteSummaryTableViewCell.swift */,
+				A5BCC54F1F94B6DD00680AD3 /* RouteSummaryViewController.swift */,
+				73D7F0F61FA71922009E4843 /* SettingsViewController.swift */,
+				7343B0AD1FA8604700BAB42D /* SettingsTableViewCell.swift */,
+				7343B0AF1FA8983300BAB42D /* SettingsDetailViewController.swift */,
+				73A838061FA9B85B00468435 /* SettingsDetailTableViewCell.swift */,
+				A55D1B5E1F6A5E1A00F2966F /* Event */,
+				A5B5F0861F78FDD10075273E /* MapUtil */,
+				A59A74E91F960F05004EBCE3 /* NaviViews */,
+				A55D1B5F1F6A5E7B00F2966F /* Presenter */,
+				A59EF1A71F6929F600EDDD48 /* Storyboard */,
+				49812A2B1FD635F800D9F7E1 /* Preferences.swift */,
+				49FB643E1FD6728800417C82 /* ZoomChanger.swift */,
+			);
+			path = NaviSample;
+			sourceTree = "<group>";
+		};
+		A5EBBDD71F6820CA005B99D9 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A5EC99E61F6925C000736ECC /* CoreLocation.framework */,
+				BD7C63110462C57059230DC8 /* Pods_NaviSample.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A5EBBDBA1F681ED0005B99D9 /* NaviSample */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A5EBBDCD1F681ED0005B99D9 /* Build configuration list for PBXNativeTarget "NaviSample" */;
+			buildPhases = (
+				05EA093609D406EB069EAC73 /* [CP] Check Pods Manifest.lock */,
+				A5EBBDB71F681ED0005B99D9 /* Sources */,
+				A5EBBDB81F681ED0005B99D9 /* Frameworks */,
+				A5EBBDB91F681ED0005B99D9 /* Resources */,
+				864FDC3D5323C9E2ABBC20CF /* [CP] Embed Pods Frameworks */,
+				A5EE2D151F68BFE80096A876 /* Embed Frameworks */,
+				F7ED16C6B150061C9ED7402B /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = NaviSample;
+			productName = iRozeNavi;
+			productReference = A5EBBDBB1F681ED0005B99D9 /* NaviSample.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A5EBBDB31F681ED0005B99D9 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0830;
+				LastUpgradeCheck = 0830;
+				ORGANIZATIONNAME = kt;
+				TargetAttributes = {
+					A5EBBDBA1F681ED0005B99D9 = {
+						CreatedOnToolsVersion = 8.3.3;
+						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
+					};
+				};
+			};
+			buildConfigurationList = A5EBBDB61F681ED0005B99D9 /* Build configuration list for PBXProject "NaviSample" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A5EBBDB21F681ED0005B99D9;
+			productRefGroup = A5EBBDBC1F681ED0005B99D9 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A5EBBDBA1F681ED0005B99D9 /* NaviSample */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A5EBBDB91F681ED0005B99D9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				73DFFCEC1FCFBE30003EEB8D /* Search.storyboard in Resources */,
+				A5C9FABF1FCD204C0094695D /* Assets.xcassets in Resources */,
+				A5EBBDC91F681ED0005B99D9 /* LaunchScreen.storyboard in Resources */,
+				A5B5F1CD1F7A474A0075273E /* NaviInfoView.xib in Resources */,
+				A5EBBDC41F681ED0005B99D9 /* Main.storyboard in Resources */,
+				A515C97B1F723CAA00CEEE1F /* Setting.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		05EA093609D406EB069EAC73 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-NaviSample-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		864FDC3D5323C9E2ABBC20CF /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-NaviSample/Pods-NaviSample-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/AlamofireObjectMapper/AlamofireObjectMapper.framework",
+				"${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework",
+				"${BUILT_PRODUCTS_DIR}/ObjectMapper/ObjectMapper.framework",
+				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftProtobuf/SwiftProtobuf.framework",
+				"${BUILT_PRODUCTS_DIR}/Toast-Swift/Toast_Swift.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AlamofireObjectMapper.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kingfisher.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ObjectMapper.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftProtobuf.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Toast_Swift.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-NaviSample/Pods-NaviSample-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F7ED16C6B150061C9ED7402B /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-NaviSample/Pods-NaviSample-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A5EBBDB71F681ED0005B99D9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A5EBBDC11F681ED0005B99D9 /* MainViewController.swift in Sources */,
+				A5EBBDBF1F681ED0005B99D9 /* AppDelegate.swift in Sources */,
+				73DFFCEE1FCFBEC9003EEB8D /* VCUtil.swift in Sources */,
+				A53871601F7CCC7A0019210F /* SafetyView.swift in Sources */,
+				A5DF99521F75137900ED9B75 /* RouteSelectEvent.swift in Sources */,
+				A5DF99481F7497B300ED9B75 /* RxEvent.swift in Sources */,
+				A54728E31F7CE8AE00660839 /* TBTView.swift in Sources */,
+				A5B5F0891F79D44C0075273E /* MapUtil.swift in Sources */,
+				A5DF993E1F73A25500ED9B75 /* SearchViewController.swift in Sources */,
+				A5BCC5501F94B6DD00680AD3 /* RouteSummaryViewController.swift in Sources */,
+				7343B0AE1FA8604700BAB42D /* SettingsTableViewCell.swift in Sources */,
+				7343B0B01FA8983300BAB42D /* SettingsDetailViewController.swift in Sources */,
+				A59A74E71F960DB7004EBCE3 /* GpsLocation.swift in Sources */,
+				7383629E1FEA4B2E00A8749C /* SearchPlaceData.swift in Sources */,
+				A5B5F1CC1F7A474A0075273E /* NaviInfoView.swift in Sources */,
+				A5BCC54C1F948AE000680AD3 /* RouteSearch.swift in Sources */,
+				A538715E1F7CCAEC0019210F /* HighwayView.swift in Sources */,
+				A5C24BF11F6FEC3B005FFCCE /* RecentPlaces.swift in Sources */,
+				A5DF99501F74A01800ED9B75 /* RoadGuiderPresenter.swift in Sources */,
+				A5DF994A1F74980E00ED9B75 /* RxEventQueue.swift in Sources */,
+				A5DF99441F73B77C00ED9B75 /* RouteDetailViewController.swift in Sources */,
+				A5DF99911F77ED0600ED9B75 /* RouteSummaryTableViewCell.swift in Sources */,
+				7383629C1FEA4B2000A8749C /* SearchManager.swift in Sources */,
+				A5DF993D1F73A25500ED9B75 /* SearchTableViewCell.swift in Sources */,
+				A5DF994E1F749FF800ED9B75 /* RouteMapPresenter.swift in Sources */,
+				49812A2C1FD635F800D9F7E1 /* Preferences.swift in Sources */,
+				73D7F0F71FA71922009E4843 /* SettingsViewController.swift in Sources */,
+				A5DF993A1F7399CB00ED9B75 /* TrackingMapPresenter.swift in Sources */,
+				A57297821F7B34C800541964 /* LaneView.swift in Sources */,
+				73CAFB7D1FAAD32300551073 /* SettingsUtil.swift in Sources */,
+				A5DF994C1F74985000ED9B75 /* ScreenTypeEvent.swift in Sources */,
+				49FB643F1FD6728800417C82 /* ZoomChanger.swift in Sources */,
+				A5DF99391F7399CB00ED9B75 /* MapPresenter.swift in Sources */,
+				73A838071FA9B85B00468435 /* SettingsDetailTableViewCell.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		A5EBBDC21F681ED0005B99D9 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A5EBBDC31F681ED0005B99D9 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		A5EBBDC71F681ED0005B99D9 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A5EBBDC81F681ED0005B99D9 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		A5EBBDCB1F681ED0005B99D9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A5EBBDCC1F681ED0005B99D9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A5EBBDCE1F681ED0005B99D9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = BC28C655D8D465767D95A2BC /* Pods-NaviSample.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Frameworks",
+				);
+				INFOPLIST_FILE = NaviSample/Info.plist;
+				INSTALL_PATH = "$(LOCAL_APPS_DIR)";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		A5EBBDCF1F681ED0005B99D9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1F886EA2F7689B6C238EAE94 /* Pods-NaviSample.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Frameworks",
+				);
+				INFOPLIST_FILE = NaviSample/Info.plist;
+				INSTALL_PATH = "$(LOCAL_APPS_DIR)";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A5EBBDB61F681ED0005B99D9 /* Build configuration list for PBXProject "NaviSample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A5EBBDCB1F681ED0005B99D9 /* Debug */,
+				A5EBBDCC1F681ED0005B99D9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A5EBBDCD1F681ED0005B99D9 /* Build configuration list for PBXNativeTarget "NaviSample" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A5EBBDCE1F681ED0005B99D9 /* Debug */,
+				A5EBBDCF1F681ED0005B99D9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A5EBBDB31F681ED0005B99D9 /* Project object */;
+}
