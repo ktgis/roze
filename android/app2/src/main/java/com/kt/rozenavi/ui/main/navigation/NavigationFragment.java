@@ -166,6 +166,7 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
     private boolean isHeading = true;
 
     private boolean isArrived = false;
+    private boolean isRerouting = false;
 
     //getInstance는 상황에 따라서 선택 사용
     //파라매터 없는 경우
@@ -854,6 +855,7 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
 
     @Override
     public void onRerouteBegin(NavigationManager.RouteMode mode) {
+        isRerouting = true;
         if (mode == NavigationManager.RouteMode.AUTO_REROUTE) {
             UIUtils.showToast(getActivity(), R.string.toast_message_reroute_auto);
         }
@@ -871,6 +873,7 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
         resetGuidanceView();
 
         NavigationManager navigationManager = NavigationManager.getInstance();
+
         lowestGasGuidanceView.setLowestGasStationList(navigationManager.getOilPricePOIList());
         spotGuidanceView.setAccidentList(navigationManager.getAccidentPOIList());
 
@@ -879,6 +882,7 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
         tbtGuidanceView.setRoute(route);
         zoomChanger.setRoute(route);
         updateRemain(route.time, route.distance);
+        isRerouting = false;
     }
 
     @Override
@@ -890,9 +894,11 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
         //서버 api 오류 코드는 가이드 문서 참고
         UIUtils.showToast(getActivity(),
                 TextUtils.isEmpty(error.rozeErrorCode) ? error.message : error.rozeErrorCode);
+        isRerouting = false;
         if (mode.isReusePreviousRoute()) {
             return;
         }
+
         getActivity().onBackPressed();
     }
 
@@ -906,6 +912,9 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
      * TBT 정보 표시
      */
     public void updateTBTViews(@NonNull List<TurnGuidance> guidances) {
+        if (isRerouting) {
+            return;
+        }
         tbtGuidanceView.updateTBTViews(guidances);
         zoomChanger.updateTbt(guidances);
     }
@@ -916,6 +925,9 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
      * @param distance 거리(m)
      */
     public void updateTBTDistance(int distance) {
+        if (isRerouting) {
+            return;
+        }
         tbtGuidanceView.updateTBTDistance(distance);
         zoomChanger.checkZoomlevel(distance);
     }
