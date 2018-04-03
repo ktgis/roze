@@ -443,7 +443,8 @@ public class SearchActivity extends AppCompatActivity implements OnKeyboardVisib
      */
     private void saveRecentDestination(Poi data) {
         UTMK utmk = data.getUTMK();
-        if (utmk.x == 0 || utmk.y == 0) {
+        if (utmk == null || utmk.x == 0 || utmk.y == 0) {
+            UIUtils.showToast(this, "POI 좌표정보가 유효하지 않습니다.");
             return;
         }
 
