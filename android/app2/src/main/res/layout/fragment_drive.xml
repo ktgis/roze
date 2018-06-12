@@ -26,6 +26,16 @@
         android:layout_marginRight="@dimen/common_margin_large"
         android:layout_marginTop="@dimen/common_margin_large" />
 
+    <!--1.2.0 안전운행 안내를 위한 safety view 추가-->
+    <com.kt.rozenavi.ui.main.drive.view.NavigationTrackingView
+        android:id="@+id/spot_guidance_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@id/search_button"
+        android:layout_marginEnd="14dp"
+        android:layout_marginTop="30dp" />
+
     <ImageView
         android:id="@+id/location_button"
         android:layout_width="@dimen/map_control_button_size"

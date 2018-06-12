@@ -13,7 +13,10 @@
 package com.kt.rozenavi.data.model;
 
 import com.kt.roze.guidance.model.SafetySpotGuidance;
+import com.kt.roze.guidance.model.SafetySpotInterface;
+import com.kt.rozenavi.utils.CommonUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,10 +24,14 @@ import java.util.List;
  */
 public class SafetyEventData {
     public final boolean isShow;
-    public final List<SafetySpotGuidance> safetyGuidanceList;
+    //-- 1.2.0 data type 변경
+    public final List<SafetySpotInterface> safetyGuidanceList = new ArrayList<>();
 
     public SafetyEventData(boolean isShow, List<SafetySpotGuidance> safetyGuidanceList) {
         this.isShow = isShow;
-        this.safetyGuidanceList = safetyGuidanceList;
+        //-- 1.2.0 data type 변경
+        if (!CommonUtils.isEmpty(safetyGuidanceList)) {
+            this.safetyGuidanceList.addAll(safetyGuidanceList);
+        }
     }
 }

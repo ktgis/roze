@@ -28,6 +28,7 @@ import com.kt.roze.data.model.Accident;
 import com.kt.roze.guidance.RGType;
 import com.kt.roze.guidance.model.IntervalSpeedSpotGuidance;
 import com.kt.roze.guidance.model.SafetySpotGuidance;
+import com.kt.roze.guidance.model.SafetySpotInterface;
 import com.kt.roze.resource.RoadSignResourceManager;
 import com.kt.rozenavi.R;
 import com.kt.rozenavi.ui.component.SpeedMeterView;
@@ -78,7 +79,8 @@ public class NavigationSpotView extends RelativeLayout {
     private Disposable cameraDisposable;
     private int speed = 0;
     private Marker warningCamera;
-    private SafetySpotGuidance currentShowSpot;
+    //-- 1.2.0 data type 변경
+    private SafetySpotInterface currentShowSpot;
 
     public NavigationSpotView(Context context) {
         super(context);
@@ -134,7 +136,8 @@ public class NavigationSpotView extends RelativeLayout {
      * @param isShow Show Event 일 때 {@code true} Hide Event 일 때 {@code false}
      * @param list   {@link SafetySpotGuidance} list
      */
-    public void updateSafetySpotView(boolean isShow, List<SafetySpotGuidance> list) {
+    //-- 1.2.0 data type 변경
+    public void updateSafetySpotView(boolean isShow, List<SafetySpotInterface> list) {
         /*
         *  isShow == true 주기적으로 계속 들어온다
         *  화면에 표시되는 전체 safety spot 리스트가 전달
@@ -158,15 +161,15 @@ public class NavigationSpotView extends RelativeLayout {
     /**
      * safety spot 정보 표시
      */
-    private void showSafetySpot(List<SafetySpotGuidance> list) {
+    //-- 1.2.0 data type 변경 및 접근자 변경 private -> protected
+    protected void showSafetySpot(List<SafetySpotInterface> list) {
         if (CommonUtils.isEmpty(list)) {
             return;
         }
-
-        SafetySpotGuidance speedCamSpot = null;
+        SafetySpotInterface speedCamSpot = null;
         int safetyResId = RoadSignResourceManager.RESOURCE_NOT_FOUND;
 
-        for (SafetySpotGuidance spot : list) {
+        for (SafetySpotInterface spot : list) {
             //스피드캠 safety spot 체크
             boolean isSpeedCam = RGType.isSpeedCamera(spot.getType());
             if (isSpeedCam && (safetyResId = RoadSignResourceManager.getResourceId(spot.getType()))
@@ -187,7 +190,7 @@ public class NavigationSpotView extends RelativeLayout {
                 startCameraWarningAnimation(speedCamSpot.getCoord());
             }
         } else {
-            for (SafetySpotGuidance spot : list) {
+            for (SafetySpotInterface spot : list) {
                 //safety spot 리스트에서 화면에 표시 가능한 첫번째 항목 표시
                 if ((safetyResId = RoadSignResourceManager.getResourceId(spot.getType()))
                         != RoadSignResourceManager.RESOURCE_NOT_FOUND) {
@@ -205,11 +208,12 @@ public class NavigationSpotView extends RelativeLayout {
      * @param list guidance 정보 리스트
      * @return 신규 guidance 정보 리스트
      */
-    private List<SafetySpotGuidance> getNewSafetySpots(List<SafetySpotGuidance> list) {
-        List<SafetySpotGuidance> newGuidances = new ArrayList<>();
+    //-- 1.2.0 data type 변경
+    private List<SafetySpotInterface> getNewSafetySpots(List<SafetySpotInterface> list) {
+        List<SafetySpotInterface> newGuidances = new ArrayList<>();
         boolean isContain;
         //TODO 3차에서 수정 예정
-        for (SafetySpotGuidance s : list) {
+        for (SafetySpotInterface s : list) {
             isContain = false;
             for (Marker marker : safetyMarkerList) {
                 if (s.getCoord().compareTo(marker.getPosition()) == 0) {
@@ -227,7 +231,8 @@ public class NavigationSpotView extends RelativeLayout {
     /**
      * safety spot 정보 숨김
      */
-    private void hideSafetySpot(List<SafetySpotGuidance> list) {
+    //-- 1.2.0 data type 변경 및 접근자 변경 private -> protected
+    protected void hideSafetySpot(List<SafetySpotInterface> list) {
         removeSpotMarker(list);
         hideSafetyImage(list);
     }
@@ -237,13 +242,14 @@ public class NavigationSpotView extends RelativeLayout {
      *
      * @param spotList 화면에서 삭제되는 safety spot 리스트
      */
-    private void removeSpotMarker(List<SafetySpotGuidance> spotList) {
+    //-- 1.2.0 data type 변경
+    private void removeSpotMarker(List<SafetySpotInterface> spotList) {
         if (CommonUtils.isEmpty(spotList)) {
             return;
         }
 
         List<Marker> deleteMarkerList = new ArrayList<>();
-        for (SafetySpotGuidance spot : spotList) {
+        for (SafetySpotInterface spot : spotList) {
             for (Marker marker : safetyMarkerList) {
                 if (spot.getCoord().compareTo(marker.getPosition()) == 0) {
                     //삭제되어야 하는 마커를 현재 Marker List 에서 추출
@@ -265,7 +271,8 @@ public class NavigationSpotView extends RelativeLayout {
      *
      * @param spot 표시 대상 SafetySpot Guidance
      */
-    private void showSafetyImage(@NonNull SafetySpotGuidance spot, int resId) {
+    //-- 1.2.0 data type 변경
+    private void showSafetyImage(@NonNull SafetySpotInterface spot, int resId) {
         setVisibility(View.VISIBLE);
         currentShowSpot = spot;
 
@@ -287,7 +294,8 @@ public class NavigationSpotView extends RelativeLayout {
 
     }
 
-    private void hideSafetyImage(List<SafetySpotGuidance> list) {
+    //-- 1.2.0 data type 변경
+    private void hideSafetyImage(List<SafetySpotInterface> list) {
         if (CommonUtils.isEmpty(list) || currentShowSpot == null || !list.contains(currentShowSpot)) {
             return;
         }
@@ -329,8 +337,8 @@ public class NavigationSpotView extends RelativeLayout {
             setVisibility(View.VISIBLE);
         }
     }
-
-    private void hideAllView() {
+    //-- 1.2.0 접근자 변경 private -> public
+    public void hideAllView() {
         hideSubView();
         setVisibility(View.INVISIBLE);
     }

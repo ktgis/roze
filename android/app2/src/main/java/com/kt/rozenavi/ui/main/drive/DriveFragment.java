@@ -40,17 +40,24 @@ import com.kt.maps.overlay.Marker;
 import com.kt.roze.NavigationManager;
 import com.kt.roze.RozeError;
 import com.kt.roze.RozeOptions;
+import com.kt.roze.SoundManager;
+import com.kt.roze.guidance.model.SafetySpotInterface;
+import com.kt.roze.guidance.model.Sound;
+import com.kt.roze.guidance.model.TrackingGuidance;
 import com.kt.roze.location.model.GeoLocation;
 import com.kt.roze.routing.RouteManager;
 import com.kt.roze.routing.RoutePlan;
 import com.kt.roze.routing.RouteSummary;
 import com.kt.rozenavi.R;
+import com.kt.rozenavi.data.NavigationData;
+import com.kt.rozenavi.data.model.TrackingEventData;
 import com.kt.rozenavi.provider.LocationProvider;
 import com.kt.rozenavi.provider.MapProvider;
 import com.kt.rozenavi.data.model.ViewpointChangeEventData;
 import com.kt.rozenavi.ui.component.SpeedMeterView;
 import com.kt.rozenavi.ui.component.core.BaseFragment;
 import com.kt.rozenavi.ui.main.MainActivity;
+import com.kt.rozenavi.ui.main.drive.view.NavigationTrackingView;
 import com.kt.rozenavi.ui.main.route.RouteFragment;
 import com.kt.rozenavi.ui.main.route.data.LocationItem;
 import com.kt.rozenavi.ui.search.SearchActivity;
@@ -66,8 +73,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+//-- 1.2.0 안전운행 발성을 위한 SoundListener 추가
 public class DriveFragment extends BaseFragment implements WeakReferenceHandler.OnMessageHandler,
-        RouteManager.RouteManagerListener {
+        RouteManager.RouteManagerListener, NavigationManager.SoundListener {
     @BindView(R.id.speed_value_layout)
     protected SpeedMeterView speedMeterView;
     @BindView(R.id.location_button)
@@ -78,6 +86,9 @@ public class DriveFragment extends BaseFragment implements WeakReferenceHandler.
     protected EditText searchText;
     @BindView(R.id.search_button)
     protected View searchBarLayout;
+    //-- 1.2.0 안전운행 안내를 위한 safety view 추가
+    @BindView(R.id.spot_guidance_view)
+    protected NavigationTrackingView trackingView;
 
 
     private GMap gMap;
@@ -129,6 +140,10 @@ public class DriveFragment extends BaseFragment implements WeakReferenceHandler.
 
     @Override
     public void onDestroy() {
+        // 1.2.0 안전운행 지도 해제
+        trackingView.releaseMap();
+        // 1.2.0 안전운행 지도 해제
+
         if (gMap != null) {
             if (currentLocationMarker != null) {
                 gMap.removeOverlay(currentLocationMarker);
@@ -157,6 +172,9 @@ public class DriveFragment extends BaseFragment implements WeakReferenceHandler.
             searchBarLayout.setElevation(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10,
                     getResources().getDisplayMetrics()));
         }
+        // 1.2.0 안전운행 안내 초기화
+        trackingView.hideAllView();
+        // 1.2.0 안전운행 안내 초기화
     }
 
     //getArguments() 및 초기 데이터 쿼리 관련 초기화
@@ -174,7 +192,14 @@ public class DriveFragment extends BaseFragment implements WeakReferenceHandler.
                 if (location == null || gMap == null) {
                     return;
                 }
-                speedMeterView.setSpeed(NaviUtils.calculateSpeed(geoLocation.location));
+
+                // 1.2.0 안전운행 속도정보 업데이트
+                int currentSpeed = NaviUtils.calculateSpeed(geoLocation.location);
+
+                speedMeterView.setSpeed(currentSpeed);
+                trackingView.setSpeed(currentSpeed);
+                // 1.2.0 안전운행 속도정보 업데이트
+
                 if (isFixedCurrentLocation && !isFreezeMap) {
                     gMap.animate(
                             ViewpointChange.builder()
@@ -232,6 +257,30 @@ public class DriveFragment extends BaseFragment implements WeakReferenceHandler.
             }
         });
 
+        // 1.2.0 버전
+        //--안전운행모드 기능 추가
+        NavigationData.getInstance().trackingEvent.observe(this, new Observer<TrackingEventData>() {
+            @Override
+            public void onChanged(@Nullable TrackingEventData trackingEventData) {
+                if (trackingEventData == null) {
+                    return;
+                }
+                updateSafetSpotView(trackingEventData.isShow, trackingEventData.guidances);
+            }
+        });
+
+        NavigationData.getInstance().trackingInitializedEvent.observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(@Nullable Boolean isInitialized) {
+                if (isInitialized != null && isInitialized) {
+                    NavigationManager.getInstance().startTracking();
+                }
+            }
+        });
+        //--안전운행모드 기능 추가
+        //--안전운행모드 사운드 기능 추가
+        NavigationManager.getInstance().setSoundListener(this);
+        //--안전운행모드 사운드 기능 추가
     }
 
     boolean isFreezeMap = false;
@@ -258,6 +307,10 @@ public class DriveFragment extends BaseFragment implements WeakReferenceHandler.
 
         setHeadingPivot();
         isFreezeMap = true;
+        // 1.2.0 안전운행 지도 등록
+        trackingView.initMap(gMap);
+        // 1.2.0 안전운행 지도 등록
+
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -448,6 +501,21 @@ public class DriveFragment extends BaseFragment implements WeakReferenceHandler.
         return routeTypes;
     }
 
+    //-- 1.2.0 안전운행 업데이트 기능 추가
+    /**
+     * 안전운행 정보 표시.
+     *
+     * @param list 표시 거리 이하로 들어온 모든 안전운행 안내점 정보
+     */
+    public void updateSafetSpotView(boolean isShow, List<TrackingGuidance> list) {
+        List<SafetySpotInterface> guidances = new ArrayList<>();
+        if (!com.kt.roze.util.CommonUtils.isEmpty(list)) {
+            guidances.addAll(list);
+        }
+        trackingView.updateSafetySpotView(isShow, guidances);
+    }
+    //-- 1.2.0 안전운행 업데이트 기능 추가
+
     @OnClick(R.id.location_button)
     protected void onClickLocationButton() {
         locationButton.setImageResource(R.drawable.btn_current_location_on);
@@ -503,4 +571,33 @@ public class DriveFragment extends BaseFragment implements WeakReferenceHandler.
         UIUtils.showToast(getActivity(),
                 TextUtils.isEmpty(rozeError.rozeErrorCode) ? rozeError.message : rozeError.rozeErrorCode);
     }
+
+    // 1.2.0 버전
+    //--안전운행모드시 사운드 발성추가
+    @Override
+    public void onSoundStart(SoundManager soundManager, Sound sound) {
+        soundManager.play(sound);
+    }
+
+    @Override
+    public void onExceedSoundEvent(SoundManager soundManager, Sound sound) {
+        if (sound == null) {
+            soundManager.stopExceedSound();
+        } else {
+            soundManager.playExceedSound(sound);
+        }
+    }
+
+    @Override
+    public void onSoundEnd() {
+        //Sound Focus 설정 시 이용
+    }
+
+    @Override
+    public void onSoundDeleteEvent(SoundManager soundManager, List<Long> ids) {
+        for (Long id : ids) {
+            soundManager.deleteSoundsById(id);
+        }
+    }
+    //--안전운행모드시 사운드 발성추가
 }

@@ -55,6 +55,7 @@ import com.kt.roze.guidance.model.HighwayGuidance;
 import com.kt.roze.guidance.model.IntervalSpeedSpotGuidance;
 import com.kt.roze.guidance.model.OilPriceGuidance;
 import com.kt.roze.guidance.model.SafetySpotGuidance;
+import com.kt.roze.guidance.model.SafetySpotInterface;
 import com.kt.roze.guidance.model.Sound;
 import com.kt.roze.guidance.model.TurnGuidance;
 import com.kt.roze.location.model.GeoLocation;
@@ -994,7 +995,8 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
      *
      * @param list 표시 거리 이하로 들어온 모든 안전운행 안내점 정보
      */
-    public void updateSafetSpotView(boolean isShow, List<SafetySpotGuidance> list) {
+    //-- 1.2.0 data type 변경
+    public void updateSafetSpotView(boolean isShow, List<SafetySpotInterface> list) {
         spotGuidanceView.updateSafetySpotView(isShow, list);
     }
 
@@ -1032,6 +1034,16 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
     @Override
     public void onSoundEnd() {
     }
+
+    // 1.2.0 버전
+    //--사운드 삭제 리스너 추가
+    @Override
+    public void onSoundDeleteEvent(SoundManager soundManager, List<Long> ids) {
+        for (Long id : ids) {
+            soundManager.deleteSoundsById(id);
+        }
+    }
+    //--사운드 삭제 리스너 추가
 
     private void registerReceiver() {
         IntentFilter intentFilter = new IntentFilter();

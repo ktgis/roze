@@ -28,6 +28,7 @@ import com.kt.roze.data.model.Link;
 import com.kt.roze.data.model.Turn;
 import com.kt.roze.guidance.RGType;
 import com.kt.roze.guidance.model.SafetySpotGuidance;
+import com.kt.roze.guidance.model.SafetySpotInterface;
 import com.kt.roze.resource.AccidentResourceManager;
 import com.kt.roze.resource.GasStationResourceManager;
 import com.kt.rozenavi.utils.CommonUtils;
@@ -314,7 +315,8 @@ public class MapHelper {
         return accidentMarkerList;
     }
 
-    public List<Marker> addSpotMarker(GMap gMap, List<SafetySpotGuidance> spotList) {
+    //-- 1.2.0 data type 변경
+    public List<Marker> addSpotMarker(GMap gMap, List<SafetySpotInterface> spotList) {
         List<Marker> safetyMarkerList = new ArrayList<>();
         Marker marker;
         UTMK coord;
@@ -324,7 +326,7 @@ public class MapHelper {
         }
 
         List<Marker> addMarkerList = new ArrayList<>();
-        for (SafetySpotGuidance spot : spotList) {
+        for (SafetySpotInterface spot : spotList) {
             marker = null;
             coord = spot.getCoord();
             for (Marker item : safetyMarkerList) {
@@ -340,7 +342,8 @@ public class MapHelper {
         return safetyMarkerList;
     }
 
-    private void createSpotMarker(GMap gMap, SafetySpotGuidance spot, List<Marker> addMarkerList) {
+    //-- 1.2.0 data type 변경
+    private void createSpotMarker(GMap gMap, SafetySpotInterface spot, List<Marker> addMarkerList) {
         if (gMap == null) {
             return;
         }

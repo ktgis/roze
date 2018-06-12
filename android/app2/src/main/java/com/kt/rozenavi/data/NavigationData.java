@@ -25,10 +25,12 @@ import com.kt.roze.guidance.model.HighwayGuidance;
 import com.kt.roze.guidance.model.IntervalSpeedSpotGuidance;
 import com.kt.roze.guidance.model.OilPriceGuidance;
 import com.kt.roze.guidance.model.SafetySpotGuidance;
+import com.kt.roze.guidance.model.TrackingGuidance;
 import com.kt.roze.guidance.model.TurnGuidance;
 import com.kt.rozenavi.data.model.LowestGasEventData;
 import com.kt.rozenavi.data.model.RemainEventData;
 import com.kt.rozenavi.data.model.SafetyEventData;
+import com.kt.rozenavi.data.model.TrackingEventData;
 
 import java.util.List;
 
@@ -52,6 +54,10 @@ public class NavigationData implements LifecycleObserver {
     public LiveDataAdv<List<WayPoint>> nearWaypointEvent = new LiveDataAdv<>();
     public LiveDataAdv<LowestGasEventData> lowestGasEvent = new LiveDataAdv<>();
     public LiveDataAdv<Integer> lowestGasDistance = new LiveDataAdv<>();
+    //-- 1.2.0 안전운행 이벤트 추가
+    public LiveDataAdv<TrackingEventData> trackingEvent = new LiveDataAdv<>();
+    public LiveDataAdv<Boolean> trackingInitializedEvent = new LiveDataAdv<>();
+    //-- 1.2.0 안전운행 이벤트 추가
 
     public static NavigationData getInstance() {
         if (instance == null) {
@@ -73,6 +79,19 @@ public class NavigationData implements LifecycleObserver {
     }
 
     private RouteGuidanceListener internalGuidanceListener = new RouteGuidanceListener() {
+        //-- 1.2.0 안전운행 이벤트 추가
+        @Override
+        public void onTrackingSpotChangedEvent(boolean isShow, List<TrackingGuidance> list) {
+            trackingEvent.setValue(new TrackingEventData(isShow, list));
+        }
+
+        @Override
+        public void onTrackingReadyEvent(boolean initialized) {
+            super.onTrackingReadyEvent(initialized);
+            trackingInitializedEvent.setValue(initialized);
+        }
+        //-- 1.2.0 안전운행 이벤트 추가
+
         @Override
         public void onLaneChangedEvent(Lane lane) {
             super.onLaneChangedEvent(lane);
