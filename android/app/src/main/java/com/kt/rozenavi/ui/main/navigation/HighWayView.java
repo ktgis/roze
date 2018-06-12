@@ -135,6 +135,10 @@ public class HighWayView extends RelativeLayout {
         }
         setVisibility(View.VISIBLE);
 
+        //since : sdk 1.2.0
+        //highway distance 계산 로직 변경
+        updateDistance(guidances.get(0).getDistance());
+
         for (int i = guidances.size(); i < 3; i++) {
             setItemVisibility(i, View.GONE);
         }

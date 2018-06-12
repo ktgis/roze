@@ -265,7 +265,10 @@ public class NavigationView extends RelativeLayout
      *
      * @param distance 거리(m)
      */
+    @Deprecated
     public void updateHighwayDistance(int distance) {
+        //since : sdk 1.2.0
+        //highway distance 계산 로직 변경
         highWayView.updateDistance(distance);
     }
 
@@ -509,6 +512,7 @@ public class NavigationView extends RelativeLayout
      * {@link RouteGuidanceListener}
      */
     private RouteGuidanceListener routeGuidanceListener = new RouteGuidanceListener() {
+
         @Override
         public void onLaneChangedEvent(Lane lane) {
             updateLanePannel(lane);
@@ -532,6 +536,9 @@ public class NavigationView extends RelativeLayout
             updateHighwayView(highwayGuidances);
         }
 
+        //since : sdk 1.2.0
+        //highway distance 계산방식 변경되어 deprecate 됨
+        //변경된 내용은 HighWayView.setHighwayGuidances() 내부에 수정되었음
         @Override
         public void onHighwayDistanceEvent(int distance) {
             super.onHighwayDistanceEvent(distance);
@@ -674,5 +681,15 @@ public class NavigationView extends RelativeLayout
     public void onSoundEnd() {
 
     }
+
+    //since : sdk 1.2.0
+    //사운드 삭제 리스너
+    @Override
+    public void onSoundDeleteEvent(SoundManager soundManager, List<Long> ids) {
+        for (Long id : ids) {
+            soundManager.deleteSoundsById(id);
+        }
+    }
+
 
 }
