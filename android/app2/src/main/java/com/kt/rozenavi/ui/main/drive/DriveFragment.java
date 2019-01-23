@@ -27,7 +27,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.kt.geom.model.Coord;
 import com.kt.geom.model.LatLng;
@@ -41,6 +40,7 @@ import com.kt.roze.NavigationManager;
 import com.kt.roze.RozeError;
 import com.kt.roze.RozeOptions;
 import com.kt.roze.SoundManager;
+import com.kt.roze.data.model.Link;
 import com.kt.roze.guidance.model.SafetySpotInterface;
 import com.kt.roze.guidance.model.Sound;
 import com.kt.roze.guidance.model.TrackingGuidance;
@@ -51,9 +51,9 @@ import com.kt.roze.routing.RouteSummary;
 import com.kt.rozenavi.R;
 import com.kt.rozenavi.data.NavigationData;
 import com.kt.rozenavi.data.model.TrackingEventData;
+import com.kt.rozenavi.data.model.ViewpointChangeEventData;
 import com.kt.rozenavi.provider.LocationProvider;
 import com.kt.rozenavi.provider.MapProvider;
-import com.kt.rozenavi.data.model.ViewpointChangeEventData;
 import com.kt.rozenavi.ui.component.SpeedMeterView;
 import com.kt.rozenavi.ui.component.core.BaseFragment;
 import com.kt.rozenavi.ui.main.MainActivity;
@@ -290,7 +290,7 @@ public class DriveFragment extends BaseFragment implements WeakReferenceHandler.
      *
      * @param gMap 지도 객체
      */
-    private void onMapReady(GMap gMap) {
+    private void onMapReady(final GMap gMap) {
         this.gMap = gMap;
         gMap.setOnAnimationEndListener(new GMap.OnAnimationEndListener() {
             @Override
@@ -314,6 +314,9 @@ public class DriveFragment extends BaseFragment implements WeakReferenceHandler.
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                if (gMap == null || currentPivot == null) {
+                    return;
+                }
                 DriveFragment.this.gMap.animate(
                         ViewpointChange.builder()
                                 .zoomTo(11)
@@ -502,6 +505,7 @@ public class DriveFragment extends BaseFragment implements WeakReferenceHandler.
     }
 
     //-- 1.2.0 안전운행 업데이트 기능 추가
+
     /**
      * 안전운행 정보 표시.
      *
