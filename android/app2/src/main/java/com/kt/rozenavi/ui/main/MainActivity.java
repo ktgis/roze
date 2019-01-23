@@ -40,7 +40,9 @@ import com.kt.maps.GMapFragment;
 import com.kt.maps.GMapResultCode;
 import com.kt.maps.OnMapReadyListener;
 import com.kt.roze.NavigationManager;
+import com.kt.roze.RozeOptions;
 import com.kt.roze.RozeResultCode;
+import com.kt.roze.data.SafetyOptions;
 import com.kt.roze.guidance.model.TurnGuidance;
 import com.kt.rozenavi.R;
 import com.kt.rozenavi.RozeNaviApplication;
@@ -177,11 +179,23 @@ public class MainActivity extends BaseActivity implements OnMapReadyListener {
             }
         });
 
+        initSafetyOptions();
+
         getLifecycle().addObserver(MapProvider.getInstance());
         getLifecycle().addObserver(navigationData);
         getLifecycle().addObserver(locationProvider);
     }
 
+    private void initSafetyOptions(){
+        SafetyOptions options = RozeOptions.getInstance().getSafetyOptions();
+        if (options == null) {
+            options = new SafetyOptions();
+        }
+        options.setHeight(false);
+        options.setWaterProtArea(false);
+        options.setWeight(false);
+        RozeOptions.getInstance().setSafetyOptions(options);
+    }
     private void initView() {
         replaceFragment(DriveFragment.getInstance());
     }
