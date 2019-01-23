@@ -73,8 +73,10 @@ public class NavigationData implements LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     void onDestroy() {
-        navigationManager.setRouteGuidanceEventListener(null);
-        navigationManager = null;
+        if (navigationManager != null) {
+            navigationManager.setRouteGuidanceEventListener(null);
+            navigationManager = null;
+        }
         instance = null;
     }
 

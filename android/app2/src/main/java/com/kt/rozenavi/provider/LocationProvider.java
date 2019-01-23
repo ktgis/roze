@@ -58,9 +58,11 @@ public class LocationProvider implements LifecycleObserver, NavigationManager.Lo
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     void onDestroy() {
-        navigationManager.setLocationListener(null);
-        navigationManager.setGpsSignalListener(null);
-        navigationManager = null;
+        if (navigationManager != null) {
+            navigationManager.setLocationListener(null);
+            navigationManager.setGpsSignalListener(null);
+            navigationManager = null;
+        }
         instance = null;
     }
 }
