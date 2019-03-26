@@ -1,6 +1,14 @@
 # Changelog
 신버전 sdk 샘플 프로젝트 변경사항
 
+## [2019-03-26]
+
+### 변경사항
+- 차선 안내 시 Pocket 차선 및 Bus 전용 차선 안내 추가
+- 경유지 안내 시 멀티 입구점 적용 함수 추가
+- 재 탐색 시 상세 원인 추가
+- 고속도로 휴게소 진입 시 반복 이탈 현상 수정 (휴게소 내부 초기탐색 제외)
+
 ## [2018-06-12-2]
 
 ### 변경사항
@@ -77,7 +85,7 @@
 ### 추가
 - 신규 샘플앱 추가
 
-
+[2019-03-26]: https://github.com/ktgis/roze/commit/34ba5836e2d178c14107830963b4416716601474
 [2018-06-12-2]: https://github.com/ktgis/roze/commit/611bf0e0ecdefe1d8f61eff9ff40a1ec1a25af47
 [2018-06-12]: https://github.com/ktgis/roze/commit/35d3fcf545edd6b803e86853973fbbcb19dd6f27
 [2018-04-03-2]: https://github.com/ktgis/roze/commit/a7611c53d9b5ec4889c46a051d964325c9d891ce
