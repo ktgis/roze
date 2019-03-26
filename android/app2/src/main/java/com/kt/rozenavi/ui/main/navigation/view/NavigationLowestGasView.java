@@ -86,7 +86,8 @@ public class NavigationLowestGasView extends RelativeLayout {
 
     public void updateLowestGasStation(boolean isShow, List<OilPriceGuidance> list) {
         if (isShow) {
-            EnergyPrice lowPrice = list.get(0).price;
+            //Since 1.3.0 주유소 정보에 직접 접근하던 부분을 get func 을 통해 접근하도록 변경했습니다.
+            EnergyPrice lowPrice = list.get(0).getPrice();
             EnergyPrice.EnergyType energyType = RozeOptions.getInstance().getEnergyType();
             lowestGasTextView.setText(
                     getResources().getText(NaviUtils.getEnergyTypeStringRes(energyType)) +

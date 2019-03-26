@@ -101,7 +101,8 @@ public class NavigationLaneView extends RelativeLayout {
         }
         int size = turnType.length;
         for (int i = 0; i < size; i++) {
-            resId = getLaneResource(exType[i], turnType[i]);
+            //Since 1.3.0 Lane : 좌/우회전 등 회전 정보에 따른 활성화 차선을 구분하기 위해 인자가 추가되었습니다.
+            resId = getLaneResource(exType[i], turnType[i], lane.rgType);
             if (resId != LaneResourceManager.RESOURCE_NOT_FOUND) {
                 resList.add(resId);
             }
@@ -119,14 +120,17 @@ public class NavigationLaneView extends RelativeLayout {
      * @param turnType TBT Type(좌,우회전등)
      * @return Lane Image ResourceId
      */
-    private int getLaneResource(byte exType, byte turnType) {
+    //Since 1.3.0 Lane : 좌/우회전 등 회전 정보에 따른 활성화 차선을 구분하기 위해 인자가 추가되었습니다.
+    private int getLaneResource(byte exType, byte turnType, short rgType) {
         int resId;
         boolean isHighlight = ((exType & Lane.LaneType.highlight) == Lane.LaneType.highlight);
-        resId = LaneResourceManager.getExtraResourceId(exType, isHighlight);
+        //Since 1.3.0 Lane : 좌/우회전 등 회전 정보에 따른 활성화 차선을 구분하기 위해 인자가 추가되었습니다.
+        resId = LaneResourceManager.getExtraResourceId(exType, isHighlight, turnType, rgType);
         if (resId != LaneResourceManager.RESOURCE_NOT_FOUND) {
             return resId;
         } else {
-            return LaneResourceManager.getLaneResourceId(turnType, isHighlight);
+            //Since 1.3.0 Lane : 좌/우회전 등 회전 정보에 따른 활성화 차선을 구분하기 위해 인자가 추가되었습니다.
+            return LaneResourceManager.getLaneResourceId(turnType, isHighlight, rgType);
         }
     }
 

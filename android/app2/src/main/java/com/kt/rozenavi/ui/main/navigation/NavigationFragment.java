@@ -263,12 +263,14 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
     }
 
     private void playStartSound(SafetySummary summary) {
-        Sound sound;
-        if (summary != null && summary.hasSafetySection) {
-            sound = SoundResourceManager.getSafetySummarySound(summary);
-        } else {
-            sound = SoundResourceManager.getRouteSound(SoundResourceManager.RouteState.ROUTE_START);
-        }
+        //최초 시작 시 안전 운행 요약 정보를 얻고 싶을 경우.
+//        Sound sound;
+//        if (summary != null && summary.hasSafetySection) {
+//            sound = SoundResourceManager.getSafetySummarySound(summary);
+//        } else {
+//            sound = SoundResourceManager.getRouteSound(SoundResourceManager.RouteState.ROUTE_START);
+//        }
+        Sound sound = SoundResourceManager.getRouteSound(SoundResourceManager.RouteState.ROUTE_START);
 
         if (sound != null) {
             NavigationManager.getInstance().playNavigationSound(sound);
@@ -323,14 +325,17 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
         gMap.addOverlay(currentRoutePath);
         routePointList = new ArrayList<>();
 
-        //waypoint
+        //Since 1.3.0 WayPoint : 경유지를 좌표에서 멀티입구점으로 처리하기 위해 UTMK 에서 -> List<UTMK> 로 변경했습니다.
         if (!CommonUtils.isEmpty(routeSummary.routePlan.waypoints)) {
-            for (UTMK coord : routeSummary.routePlan.waypoints) {
+            for (List<UTMK> coord : routeSummary.routePlan.waypoints) {
+                if (CommonUtils.isEmpty(coord)) {
+                    continue;
+                }
                 MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.anchor(new Point(0.5, 1.0))
                         .icon(ResourceDescriptorFactory.fromResource(R.drawable.route_marker_waypoint))
                         .iconSize(new Point(30, 49))
-                        .position(coord).visible(true);
+                        .position(coord.get(0)).visible(true);
                 Marker marker = new Marker(markerOptions);
                 routePointList.add(marker);
                 gMap.addOverlay(marker);
@@ -792,7 +797,9 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
         }
         UTMK utmk = UTMK.valueOf(new LatLng(location.getLatitude(), location.getLongitude()));
         NavigationManager navigationManager = NavigationManager.getInstance();
-        navigationManager.reroute(utmk, navigationManager.getLastBearing(), mode);
+        //Since 1.3.0 Reroute : 재탐색에 대한 이유에 따라 UI 처리가 다른 경우가 있어, 재탐색에 대한 사유를 추가했습니다.
+        navigationManager.reroute(utmk, navigationManager.getLastBearing(), mode,
+                NavigationManager.RerouteExtraInfo.NONE);
     }
 
 
@@ -842,8 +849,9 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
         }
     }
 
+    //Since 1.3.0 Reroute : 재탐색에 대한 이유에 따라 UI 처리가 다른 경우가 있어, 재탐색에 대한 사유를 추가했습니다.
     @Override
-    public void onRouteDeviated(Location location) {
+    public void onRouteDeviated(Location location, NavigationManager.RerouteExtraInfo extraReason) {
         UIUtils.showToast(getActivity(), R.string.toast_message_location_deviated);
         requestReRoute(location, NavigationManager.RouteMode.DEVIATED_REROUTE);
     }
@@ -854,16 +862,18 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
         requestReRoute(location, NavigationManager.RouteMode.DID_NOT_ENTER_REROUTE);
     }
 
+    //Since 1.3.0 Reroute : 재탐색에 대한 이유에 따라 UI 처리가 다른 경우가 있어, 재탐색에 대한 사유를 추가했습니다.
     @Override
-    public void onRerouteBegin(NavigationManager.RouteMode mode) {
+    public void onRerouteBegin(NavigationManager.RouteMode mode, NavigationManager.RerouteExtraInfo extraReason) {
         isRerouting = true;
         if (mode == NavigationManager.RouteMode.AUTO_REROUTE) {
             UIUtils.showToast(getActivity(), R.string.toast_message_reroute_auto);
         }
     }
 
+    //Since 1.3.0 Reroute : Reroute 시에 이전 경로와 신규 경로에 차이가 있는지 확인 하기 위해 isUpdated 를 추가했습니다.
     @Override
-    public void onRerouteEnd(NavigationManager.RouteMode mode, RouteSummary routeSummary) {
+    public void onRerouteEnd(NavigationManager.RouteMode mode, RouteSummary routeSummary, boolean isUpdated) {
         this.routeSummary = routeSummary;
         if (!isAdded()) {
             return;

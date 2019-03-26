@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 apply plugin: 'io.fabric'
-apply plugin: 'me.tatarka.retrolambda'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '26.0.2'
+    compileSdkVersion 28
+    buildToolsVersion '28.0.3'
     defaultConfig {
         applicationId "com.kt.rozenavi"
         minSdkVersion 19
-        targetSdkVersion 24
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
@@ -20,6 +20,25 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        pickFirst 'nad/**'
+    }
+
+    dexOptions {
+//        javaMaxHeapSize "4g"
+//        incremental true
+        preDexLibraries false
+//        maxProcessCount Math.max(1, ((int) (Runtime.getRuntime().availableProcessors() / 2)))
+    }
+
     dataBinding {
         enabled = true
     }
@@ -41,7 +60,7 @@ buildscript {
     }
 }
 crashlytics {
-    enableNdk true
+    enableNdk false
 //    androidNdkOut 'src/main/obj'
 //    androidNdkLibsOut 'src/main/libs'
     androidNdkOut '../maps/src/main/obj'
@@ -51,6 +70,7 @@ crashlytics {
 repositories {
     maven { url 'https://maven.fabric.io/public' }
     maven { url 'https://maven.google.com' }
+    mavenCentral()
 }
 
 dependencies {
@@ -74,7 +94,8 @@ dependencies {
     compile 'jp.wasabeef:glide-transformations:3.0.1'
     
     //--DI
-    provided 'org.projectlombok:lombok:1.16.8'
+    compile 'org.projectlombok:lombok:1.16.8'
+    annotationProcessor "org.projectlombok:lombok:${rootProject.ext.lombokVersion}"
     compile project(':geom')
     compile project(':maps-release')
     compile project(':roze-release')
@@ -111,7 +132,7 @@ dependencies {
 
     // Crashlytics Kit
     compile('com.crashlytics.sdk.android:crashlytics:2.6.7@aar') {
-        transitive = true;
+        transitive = true
     }
     // NDK Kit
     compile('com.crashlytics.sdk.android:crashlytics-ndk:1.1.6@aar') {
@@ -122,5 +143,6 @@ dependencies {
     compile "android.arch.lifecycle:runtime:1.0.3"
     compile "android.arch.lifecycle:extensions:1.0.0-rc1"
     annotationProcessor "android.arch.lifecycle:compiler:1.0.0-rc1"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     //--google architecture components
 }

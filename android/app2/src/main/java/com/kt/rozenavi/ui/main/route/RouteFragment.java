@@ -317,12 +317,13 @@ public class RouteFragment extends BaseFragment implements RouteManager.RouteMan
         gMap.addOverlay(marker);
 
         //경유지 마커
-        for (UTMK waypoint : routeSummary.routePlan.waypoints) {
+        //Since 1.3.0 WayPoint : 경유지를 좌표에서 멀티입구점으로 처리하기 위해 UTMK 에서 -> List<UTMK> 로 변경했습니다.
+        for (List<UTMK> waypoint : routeSummary.routePlan.waypoints) {
             markerOptions = new MarkerOptions();
             markerOptions.anchor(new Point(0.5, 1.0))
                     .icon(ResourceDescriptorFactory.fromResource(R.drawable.route_marker_waypoint))
                     .iconSize(new Point(30, 49))
-                    .position(waypoint).visible(true);
+                    .position(waypoint.get(0)).visible(true);
             marker = new Marker(markerOptions);
             markerList.add(marker);
             gMap.addOverlay(marker);

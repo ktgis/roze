@@ -84,7 +84,8 @@ public class RouteTbtRecyclerViewAdapter extends RecyclerView.Adapter<RouteTbtRe
         if (resId > 0) {
             holder.tbtTitleTextView.setText(resId);
         } else {
-            holder.tbtTitleTextView.setText(turn.nodeName);
+            //Since 1.3.0 의도를 명확히 하기 위해 nodeName 이 삭제되고 tbtName 으로 변경되었습니다.
+            holder.tbtTitleTextView.setText(turn.tbtName);
         }
 
         if (turn.nextDistance == 0) {
