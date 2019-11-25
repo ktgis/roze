@@ -1,6 +1,11 @@
 # Changelog
 신버전 sdk 샘플 프로젝트 변경사항
 
+## [2019-11-25-2]
+
+### 추가
+- 누락된 클래스 파일 추가
+
 ## [2019-11-25]
 
 ### 추가
@@ -101,6 +106,7 @@
 ### 추가
 - 신규 샘플앱 추가
 
+[2019-11-25-2]: https://github.com/ktgis/roze/commit/331c49ce67cea50d5af3b88f56094391881b9cba
 [2019-11-25]: https://github.com/ktgis/roze/commit/55c88eadbb58f60db6f6635ee15d1677db331f6d
 [2019-03-26]: https://github.com/ktgis/roze/commit/34ba5836e2d178c14107830963b4416716601474
 [2018-06-12-2]: https://github.com/ktgis/roze/commit/611bf0e0ecdefe1d8f61eff9ff40a1ec1a25af47
