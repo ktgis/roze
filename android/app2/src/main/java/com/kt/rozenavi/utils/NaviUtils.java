@@ -55,6 +55,10 @@ public class NaviUtils {
      * @return km/h 속도
      */
     public static int calculateSpeed(Location location) {
+        if(location == null) {
+            return 0;
+        }
+
         if (location.hasSpeed()) {
             return (int) (location.getSpeed() * 3.6);
         }

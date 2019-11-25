@@ -41,6 +41,7 @@ import com.kt.roze.RozeError;
 import com.kt.roze.RozeOptions;
 import com.kt.roze.SoundManager;
 import com.kt.roze.data.model.Link;
+import com.kt.roze.data.model.Route;
 import com.kt.roze.guidance.model.SafetySpotInterface;
 import com.kt.roze.guidance.model.Sound;
 import com.kt.roze.guidance.model.TrackingGuidance;
@@ -48,8 +49,10 @@ import com.kt.roze.location.model.GeoLocation;
 import com.kt.roze.routing.RouteManager;
 import com.kt.roze.routing.RoutePlan;
 import com.kt.roze.routing.RouteSummary;
+import com.kt.roze.util.SimpleLog;
 import com.kt.rozenavi.R;
 import com.kt.rozenavi.data.NavigationData;
+import com.kt.rozenavi.data.SingleMessage;
 import com.kt.rozenavi.data.model.TrackingEventData;
 import com.kt.rozenavi.data.model.ViewpointChangeEventData;
 import com.kt.rozenavi.provider.LocationProvider;
@@ -188,8 +191,17 @@ public class DriveFragment extends BaseFragment implements WeakReferenceHandler.
                 if (geoLocation == null || !isResumed()) {
                     return;
                 }
-                Location location = geoLocation.location;
-                if (location == null || gMap == null) {
+
+                //-- 1.5.0 안전운행 가상 주행관련 예외처리
+                // 가상주행시 Location없이 RouteLocation만 전달
+                if ((geoLocation.location == null && geoLocation.routeLocation == null) || gMap == null) {
+                    return;
+                }
+
+                UTMK coord = getCoord(geoLocation);
+                float angle = getAngle(geoLocation);
+                //좌표나 각도가 유효하지 않은경우는 위치정보를 반영하지 않는다.
+                if (coord == null || angle < 0) {
                     return;
                 }
 
@@ -203,13 +215,13 @@ public class DriveFragment extends BaseFragment implements WeakReferenceHandler.
                 if (isFixedCurrentLocation && !isFreezeMap) {
                     gMap.animate(
                             ViewpointChange.builder()
-                                    .rotateTo(isHeading ? location.getBearing() : 0)
-                                    .panTo(UTMK.valueOf(new LatLng(location.getLatitude(), location.getLongitude())))
+                                    .rotateTo(isHeading ? angle : 0)
+                                    .panTo(coord)
                                     .pivot(currentPivot).build()
                             , 1000
                             , GMap.AnimationTiming.LINEAR);
                 } else {
-                    setCurrentLocationMarker(location);
+                    setCurrentLocationMarker(coord);
                 }
             }
         });
@@ -272,15 +284,58 @@ public class DriveFragment extends BaseFragment implements WeakReferenceHandler.
         NavigationData.getInstance().trackingInitializedEvent.observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(@Nullable Boolean isInitialized) {
+                SimpleLog.i("TEST", "trackingInitializedEvent "+isInitialized);
                 if (isInitialized != null && isInitialized) {
                     NavigationManager.getInstance().startTracking();
                 }
             }
         });
-        //--안전운행모드 기능 추가
-        //--안전운행모드 사운드 기능 추가
+
+        //-- 1.4.0 안전운행 이벤트 추가
+        NavigationData.getInstance().trackingDeviatedEvent.observe(this,
+                (SingleMessage.SingleMessageObserver) message -> hideSafetyView());
+
         NavigationManager.getInstance().setSoundListener(this);
         //--안전운행모드 사운드 기능 추가
+    }
+
+    /**
+     * 좌표 선택
+     * 안전운행용 맵매칭 좌표와 일반 좌표에서 가능한 좌표 반환
+     * 오류 상황일 경우 null 반환
+     */
+    private UTMK getCoord(GeoLocation geoLocation) {
+        if(geoLocation == null) {
+            return null;
+        }
+
+        if(geoLocation.hasRoutedLocation()) {
+            return geoLocation.routeLocation.location;
+        } else {
+            try {
+                Location location = geoLocation.location;
+                return UTMK.valueOf(new LatLng(location.getLatitude(), location.getLongitude()));
+            } catch (Exception e) {
+                return null;
+            }
+        }
+    }
+
+    /**
+     * 방향값 선택
+     * 안전운행용 맵매칭 좌표와 일반 좌표에서 유효한 방향값 선택
+     * 오류 상황일 경우 null 반환
+     */
+    private float getAngle(GeoLocation geoLocation) {
+        if(geoLocation == null) {
+            return -1;
+        }
+
+        if(geoLocation.hasRoutedLocation()) {
+            return geoLocation.routeLocation.angle;
+        } else {
+            return geoLocation.location == null ? -1 : geoLocation.location.getBearing();
+        }
     }
 
     boolean isFreezeMap = false;
@@ -518,7 +573,11 @@ public class DriveFragment extends BaseFragment implements WeakReferenceHandler.
         }
         trackingView.updateSafetySpotView(isShow, guidances);
     }
-    //-- 1.2.0 안전운행 업데이트 기능 추가
+
+    //-- 1.4.0 안전운행 이벤트 추가
+    private void hideSafetyView() {
+        trackingView.hideAllView();
+    }
 
     @OnClick(R.id.location_button)
     protected void onClickLocationButton() {
@@ -557,10 +616,37 @@ public class DriveFragment extends BaseFragment implements WeakReferenceHandler.
         onClickLocationButton();
     }
 
+    /**
+     * 경로안내를 할 수 없는 경로인지 체크
+     * since 1.5.0 경로탐색 실패 예외처리 추가
+     */
+    public static boolean isUnavailableRoute(Route route) {
+        if (route == null) {
+            return true;
+        }
+
+        if (TextUtils.equals(route.errorCode, "C0002")) {
+            return true;
+        }
+
+        return route.links == null || route.links.size() == 0;
+    }
+
     @Override
     public void onRouteCalculateFinished(RouteSummary routeSummary) {
         UIUtils.dismissProgressDialog();
         MainActivity mainActivity = (MainActivity) getActivity();
+        if (mainActivity == null || routeSummary == null || routeSummary.routes == null || routeSummary.routes.size() == 0) {
+            return;
+        }
+        List<Route> route = routeSummary.routes;
+        for (Route r : route) {
+            //-- 1.5.0 경로탐색 오류 예외처리 추가
+            if (isUnavailableRoute(r)) {
+                UIUtils.showToast(getContext(), "경로 검색에 실패했습니다." + r.errorCode);
+                return;
+            }
+        }
         mainActivity.replaceFragment(RouteFragment.getInstance(routeSummary, destination));
     }
 

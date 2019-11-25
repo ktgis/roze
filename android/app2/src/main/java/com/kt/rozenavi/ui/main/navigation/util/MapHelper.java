@@ -154,7 +154,7 @@ public class MapHelper {
             return null;
         } else if (turn.type == RGType.U_TURN) {
             //기준이 될 좌표 설정
-            int uturnLength = links.get(turn.linkIndex + 1).length;
+            int uturnLength = links.get(turn.linkIndex + 1).getLength();
             if (uturnLength < 30) {
                 //u turn이기 때문에 링크 전체를 설정
                 coords.addAll(links.get(turn.linkIndex + 1).getNodes());
@@ -201,11 +201,11 @@ public class MapHelper {
         UTMK point1 = links.get(linkIndex).getNode(0);
         UTMK point2 = links.get(linkIndex).getNode(1);
         double distance;
-        while (linkIndex < (links.size() - 1) && interval > links.get(linkIndex).length) {
+        while (linkIndex < (links.size() - 1) && interval > links.get(linkIndex).getLength()) {
             //링크의 전체 노드 추가
             coords.addAll(links.get(linkIndex).getNodes());
             //남은길이를 링크의 길이만큼 제외
-            interval = interval - links.get(linkIndex).length;
+            interval = interval - links.get(linkIndex).getLength();
             //앞링크 인덱스를 하나 뒤로 이동
             linkIndex = linkIndex + 1;
             //앞으로 더 넘어갈수 없을때는 반복문 종료
@@ -252,11 +252,11 @@ public class MapHelper {
         UTMK point2 = links.get(linkIndex).getNode(links.get(linkIndex).getNodeSize() - 2);
         double distance;
         //링크 전체가 tbt 구간에 포함되는경우 반복문으로 확인 처리
-        while (linkIndex > 0 && interval > links.get(linkIndex).length) {
+        while (linkIndex > 0 && interval > links.get(linkIndex).getLength()) {
             //링크의 전체 노드 추가
             coords.addAll(0, links.get(linkIndex).getNodes());
             //남은길이를 링크의 길이만큼 제외
-            interval = interval - links.get(linkIndex).length;
+            interval = interval - links.get(linkIndex).getLength();
             //이전링크 인덱스를 하나 뒤로 이동
             linkIndex = linkIndex - 1;
             //뒤로 더 넘어갈수 없을때는 반복문 종료

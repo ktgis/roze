@@ -47,6 +47,8 @@ import com.kt.roze.NavigationManager;
 import com.kt.roze.RozeError;
 import com.kt.roze.RozeOptions;
 import com.kt.roze.SoundManager;
+import com.kt.roze.data.model.ControlLink;
+import com.kt.roze.data.model.FerryPoint;
 import com.kt.roze.data.model.Lane;
 import com.kt.roze.data.model.Route;
 import com.kt.roze.data.model.SafetySummary;
@@ -824,6 +826,12 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
 
     }
 
+    //Since 1.5.0 교통정보 업데이트 완료 이벤트 메소드 추가
+    @Override
+    public void onTrafficUpdateComplete(@Nullable List<ControlLink> list) {
+
+    }
+
     @Override
     public void onArrived(short arrivedIndex) {
         if (arrivedIndex == -1) { // 목적지 도착
@@ -860,6 +868,12 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
     public void onRouteDidNotEnter(Location location) {
         UIUtils.showToast(getActivity(), R.string.toast_message_location_did_not_enter);
         requestReRoute(location, NavigationManager.RouteMode.DID_NOT_ENTER_REROUTE);
+    }
+
+    //Since 1.4.3 페리경로 시작지점 도착 이벤트 메소드 추가
+    @Override
+    public void onArrivedFerryRoute(FerryPoint ferryPoint) {
+
     }
 
     //Since 1.3.0 Reroute : 재탐색에 대한 이유에 따라 UI 처리가 다른 경우가 있어, 재탐색에 대한 사유를 추가했습니다.

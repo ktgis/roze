@@ -126,9 +126,9 @@ public class MainActivity extends BaseActivity implements OnMapReadyListener {
             return;
         }
 
+        //-- 1.4.0 안전운행 이벤트 추가
         //gps 수신을 위해 내비게이션 시작
-        navigationManager.startTracking();
-
+        navigationManager.startCruising();
         //내비 동작중에 화면이 꺼지지 않도록 wake lock 설정
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
@@ -178,8 +178,18 @@ public class MainActivity extends BaseActivity implements OnMapReadyListener {
                 }
             }
         });
-
-        initSafetyOptions();
+        //-- 1.4.0 안전운행 이벤트 추가
+        LocationProvider.getInstance().isGpsOn.observe(this, new Observer<Boolean>() {
+                    @Override
+                    public void onChanged(@Nullable Boolean aBoolean) {
+                        if (aBoolean == null || !aBoolean) {
+                            return;
+                        }
+                        NavigationManager.getInstance().initializeTrackingData();
+                        LocationProvider.getInstance().isGpsOn.removeObserver(this);
+                    }
+                }
+        );
 
         getLifecycle().addObserver(MapProvider.getInstance());
         getLifecycle().addObserver(navigationData);

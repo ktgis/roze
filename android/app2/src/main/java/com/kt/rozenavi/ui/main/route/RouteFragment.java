@@ -502,9 +502,38 @@ public class RouteFragment extends BaseFragment implements RouteManager.RouteMan
         return routeTypes;
     }
 
+    /**
+     * 경로안내를 할 수 없는 경로인지 체크
+     * since 1.5.0 경로탐색 실패 예외처리 추가
+     */
+    public static boolean isUnavailableRoute(Route route) {
+        if (route == null) {
+            return true;
+        }
+
+        if (TextUtils.equals(route.errorCode, "C0002")) {
+            return true;
+        }
+
+        return route.links == null || route.links.size() == 0;
+    }
+
     @Override
     public void onRouteCalculateFinished(RouteSummary routeSummary) {
         UIUtils.dismissProgressDialog();
+        MainActivity mainActivity = (MainActivity) getActivity();
+        if (mainActivity == null || routeSummary == null || routeSummary.routes == null || routeSummary.routes.size() == 0) {
+            return;
+        }
+        List<Route> route = routeSummary.routes;
+        for (Route r : route) {
+            //-- 1.5.0 경로탐색 오류 예외처리 추가
+            if (isUnavailableRoute(r)) {
+                UIUtils.showToast(getContext(), "경로 검색에 실패했습니다." + r.errorCode);
+                return;
+            }
+        }
+
         this.routeSummary = routeSummary;
         routeTypeView.setRouteInfo(routeSummary.routes, routeSummary.routePlan.routeTypes, this);
         routeTbtView.setRouteInfo(routeSummary.routes, this);

@@ -13,9 +13,14 @@
 package com.kt.rozenavi.utils;
 
 import android.location.Location;
+import android.support.annotation.Nullable;
 
 import com.kt.roze.NavigationManager;
 import com.kt.roze.RozeError;
+import com.kt.roze.data.model.ControlLink;
+import com.kt.roze.data.model.FerryPoint;
+
+import java.util.List;
 
 public class RouteListenerAdpater implements NavigationManager.RouteListener {
     @Override
@@ -28,6 +33,12 @@ public class RouteListenerAdpater implements NavigationManager.RouteListener {
 
     @Override
     public void onTrafficUpdate() {
+    }
+
+    //Since 1.5.0 교통정보 업데이트 완료 이벤트 메소드 추가
+    @Override
+    public void onTrafficUpdateComplete(@Nullable List<ControlLink> list) {
+
     }
 
     @Override
@@ -45,5 +56,11 @@ public class RouteListenerAdpater implements NavigationManager.RouteListener {
 
     @Override
     public void onRouteDidNotEnter(Location location) {
+    }
+
+    //Since 1.4.3 페리경로 시작지점 도착 이벤트 메소드 추가
+    @Override
+    public void onArrivedFerryRoute(FerryPoint ferryPoint) {
+
     }
 }

@@ -18,6 +18,7 @@ import android.arch.lifecycle.LifecycleObserver;
 import android.arch.lifecycle.OnLifecycleEvent;
 
 import com.kt.roze.NavigationManager;
+import com.kt.roze.RozeError;
 import com.kt.roze.data.model.Lane;
 import com.kt.roze.data.model.WayPoint;
 import com.kt.roze.guidance.RouteGuidanceListener;
@@ -54,10 +55,13 @@ public class NavigationData implements LifecycleObserver {
     public LiveDataAdv<List<WayPoint>> nearWaypointEvent = new LiveDataAdv<>();
     public LiveDataAdv<LowestGasEventData> lowestGasEvent = new LiveDataAdv<>();
     public LiveDataAdv<Integer> lowestGasDistance = new LiveDataAdv<>();
-    //-- 1.2.0 안전운행 이벤트 추가
     public LiveDataAdv<TrackingEventData> trackingEvent = new LiveDataAdv<>();
     public LiveDataAdv<Boolean> trackingInitializedEvent = new LiveDataAdv<>();
-    //-- 1.2.0 안전운행 이벤트 추가
+    /**
+     * 안전운행 중 가상경로 이탈 시 발행
+     */
+	//-- 1.4.0 안전운행 이벤트 추가
+    public SingleMessage<Boolean> trackingDeviatedEvent = new SingleMessage<>();
 
     public static NavigationData getInstance() {
         if (instance == null) {
@@ -69,30 +73,43 @@ public class NavigationData implements LifecycleObserver {
     public void bindNavigationManager(NavigationManager navigationManager) {
         this.navigationManager = navigationManager;
         navigationManager.setRouteGuidanceEventListener(internalGuidanceListener);
+	//-- 1.4.0 안전운행 이벤트 추가		
+        navigationManager.setTrackingEventListener(trackingListener);
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     void onDestroy() {
-        if (navigationManager != null) {
+        if(navigationManager != null){
             navigationManager.setRouteGuidanceEventListener(null);
+			//-- 1.4.0 안전운행 이벤트 추가
+            navigationManager.setTrackingEventListener(null);
             navigationManager = null;
         }
         instance = null;
     }
+	//-- 1.4.0 안전운행 이벤트 추가
+    private NavigationManager.TrackingEventListener trackingListener = new NavigationManager.TrackingEventListener() {
+        @Override
+        public void onTrackingDataReadyEvent() {
+            trackingInitializedEvent.setValue(true);
+        }
+
+        @Override
+        public void onTrackingDataFailed(RozeError error) {
+            trackingInitializedEvent.setValue(false);
+        }
+
+        @Override
+        public void onTrackingRouteDeviated(NavigationManager.RerouteExtraInfo extraReason) {
+            trackingDeviatedEvent.setValue(true);
+        }
+    };
 
     private RouteGuidanceListener internalGuidanceListener = new RouteGuidanceListener() {
-        //-- 1.2.0 안전운행 이벤트 추가
         @Override
         public void onTrackingSpotChangedEvent(boolean isShow, List<TrackingGuidance> list) {
             trackingEvent.setValue(new TrackingEventData(isShow, list));
         }
-
-        @Override
-        public void onTrackingReadyEvent(boolean initialized) {
-            super.onTrackingReadyEvent(initialized);
-            trackingInitializedEvent.setValue(initialized);
-        }
-        //-- 1.2.0 안전운행 이벤트 추가
 
         @Override
         public void onLaneChangedEvent(Lane lane) {
@@ -187,5 +204,7 @@ public class NavigationData implements LifecycleObserver {
         nearWaypointEvent.setValue(null);
         lowestGasEvent.setValue(null);
         lowestGasDistance.setValue(null);
+        trackingEvent.setValue(null);
+        trackingDeviatedEvent.setValue(null);
     }
 }
