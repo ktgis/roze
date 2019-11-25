@@ -1,6 +1,22 @@
 # Changelog
 신버전 sdk 샘플 프로젝트 변경사항
 
+## [2019-11-25]
+
+### 추가
+- NAVI SDK 1.4.0 - 1.5.0 대응
+- 안전운행 맵매칭 기능 추가 (1.4.0)
+- onArrivedFerryRoute(FerryPoint ferryPoint) 메소드 추가로 페리경로 시작지점 도착여부 확인기능 추가
+- 경로탐색 오류시 예외처리 코드 추가(1.5.0)
+- 구간 단속 평균속도 초과 알림음 활성/비활성 기능 추가(1.5.0)
+
+### 변경사항
+- gradle 버전에 따른 build.gradle migration
+- 앱시작시 NavigationManager.startTracking() -> navigationManager.startCruising() 로 변경
+- 안전운행 안내정보 준비 이벤트 RouteGuidanceListener.onTrackingReadyEvent(boolean initialized) -> NavigationManager.TrackingEventListener 로 변경
+- DriveFragment 맵매칭 좌표 반영
+- kotlin 호환 코드 업데이트
+
 ## [2019-03-26]
 
 ### 변경사항
@@ -85,6 +101,7 @@
 ### 추가
 - 신규 샘플앱 추가
 
+[2019-11-25]: https://github.com/ktgis/roze/commit/55c88eadbb58f60db6f6635ee15d1677db331f6d
 [2019-03-26]: https://github.com/ktgis/roze/commit/34ba5836e2d178c14107830963b4416716601474
 [2018-06-12-2]: https://github.com/ktgis/roze/commit/611bf0e0ecdefe1d8f61eff9ff40a1ec1a25af47
 [2018-06-12]: https://github.com/ktgis/roze/commit/35d3fcf545edd6b803e86853973fbbcb19dd6f27
