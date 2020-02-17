@@ -14,10 +14,10 @@ android studio에서 사용시 File -> New -> New Module -> import .JAR/.AAR Pac
 ## SDK 의존성 확인
 build.gradle에 기본적으로 실행에 필요한 라이브러리나 설정이 적용 되어있습니다.
 ```bash
-compile project(':geom')
-compile project(':maps-release')
-compile project(':roze-release')
-compile project(':place-release')
+implementation project(':geom')
+implementation project(':maps-release')
+implementation project(':roze-release')
+implementation project(':place-release')
 ```
 
 설치된 SDK의 dependency를 확인합니다. 현재 build.gradle 상에서는 임의의 모듈명으로 포함이 되어있기 때문에
@@ -31,26 +31,29 @@ Navi SDK를 사용하기 위해서는 아래와 같은 라이브러리 dependenc
 ```bash
 //--roze dependencies
 // RxAndroid, RxJava
-compile 'io.reactivex.rxjava2:rxjava:2.1.3'
-compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+implementation 'io.reactivex.rxjava2:rxjava:2.1.3'
+implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
 // Http
-compile 'com.squareup.retrofit2:retrofit:2.3.0'
-compile 'com.squareup.retrofit2:converter-gson:2.3.0'
-compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
-compile 'com.squareup.retrofit2:converter-protobuf:2.1.0'
-compile ('com.squareup.retrofit2:converter-simplexml:2.3.0') {
+implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+implementation ('com.squareup.retrofit2:converter-protobuf:2.3.0') {
+        exclude group: 'com.google.protobuf'
+}
+implementation ('com.squareup.retrofit2:converter-simplexml:2.3.0') {
 	exclude group: 'xpp3', module: 'xpp3'
 	exclude group: 'stax', module: 'stax-api'
 	exclude group: 'stax', module: 'stax' +
 			''
 }
-compile 'com.squareup.okhttp3:okhttp-urlconnection:3.8.0'
-compile 'com.squareup.okhttp3:logging-interceptor:3.8.0'
-compile 'com.google.protobuf:protobuf-java:3.5.1'
+implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.8.0'
+implementation 'com.squareup.okhttp3:logging-interceptor:3.8.0'
+implementation 'com.google.protobuf:protobuf-lite:3.0.0'
 // etc
-compile 'org.apache.commons:commons-lang3:3.4'
-compile "com.google.guava:guava:19.0"
-compile "com.google.android.gms:play-services-location:9.2.0"
+implementation 'org.apache.commons:commons-lang3:3.4'
+implementation "com.google.guava:guava:24.1-jre"
+implementation "com.google.android.gms:play-services-location:16.0.0"
+implementation group: 'com.github.davidmoten', name: 'rtree', version: '0.8-RC10'
 //--roze dependencies
 ```
 

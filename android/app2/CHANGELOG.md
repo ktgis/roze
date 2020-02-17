@@ -1,6 +1,11 @@
 # Changelog
 신버전 sdk 샘플 프로젝트 변경사항
 
+## [2020-02-17]
+
+### 변경사항
+- sdk 1.6.0 버전 적용 dependencies 업데이트
+
 ## [2019-11-25-2]
 
 ### 추가
@@ -106,6 +111,7 @@
 ### 추가
 - 신규 샘플앱 추가
 
+[2020-02-17]: https://github.com/ktgis/roze/commit/d6cd71a45f759ddf0f5692e153c128e8f51a94c3
 [2019-11-25-2]: https://github.com/ktgis/roze/commit/331c49ce67cea50d5af3b88f56094391881b9cba
 [2019-11-25]: https://github.com/ktgis/roze/commit/55c88eadbb58f60db6f6635ee15d1677db331f6d
 [2019-03-26]: https://github.com/ktgis/roze/commit/34ba5836e2d178c14107830963b4416716601474
