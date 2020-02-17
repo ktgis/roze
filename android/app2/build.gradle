@@ -107,7 +107,11 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
-    implementation 'com.squareup.retrofit2:converter-protobuf:2.1.0'
+    //-- 1.6.0 protobuf-lite 적용으로 인한 예외처리, protobuf-lite 와 충돌 발생
+    implementation ('com.squareup.retrofit2:converter-protobuf:2.3.0') {
+        exclude group: 'com.google.protobuf'
+    }
+
     compile ('com.squareup.retrofit2:converter-simplexml:2.3.0') {
         exclude group: 'xpp3', module: 'xpp3'
         exclude group: 'stax', module: 'stax-api'
@@ -116,7 +120,9 @@ dependencies {
     }
     implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.8.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.8.0'
-    implementation 'com.google.protobuf:protobuf-java:3.5.1'
+    //-- 1.6.0 protobuf-lite 적용
+    implementation 'com.google.protobuf:protobuf-lite:3.0.0'
+
     // etc
     implementation 'org.apache.commons:commons-lang3:3.4'
     implementation "com.google.guava:guava:24.1-jre"
