@@ -12,11 +12,15 @@
 
 package com.kt.rozenavi.utils;
 
+import android.content.Context;
 import android.location.Location;
 import android.util.Log;
 
 import com.kt.geom.model.LatLng;
 import com.kt.geom.model.UTMK;
+import com.kt.maps.GMap;
+import com.kt.maps.overlay.Overlay;
+import com.kt.naviextension.traffic.adapter.TrafficAdapter;
 
 /**
  * 지도 기능을 구현하는데 필요한 공통 기능을 모아놓은 유틸리티 클래스
@@ -61,5 +65,30 @@ public class MapUtils {
         }
         //화면에 잘리지 않도록 좀 더 작게 축소
         return zoomlevel < 0.2 ? 0 : zoomlevel - 0.2;
+    }
+
+    /**
+     * 지도에 overlay 등록
+     *
+     * @param gMap    지도 객체
+     * @param overlay 오버레이 객체
+     * @return 등록 성공/실패
+     */
+    public static boolean addOverlay(GMap gMap, Overlay overlay) {
+        if (gMap == null || overlay == null) {
+            return false;
+        }
+        gMap.addOverlay(overlay);
+        return true;
+    }
+
+    /**
+     * 교통정보 layer adapter 설정
+     */
+    public static void setTrafficLayerAdapter(GMap gMap, Context applicationContext, TrafficAdapter adapter) {
+        if (gMap == null || applicationContext == null) {
+            return;
+        }
+        gMap.setGTrafficLayerAdaptor(adapter, applicationContext);
     }
 }

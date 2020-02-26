@@ -39,6 +39,8 @@ import com.kt.maps.GMap;
 import com.kt.maps.GMapFragment;
 import com.kt.maps.GMapResultCode;
 import com.kt.maps.OnMapReadyListener;
+import com.kt.naviextension.traffic.TrafficInfoManager;
+import com.kt.naviextension.traffic.adapter.TrafficAdapter;
 import com.kt.roze.NavigationManager;
 import com.kt.roze.RozeOptions;
 import com.kt.roze.RozeResultCode;
@@ -53,8 +55,10 @@ import com.kt.rozenavi.ui.component.core.BaseActivity;
 import com.kt.rozenavi.ui.component.core.BaseFragment;
 import com.kt.rozenavi.ui.main.alarm.NightAlarmManager;
 import com.kt.rozenavi.ui.main.drive.DriveFragment;
+import com.kt.rozenavi.ui.main.navigation.util.MapHelper;
 import com.kt.rozenavi.ui.main.service.TbtGuidancePopupService;
 import com.kt.rozenavi.ui.setting.AppOptions;
+import com.kt.rozenavi.utils.MapUtils;
 import com.kt.rozenavi.utils.PreferenceUtils;
 import com.kt.rozenavi.utils.UIUtils;
 import com.squareup.leakcanary.RefWatcher;
@@ -95,6 +99,9 @@ public class MainActivity extends BaseActivity implements OnMapReadyListener {
      */
     @BindView(R.id.drawer_layout)
     protected DrawerLayout drawerLayout;
+
+    //since 1.7.0 교통정보 RoutePath, Map SDk 의 교통정보 표출을 위한 adapter
+    private TrafficAdapter trafficAdapter = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -196,7 +203,12 @@ public class MainActivity extends BaseActivity implements OnMapReadyListener {
         getLifecycle().addObserver(locationProvider);
     }
 
-    private void initSafetyOptions(){
+    //since 1.7.0 교통정보 RoutePath, Map SDk 의 교통정보 표출을 위해 설정한 adapter 반환
+    public TrafficAdapter getTrafficAdapter() {
+        return trafficAdapter;
+    }
+
+    private void initSafetyOptions() {
         SafetyOptions options = RozeOptions.getInstance().getSafetyOptions();
         if (options == null) {
             options = new SafetyOptions();
@@ -343,9 +355,11 @@ public class MainActivity extends BaseActivity implements OnMapReadyListener {
     public void onMapReady(GMap gMap) {
         map = gMap;
         MapProvider.getInstance().bindMap(gMap);
-
         //초기화전 지도화면을 숨겨두었다가 완료후 표출
         mapView.setVisibility(View.VISIBLE);
+        //since 1.7.0 교통정보 RoutePath, Map SDk 의 교통정보 표출을 위해 설정한 adapter 설정
+        trafficAdapter = TrafficInfoManager.getTrafficAdapter(null);
+        MapUtils.setTrafficLayerAdapter(gMap, getApplicationContext(), trafficAdapter);
     }
 
     @Override

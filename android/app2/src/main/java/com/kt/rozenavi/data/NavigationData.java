@@ -20,6 +20,7 @@ import android.arch.lifecycle.OnLifecycleEvent;
 import com.kt.roze.NavigationManager;
 import com.kt.roze.RozeError;
 import com.kt.roze.data.model.Lane;
+import com.kt.roze.data.model.RGCurrentInform;
 import com.kt.roze.data.model.WayPoint;
 import com.kt.roze.guidance.RouteGuidanceListener;
 import com.kt.roze.guidance.model.HighwayGuidance;
@@ -153,10 +154,19 @@ public class NavigationData implements LifecycleObserver {
             highwayDistance.setValue(distance);
         }
 
+//        @Override
+//        public void onRemainChangedEvent(int timeInSecond, int distanceInMeter) {
+//            super.onRemainChangedEvent(timeInSecond, distanceInMeter);
+//            remainEvent.setValue(new RemainEventData(timeInSecond, distanceInMeter));
+//        }
+
         @Override
-        public void onRemainChangedEvent(int timeInSecond, int distanceInMeter) {
-            super.onRemainChangedEvent(timeInSecond, distanceInMeter);
-            remainEvent.setValue(new RemainEventData(timeInSecond, distanceInMeter));
+        public void onCurrentInformEvent(RGCurrentInform inform) {
+            super.onCurrentInformEvent(inform);
+            //since 1.7.0 현재 위치의 link index 를 받기 위해 observing event 변경
+            remainEvent.setValue(new RemainEventData(inform.getTimeInSecond(),
+                    inform.getDistanceInMeter(),
+                    inform.getCurrentLinkIndex()));
         }
 
         @Override

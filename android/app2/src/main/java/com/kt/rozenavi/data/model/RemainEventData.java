@@ -15,8 +15,11 @@ package com.kt.rozenavi.data.model;
 public class RemainEventData {
     public final int timeInSecond;
     public final int distanceInMeter;
+    //since 1.7.0 현재 위치의 link index 정보 추가
+    public final int currentLinkIndex;
 
-    public RemainEventData(int timeInSecond, int distanceInMeter) {
+    public RemainEventData(int timeInSecond, int distanceInMeter, int currentLinkIndex) {
+        this.currentLinkIndex = currentLinkIndex;
         this.timeInSecond = timeInSecond;
         this.distanceInMeter = distanceInMeter;
     }

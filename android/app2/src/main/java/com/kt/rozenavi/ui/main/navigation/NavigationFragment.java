@@ -25,6 +25,7 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -36,17 +37,25 @@ import com.kt.geom.model.Coord;
 import com.kt.geom.model.LatLng;
 import com.kt.geom.model.UTMK;
 import com.kt.maps.GMap;
+import com.kt.maps.GMapShared;
 import com.kt.maps.ViewpointChange;
 import com.kt.maps.model.Point;
 import com.kt.maps.model.ResourceDescriptorFactory;
 import com.kt.maps.overlay.Marker;
 import com.kt.maps.overlay.MarkerOptions;
-import com.kt.maps.overlay.RoutePath;
-import com.kt.maps.overlay.RoutePathOptions;
+import com.kt.maps.overlay.TrafficRoutePath;
+import com.kt.maps.util.GTrafficManager;
+import com.kt.naviextension.data.Failure;
+import com.kt.naviextension.data.ResultListener;
+import com.kt.naviextension.routepath.RoutePathManager;
+import com.kt.naviextension.routepath.data.RoutePathOption;
+import com.kt.naviextension.traffic.TrafficInfoManager;
+import com.kt.naviextension.traffic.adapter.TrafficAdapter;
 import com.kt.roze.NavigationManager;
 import com.kt.roze.RozeError;
 import com.kt.roze.RozeOptions;
 import com.kt.roze.SoundManager;
+import com.kt.roze.data.RouteTrafficDataContainer;
 import com.kt.roze.data.model.ControlLink;
 import com.kt.roze.data.model.FerryPoint;
 import com.kt.roze.data.model.Lane;
@@ -56,7 +65,6 @@ import com.kt.roze.data.model.WayPoint;
 import com.kt.roze.guidance.model.HighwayGuidance;
 import com.kt.roze.guidance.model.IntervalSpeedSpotGuidance;
 import com.kt.roze.guidance.model.OilPriceGuidance;
-import com.kt.roze.guidance.model.SafetySpotGuidance;
 import com.kt.roze.guidance.model.SafetySpotInterface;
 import com.kt.roze.guidance.model.Sound;
 import com.kt.roze.guidance.model.TurnGuidance;
@@ -74,6 +82,7 @@ import com.kt.rozenavi.provider.LocationProvider;
 import com.kt.rozenavi.provider.MapProvider;
 import com.kt.rozenavi.ui.component.SpeedMeterView;
 import com.kt.rozenavi.ui.component.core.BaseFragment;
+import com.kt.rozenavi.ui.main.MainActivity;
 import com.kt.rozenavi.ui.main.alarm.NightAlarmBroadcastReceiver;
 import com.kt.rozenavi.ui.main.navigation.view.NavigationHighWayView;
 import com.kt.rozenavi.ui.main.navigation.view.NavigationHipassView;
@@ -88,8 +97,11 @@ import com.kt.rozenavi.utils.CommonUtils;
 import com.kt.rozenavi.utils.MapUtils;
 import com.kt.rozenavi.utils.NaviUtils;
 import com.kt.rozenavi.utils.RouteListenerAdpater;
+import com.kt.rozenavi.utils.RoutePathUtils;
 import com.kt.rozenavi.utils.UIUtils;
 import com.kt.rozenavi.utils.WeakReferenceHandler;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -161,7 +173,10 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
     private WeakReferenceHandler handler = new WeakReferenceHandler(this);
     private int currentMarkerIcon = R.drawable.my_location_navigation_on;
     private Marker currentLocationMarker;
-    private RoutePath currentRoutePath;
+    //기본 RoutePath 이용 시
+    //private RoutePath currentRoutePath;
+    //since 1.7.0 교통정보 RoutePath
+    private TrafficRoutePath currentRoutePath;
     private List<Marker> routePointList;
     private Point currentPivot;
 
@@ -170,6 +185,14 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
 
     private boolean isArrived = false;
     private boolean isRerouting = false;
+
+    //since 1.7.0 교통정보 RoutePath
+    /**
+     * onMapReady 시점에 초기화됨.
+     * RoutePath 객체를 위한 옵션
+     */
+    private RoutePathOption defaultRoutePathOptions;
+    private int currentLinkIndex = 0;
 
     //getInstance는 상황에 따라서 선택 사용
     //파라매터 없는 경우
@@ -321,10 +344,11 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
         //기존 routepath가 있는경우 삭제
         clearOverlay();
         //routepath객체 생성
-        currentRoutePath = createRoutePath(route.routePath());
+        //기본 RoutePath 이용 시
+        //currentRoutePath = createRoutePath(route.routePath());
+        //since 1.7.0 교통정보 RoutePath
+        createRoutePath(gMap, route);
 
-        //지도 및 리스트에 routepath 추가
-        gMap.addOverlay(currentRoutePath);
         routePointList = new ArrayList<>();
 
         //Since 1.3.0 WayPoint : 경유지를 좌표에서 멀티입구점으로 처리하기 위해 UTMK 에서 -> List<UTMK> 로 변경했습니다.
@@ -355,14 +379,43 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
         gMap.addOverlay(marker);
     }
 
-    private RoutePath createRoutePath(List<UTMK> pathPointList) {
-        return new RoutePath(new RoutePathOptions().addPoints(pathPointList)
-                .bufferWidth(gMap.getResolution() * 6)
-                .strokeWidth(1)
-                .strokeColor(Color.DKGRAY)
-                .passedFillColor(getResources().getColor(R.color.elephant_grey))
-                .fillColor(getResources().getColor(R.color.cool_red)));
+    /**
+     * 경로 오버레이 생성
+     *
+     * @param gMap  지도 객체
+     * @param route 현재 Active 된 Route 객체
+     */
+    //since 1.7.0 교통정보 RoutePath
+    private void createRoutePath(GMap gMap, Route route) {
+        if (gMap == null || route == null) {
+            return;
+        }
+        RoutePathManager.createTrafficRoutePath(getContext(),
+                route,
+                defaultRoutePathOptions,
+                new ResultListener<TrafficRoutePath>() {
+                    @Override
+                    public void success(TrafficRoutePath trafficRoutePath) {
+                        if (MapUtils.addOverlay(gMap, trafficRoutePath)) {
+                            currentRoutePath = trafficRoutePath;
+                        }
+                    }
+
+                    @Override
+                    public void fail(@NotNull Failure failure) {
+                        //SimpleLog.e("RouteFragment", "Error in RoutePath " + failure.getCode());
+                    }
+                });
     }
+//기본 RoutePath 이용 시
+//    private RoutePath createRoutePath(List<UTMK> pathPointList) {
+//        return new RoutePath(new RoutePathOptions().addPoints(pathPointList)
+//                .bufferWidth(gMap.getResolution() * 6)
+//                .strokeWidth(1)
+//                .strokeColor(Color.DKGRAY)
+//                .passedFillColor(getResources().getColor(R.color.elephant_grey))
+//                .fillColor(getResources().getColor(R.color.cool_red)));
+//    }
 
     private void clearOverlay() {
         if (currentRoutePath != null) {
@@ -570,6 +623,8 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
                         if (remainEventData == null) {
                             return;
                         }
+                        //since 1.7.0 현재 위치의 link index 수신
+                        currentLinkIndex = remainEventData.currentLinkIndex;
                         updateRemain(remainEventData.timeInSecond, remainEventData.distanceInMeter);
                     }
                 });
@@ -635,6 +690,16 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
      */
     private void onMapReady(GMap gMap) {
         this.gMap = gMap;
+        //since 1.7.0 교통정보 RoutePath 주행선 생성을 위한 기본 옵션 설정
+        defaultRoutePathOptions = RoutePathUtils.createNormalRoutePathOption(
+                gMap,
+                6,
+                1,
+                Color.DKGRAY,
+                ContextCompat.getColor(getContext(), R.color.elephant_grey),
+                ContextCompat.getColor(getContext(), R.color.cool_red),
+                ContextCompat.getColor(getContext(), R.color.elephant_grey)
+        );
         gMap.setOnAnimationEndListener(new GMap.OnAnimationEndListener() {
             @Override
             public void onAnimationComplete() {
@@ -743,7 +808,8 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
         currentLocationMarker.bringToFront();
 
         if (currentRoutePath != null) {
-            currentRoutePath.setSplitCoord(coord);
+            //since 1.7.0 교통정보 RoutePath
+            currentRoutePath.setSplitCoord(coord, currentLinkIndex);
         }
     }
 
@@ -829,7 +895,58 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
     //Since 1.5.0 교통정보 업데이트 완료 이벤트 메소드 추가
     @Override
     public void onTrafficUpdateComplete(@Nullable List<ControlLink> list) {
+        //since 1.7.0 교통정보 RoutePath, 교통 정보 업데이트 시 map sdk 에서 신규 교통정보를 얻어오는 기능 추가
+        updateTrafficInfoAsync();
+    }
 
+    /**
+     * 교통정보 비동기 업데이트
+     * 지도 데이터의 캐시를 삭제하고 경로의 링크정보를 모두 업데이트 하고
+     * 지도의 링크 데이터를 캐시를 이용하여 빠르게 업데이트
+     *
+     * 파라매터를 기준으로 일차적으로 업데이트 가능/ 불가능을 판별하고
+     * 그후는 callback 을 통해 전달받아 처리
+     */
+    //since 1.7.0 교통정보 RoutePath
+    private void updateTrafficInfoAsync() {
+        GTrafficManager trafficManager = GMapShared.getInstance(getContext()).getTrafficManager();
+        if (routeSummary == null || routeSummary.routes == null || trafficManager == null) {
+            return;
+        }
+
+        Context context = getContext();
+        if (!(context instanceof MainActivity)) {
+            return;
+        }
+
+        MainActivity activity = (MainActivity) context;
+        TrafficAdapter adapter = activity.getTrafficAdapter();
+        if (adapter == null) {
+            return;
+        }
+
+        Route route = routeSummary.getActiveRoute();
+        TrafficInfoManager.updateTrafficStateAsync(
+                adapter.getConverter(),
+                trafficManager,
+                route.getRouteTrafficData(),
+                new ResultListener<RouteTrafficDataContainer>() {
+                    @Override
+                    public void success(RouteTrafficDataContainer result) {
+                        boolean isUpdated = route.updateTrafficData(result);
+                        if (isUpdated) {
+                            drawRoute(route);
+                            if (gMap != null) {
+                                gMap.updateNetworkLink(false);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void fail(@NotNull Failure failure) {
+                        //Log.d("trafficDataTest", "failed update");
+                    }
+                });
     }
 
     @Override

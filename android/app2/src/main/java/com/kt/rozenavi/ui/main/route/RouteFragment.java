@@ -13,6 +13,7 @@ package com.kt.rozenavi.ui.main.route;
 
 import android.app.Activity;
 import android.arch.lifecycle.Observer;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -24,6 +25,7 @@ import android.support.annotation.Nullable;
 import android.support.transition.ChangeBounds;
 import android.support.transition.TransitionManager;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -35,7 +37,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.kt.geom.model.LatLng;
 import com.kt.geom.model.UTMK;
@@ -46,8 +47,11 @@ import com.kt.maps.model.Point;
 import com.kt.maps.model.ResourceDescriptorFactory;
 import com.kt.maps.overlay.Marker;
 import com.kt.maps.overlay.MarkerOptions;
-import com.kt.maps.overlay.RoutePath;
-import com.kt.maps.overlay.RoutePathOptions;
+import com.kt.maps.overlay.TrafficRoutePath;
+import com.kt.naviextension.data.Failure;
+import com.kt.naviextension.data.ResultListener;
+import com.kt.naviextension.routepath.RoutePathManager;
+import com.kt.naviextension.routepath.data.RoutePathOption;
 import com.kt.roze.NavigationManager;
 import com.kt.roze.RozeError;
 import com.kt.roze.RozeOptions;
@@ -74,8 +78,11 @@ import com.kt.rozenavi.utils.CommonUtils;
 import com.kt.rozenavi.utils.MapUtils;
 import com.kt.rozenavi.utils.PreferenceUtils;
 import com.kt.rozenavi.utils.RouteListenerAdpater;
+import com.kt.rozenavi.utils.RoutePathUtils;
 import com.kt.rozenavi.utils.UIUtils;
 import com.kt.rozenavi.utils.WeakReferenceHandler;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -108,12 +115,22 @@ public class RouteFragment extends BaseFragment implements RouteManager.RouteMan
     private List<LocationItem> destinationList;
     private RouteSummary routeSummary;
 
-    private List<RoutePath> routePathList = new ArrayList<>();
+    //기본 RoutePath 이용 시
+    //private List<RoutePath> routePathList = new ArrayList<>();
+    //since 1.7.0 교통정보 RoutePath
+    private List<TrafficRoutePath> routePathList = new ArrayList<>();
     private List<Marker> markerList = new ArrayList<>();
     private int selectedRouteIndex = 0;
 
     private Fragment navigationFragment;
     private Point routePivot;
+
+    //since 1.7.0 교통정보 RoutePath
+    /**
+     * onMapReady 시점에 초기화됨.
+     * RoutePath 객체를 위한 옵션
+     */
+    private RoutePathOption defaultRoutePathOptions;
 
     public static Fragment getInstance(RouteSummary routeSummary, LocationItem destination) {
         RouteFragment fragment = new RouteFragment();
@@ -241,7 +258,10 @@ public class RouteFragment extends BaseFragment implements RouteManager.RouteMan
                             return;
                         }
 
-                        for (RoutePath routePath : routePathList) {
+                        //기본 RoutePath 이용 시
+                        //for (RoutePath routePath : routePathList) {
+                        //since 1.7.0 교통정보 RoutePath
+                        for (TrafficRoutePath routePath : routePathList) {
                             routePath.setBufferWidth(gMap.getResolution() * 4);
                         }
                     }
@@ -270,7 +290,10 @@ public class RouteFragment extends BaseFragment implements RouteManager.RouteMan
 
     private void clearOverlay() {
         if (!CommonUtils.isEmpty(routePathList)) {
-            for (RoutePath routePath : routePathList) {
+            //기본 RoutePath 이용 시
+            //for (RoutePath routePath : routePathList) {
+            //since 1.7.0 교통정보 RoutePath
+            for (TrafficRoutePath routePath : routePathList) {
                 gMap.removeOverlay(routePath);
             }
             routePathList.clear();
@@ -287,14 +310,7 @@ public class RouteFragment extends BaseFragment implements RouteManager.RouteMan
     private void setRoutePath() {
         clearOverlay();
 
-        RoutePath path;
-        for (Route route : routeSummary.routes) {
-            path = createRoutePath(route.routePath());
-
-            //지도 및 리스트에 routepath 추가
-            gMap.addOverlay(path);
-            routePathList.add(path);
-        }
+        createRoutePath();
         //addmarker
         //출발지 마커
         MarkerOptions markerOptions = new MarkerOptions();
@@ -331,28 +347,75 @@ public class RouteFragment extends BaseFragment implements RouteManager.RouteMan
 
         selectRoute(0);
     }
+//기본 RoutePath 이용 시
+//    private RoutePath createRoutePath(List<UTMK> pathPointList) {
+//        return new RoutePath(new RoutePathOptions().addPoints(pathPointList)
+//                .bufferWidth(gMap.getResolution() * 4)
+//                .strokeWidth(1)
+//                .strokeColor(Color.DKGRAY)
+//                .passedFillColor(getResources().getColor(R.color.elephant_grey))
+//                .fillColor(getResources().getColor(R.color.elephant_grey)));
+//    }
 
-    private RoutePath createRoutePath(List<UTMK> pathPointList) {
-        return new RoutePath(new RoutePathOptions().addPoints(pathPointList)
-                .bufferWidth(gMap.getResolution() * 4)
-                .strokeWidth(1)
-                .strokeColor(Color.DKGRAY)
-                .passedFillColor(getResources().getColor(R.color.elephant_grey))
-                .fillColor(getResources().getColor(R.color.elephant_grey)));
+    //since 1.7.0 교통정보 RoutePath
+    private void createRoutePath() {
+        Context context = getContext();
+        if (gMap == null || routeSummary == null || CommonUtils.isEmpty(routeSummary.routes) || context == null) {
+            return;
+        }
+
+        routePathList.clear();
+        //since 01.17.00 navi Extension 에서 제공하는 RoutePathManager 이용
+        for (Route route : routeSummary.routes) {
+            //지도 및 리스트에 routepath 추가
+            RoutePathManager.createTrafficRoutePath(context, route, defaultRoutePathOptions, new ResultListener<TrafficRoutePath>() {
+                @Override
+                public void success(TrafficRoutePath routePath) {
+                    if (MapUtils.addOverlay(gMap, routePath)) {
+                        routePathList.add(routePath);
+                    }
+                }
+
+                @Override
+                public void fail(@NotNull Failure failure) {
+                    Log.e("RouteFragment", "Error in RoutePath " + failure.getCode());
+                }
+            });
+        }
     }
 
-    public void selectRoute(int index) {
-        if (selectedRouteIndex > -1) {
-            routePathList.get(selectedRouteIndex).setFillColor(
-                    getResources().getColor(R.color.elephant_grey));
+    //기본 RoutePath 이용 시
+//    public void selectRoute(int index) {
+//        if (selectedRouteIndex > -1) {
+//            routePathList.get(selectedRouteIndex).setFillColor(
+//                    getResources().getColor(R.color.elephant_grey));
+//        }
+//        selectedRouteIndex = index;
+//
+//        gMap.removeOverlay(routePathList.get(selectedRouteIndex));
+//        gMap.addOverlay(routePathList.get(selectedRouteIndex));
+//        routePathList.get(selectedRouteIndex).setFillColor(
+//                getResources().getColor(R.color.cool_red));
+//    }
+    //since 1.7.0 교통정보 RoutePath
+    /**
+     * 경로 선택
+     * 선택된 경로정보를 활성화 하고 선택되지 않은 경로정보는 비활성화 상태로 변경
+     *
+     * @param index index
+     */
+    private void selectRoute(int index) {
+        if (CommonUtils.isEmpty(routePathList)) {
+            return;
+        }
+
+        boolean isSuccess = RoutePathUtils.changeSelectedTrafficRoutePath(index, routePathList);
+        if (!isSuccess) {
+            return;
         }
         selectedRouteIndex = index;
-
-        gMap.removeOverlay(routePathList.get(selectedRouteIndex));
-        gMap.addOverlay(routePathList.get(selectedRouteIndex));
-        routePathList.get(selectedRouteIndex).setFillColor(
-                getResources().getColor(R.color.cool_red));
     }
+
 
     @OnClick(R.id.cancel_button)
     protected void onCancelClick() {
@@ -387,7 +450,7 @@ public class RouteFragment extends BaseFragment implements RouteManager.RouteMan
             }
 
             @Override
-                public void onRouteStartFail(RozeError error) {
+            public void onRouteStartFail(RozeError error) {
                 Log.e("Roze", "onRouteStartFail");
                 // ~ 1.1.1 버전
                 //UIUtils.showToast(getActivity(), rozeError.message);
@@ -407,6 +470,16 @@ public class RouteFragment extends BaseFragment implements RouteManager.RouteMan
      */
     private void onMapReady(GMap gMap) {
         this.gMap = gMap;
+        //since 1.7.0 교통정보 RoutePath 주행선 생성을 위한 기본 옵션 설정
+        defaultRoutePathOptions = RoutePathUtils.createNormalRoutePathOption(
+                gMap,
+                4,
+                1,
+                Color.DKGRAY,
+                ContextCompat.getColor(getContext(), R.color.elephant_grey),
+                ContextCompat.getColor(getContext(), R.color.cool_red),
+                ContextCompat.getColor(getContext(), R.color.elephant_grey)
+        );
         setRoutePath();
         handler.postDelayed(new Runnable() {
             @Override

@@ -96,6 +96,8 @@ dependencies {
     implementation project(':geom')
     implementation project(':maps-release')
     implementation project(':roze-release')
+    //since 1.7.0 교통정보 RoutePath Util Module 추가
+    implementation project(':naviextension-release')
     implementation project(':place-release')
     
     //--roze dependencies
