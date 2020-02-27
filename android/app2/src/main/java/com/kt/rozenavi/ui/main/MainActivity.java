@@ -55,7 +55,6 @@ import com.kt.rozenavi.ui.component.core.BaseActivity;
 import com.kt.rozenavi.ui.component.core.BaseFragment;
 import com.kt.rozenavi.ui.main.alarm.NightAlarmManager;
 import com.kt.rozenavi.ui.main.drive.DriveFragment;
-import com.kt.rozenavi.ui.main.navigation.util.MapHelper;
 import com.kt.rozenavi.ui.main.service.TbtGuidancePopupService;
 import com.kt.rozenavi.ui.setting.AppOptions;
 import com.kt.rozenavi.utils.MapUtils;
@@ -201,6 +200,8 @@ public class MainActivity extends BaseActivity implements OnMapReadyListener {
         getLifecycle().addObserver(MapProvider.getInstance());
         getLifecycle().addObserver(navigationData);
         getLifecycle().addObserver(locationProvider);
+
+        initSafetyOptions();
     }
 
     //since 1.7.0 교통정보 RoutePath, Map SDk 의 교통정보 표출을 위해 설정한 adapter 반환
@@ -217,6 +218,8 @@ public class MainActivity extends BaseActivity implements OnMapReadyListener {
         options.setWaterProtArea(false);
         options.setWeight(false);
         RozeOptions.getInstance().setSafetyOptions(options);
+        //since 1.7.0 긴급차량 안전정보 : 긴급차량 안전 정보 (필요시 true)
+        RozeOptions.getInstance().setEmergencyVehicle(false);
     }
     private void initView() {
         replaceFragment(DriveFragment.getInstance());

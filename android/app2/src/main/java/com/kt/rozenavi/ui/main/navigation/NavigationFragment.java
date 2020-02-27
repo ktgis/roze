@@ -57,11 +57,13 @@ import com.kt.roze.RozeOptions;
 import com.kt.roze.SoundManager;
 import com.kt.roze.data.RouteTrafficDataContainer;
 import com.kt.roze.data.model.ControlLink;
+import com.kt.roze.data.model.EmergencySafety;
 import com.kt.roze.data.model.FerryPoint;
 import com.kt.roze.data.model.Lane;
 import com.kt.roze.data.model.Route;
 import com.kt.roze.data.model.SafetySummary;
 import com.kt.roze.data.model.WayPoint;
+import com.kt.roze.guidance.RGType;
 import com.kt.roze.guidance.model.HighwayGuidance;
 import com.kt.roze.guidance.model.IntervalSpeedSpotGuidance;
 import com.kt.roze.guidance.model.OilPriceGuidance;
@@ -285,6 +287,8 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
         zoomChanger.setRoute(route);
 
         updateRemain(route.time, route.distance);
+        //since 1.7.0 긴급차량 안전정보 : 긴급차량 안전정보 추출
+        showEmergencyMessage(route);
     }
 
     private void playStartSound(SafetySummary summary) {
@@ -1204,4 +1208,57 @@ public class NavigationFragment extends BaseFragment implements NavigationManage
             }
         }
     };
+
+    /**
+     * 긴급 차량 안전 정보 알림
+     */
+    //since 1.7.0 긴급차량 안전정보 : 긴급차량 안전정보 추출
+    private void showEmergencyMessage(Route route) {
+        if (getActivity() == null) {
+            return;
+        }
+        MainActivity mainActivity = (MainActivity) getActivity();
+        List<EmergencySafety> emergencySafeties = route.getEmergencySafeties();
+        if (emergencySafeties == null || emergencySafeties.size() == 0) {
+            return;
+        }
+
+        EmergencySafety emergencySafety = null;
+        for (EmergencySafety safety : emergencySafeties) {
+            if (safety.getLimitValue() > 0) {
+                emergencySafety = safety;
+                break;
+            }
+        }
+
+        if (emergencySafety == null) {
+            return;
+        }
+
+        String message = getEmergencyString(emergencySafety);
+        if (TextUtils.isEmpty(message)) {
+            return;
+        }
+        AlertDialog.Builder failDialog = new AlertDialog.Builder(mainActivity);
+        failDialog.setTitle("긴급 차량 안전정보 알림");
+        failDialog.setMessage(message);
+        failDialog.setNegativeButton("확인", (dialog, id) -> {
+            //do something
+        });
+        failDialog.show();
+    }
+
+    //since 1.7.0 긴급차량 안전정보 : 긴급차량 안전정보 메세지 생성
+    private String getEmergencyString(EmergencySafety safety) {
+        StringBuilder builder = new StringBuilder();
+        if (safety.getType() == RGType.CAUTION_EMERGENCY_VEHICLE_HEIGHT) {
+            builder.append("긴급차량 높이제한 : ");
+        } else if (safety.getType() == RGType.CAUTION_EMERGENCY_VEHICLE_WIDTH) {
+            builder.append("긴급차량 폭제한 : ");
+        } else {
+            return null;
+        }
+        builder.append(safety.getLimitValue());
+        return builder.toString();
+    }
 }
