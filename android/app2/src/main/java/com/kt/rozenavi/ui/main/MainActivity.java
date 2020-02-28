@@ -44,7 +44,7 @@ import com.kt.naviextension.traffic.adapter.TrafficAdapter;
 import com.kt.roze.NavigationManager;
 import com.kt.roze.RozeOptions;
 import com.kt.roze.RozeResultCode;
-import com.kt.roze.data.SafetyOptions;
+import com.kt.roze.data.model.SafetyOptions;
 import com.kt.roze.guidance.model.TurnGuidance;
 import com.kt.rozenavi.R;
 import com.kt.rozenavi.RozeNaviApplication;
