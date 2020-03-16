@@ -1,6 +1,12 @@
 # Changelog
 신버전 sdk 샘플 프로젝트 변경사항
 
+## [2020-03-16]
+
+### 변경사항
+- Route Class 에 교통정보 제공 API 추가 
+- Route Class 에 긴급 차량 안전 정보 추가
+
 ## [2020-02-17]
 
 ### 변경사항
@@ -111,6 +117,7 @@
 ### 추가
 - 신규 샘플앱 추가
 
+[2020-03-16]: https://github.com/ktgis/roze/commit/21e83924bb141c56a2542fd3d4bbe60b9888242d
 [2020-02-17]: https://github.com/ktgis/roze/commit/d6cd71a45f759ddf0f5692e153c128e8f51a94c3
 [2019-11-25-2]: https://github.com/ktgis/roze/commit/331c49ce67cea50d5af3b88f56094391881b9cba
 [2019-11-25]: https://github.com/ktgis/roze/commit/55c88eadbb58f60db6f6635ee15d1677db331f6d
