@@ -13,7 +13,7 @@
 package com.kt.rozenavi.utils;
 
 import android.location.Location;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import com.kt.roze.NavigationManager;
 import com.kt.roze.RozeError;

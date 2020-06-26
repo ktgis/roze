@@ -12,8 +12,7 @@
 package com.kt.rozenavi.ui.main;
 
 import android.content.Context;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
+import androidx.core.view.GravityCompat;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -26,6 +25,7 @@ import com.kt.rozenavi.ui.setting.SettingRouteAdvActivity;
 import com.kt.rozenavi.ui.setting.SettingSoundActivity;
 import com.kt.rozenavi.utils.UIUtils;
 
+import androidx.drawerlayout.widget.DrawerLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;

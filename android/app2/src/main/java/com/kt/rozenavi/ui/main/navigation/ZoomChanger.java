@@ -12,7 +12,7 @@
 
 package com.kt.rozenavi.ui.main.navigation;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.kt.geom.model.UTMK;
 import com.kt.maps.GMap;

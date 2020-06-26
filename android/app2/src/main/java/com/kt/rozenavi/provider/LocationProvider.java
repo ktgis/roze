@@ -12,13 +12,13 @@
 
 package com.kt.rozenavi.provider;
 
-import android.arch.lifecycle.Lifecycle;
-import android.arch.lifecycle.LifecycleObserver;
-import android.arch.lifecycle.OnLifecycleEvent;
-
 import com.kt.roze.NavigationManager;
 import com.kt.roze.location.model.GeoLocation;
 import com.kt.rozenavi.data.LiveDataAdv;
+
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleObserver;
+import androidx.lifecycle.OnLifecycleEvent;
 
 
 public class LocationProvider implements LifecycleObserver, NavigationManager.LocationListener,

@@ -19,6 +19,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Binder;
+import android.os.Build;
 import android.os.IBinder;
 import android.view.WindowManager;
 
@@ -98,7 +99,7 @@ public class TbtGuidancePopupService extends Service {
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         pendingIntent = PendingIntent.getActivity(getApplicationContext(), 2, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Notification status = new android.support.v4.app.NotificationCompat.Builder(getApplicationContext())
+        Notification status = new androidx.core.app.NotificationCompat.Builder(getApplicationContext())
                 .setSmallIcon(R.drawable.ico_rozenavi)
                 .setContentTitle(getResources().getString(R.string.notification_content_title))
                 .setContentText(getResources().getString(R.string.notification_content_text))
@@ -141,7 +142,7 @@ public class TbtGuidancePopupService extends Service {
         WindowManager.LayoutParams params = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
+                getWindowOverlayType(),
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSLUCENT);
 
@@ -151,6 +152,18 @@ public class TbtGuidancePopupService extends Service {
         }
 
         windowManager.addView(tbtGuidancePopupView, params);
+    }
+
+    /**
+     * WindowManager에 추가되는 방식 설정
+     * sdk 26 이후 사용불가되는 type으로 인해 분기처리
+     */
+    private int getWindowOverlayType() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            return WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+        } else {
+            return WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
+        }
     }
 
     /**

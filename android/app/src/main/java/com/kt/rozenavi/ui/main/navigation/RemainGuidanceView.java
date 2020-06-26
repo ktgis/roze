@@ -13,7 +13,7 @@
 package com.kt.rozenavi.ui.main.navigation;
 
 import android.content.Context;
-import android.databinding.DataBindingUtil;
+import androidx.databinding.DataBindingUtil;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.RelativeLayout;

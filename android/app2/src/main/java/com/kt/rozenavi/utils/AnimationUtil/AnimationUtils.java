@@ -13,7 +13,7 @@
 package com.kt.rozenavi.utils.AnimationUtil;
 
 import android.graphics.drawable.AnimationDrawable;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.widget.ImageView;
 
 /**

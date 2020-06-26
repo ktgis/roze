@@ -12,7 +12,7 @@
 
 package com.kt.rozenavi.utils;
 
-import android.databinding.BindingAdapter;
+import androidx.databinding.BindingAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 

@@ -12,11 +12,12 @@
 
 package com.kt.rozenavi.data;
 
-import android.arch.lifecycle.Lifecycle;
-import android.arch.lifecycle.LifecycleOwner;
-import android.arch.lifecycle.Observer;
 
 import com.kt.rozenavi.ui.component.core.MutableLiveDataExt;
+
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
 
 
 public class LiveDataAdv<T> extends MutableLiveDataExt<T> {

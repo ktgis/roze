@@ -13,10 +13,6 @@
 
 package com.kt.rozenavi.data;
 
-import android.arch.lifecycle.Lifecycle;
-import android.arch.lifecycle.LifecycleObserver;
-import android.arch.lifecycle.OnLifecycleEvent;
-
 import com.kt.roze.NavigationManager;
 import com.kt.roze.RozeError;
 import com.kt.roze.data.model.Lane;
@@ -35,6 +31,10 @@ import com.kt.rozenavi.data.model.SafetyEventData;
 import com.kt.rozenavi.data.model.TrackingEventData;
 
 import java.util.List;
+
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleObserver;
+import androidx.lifecycle.OnLifecycleEvent;
 
 /**
  * 경로안내정보 유실을 막기 위한 Data 클래스
@@ -153,12 +153,6 @@ public class NavigationData implements LifecycleObserver {
             super.onHighwayDistanceEvent(distance);
             highwayDistance.setValue(distance);
         }
-
-//        @Override
-//        public void onRemainChangedEvent(int timeInSecond, int distanceInMeter) {
-//            super.onRemainChangedEvent(timeInSecond, distanceInMeter);
-//            remainEvent.setValue(new RemainEventData(timeInSecond, distanceInMeter));
-//        }
 
         @Override
         public void onCurrentInformEvent(RGCurrentInform inform) {

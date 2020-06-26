@@ -12,8 +12,8 @@
 
 package com.kt.rozenavi.ui.main.navigation.data;
 
-import android.databinding.BaseObservable;
-import android.databinding.Bindable;
+import androidx.databinding.BaseObservable;
+import androidx.databinding.Bindable;
 
 import com.android.databinding.library.baseAdapters.BR;
 

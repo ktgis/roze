@@ -13,7 +13,7 @@ package com.kt.rozenavi.ui.main.route.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,7 +24,6 @@ import lombok.Setter;
  * 경로편집 화면에서 사용하는 출발지/목적지/경유지 정보 데이터 클래스
  * 좌표, 목적지 명칭을 제공
  */
-@AllArgsConstructor
 public class LocationItem implements Parcelable {
     /**
      * 목적지 x 좌표
@@ -47,7 +46,13 @@ public class LocationItem implements Parcelable {
     @Setter
     private String name;
 
-    protected LocationItem(Parcel in) {
+    public LocationItem(double x, double y, String name) {
+        this.x = x;
+        this.y = y;
+        this.name = name;
+    }
+
+    public LocationItem(Parcel in) {
         x = in.readDouble();
         y = in.readDouble();
         name = in.readString();

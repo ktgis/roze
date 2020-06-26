@@ -13,13 +13,14 @@
 package com.kt.rozenavi;
 
 import android.content.Context;
-import android.support.multidex.MultiDexApplication;
 
 import com.kt.maps.GMapShared;
 import com.kt.maps.util.GMapKeyManager;
 import com.kt.roze.RozeOptions;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
+
+import androidx.multidex.MultiDexApplication;
 
 /**
  * application 클래스

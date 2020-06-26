@@ -16,7 +16,7 @@
 
 package com.kt.rozenavi.data;
 
-import android.arch.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LifecycleOwner;
 
 /**
  * 구독 이후의 이벤트만 받고 싶을 떄 사용.

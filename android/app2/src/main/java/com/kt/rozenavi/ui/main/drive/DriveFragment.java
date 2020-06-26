@@ -12,14 +12,15 @@
 package com.kt.rozenavi.ui.main.drive;
 
 import android.app.Activity;
-import android.arch.lifecycle.Observer;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -40,7 +41,6 @@ import com.kt.roze.NavigationManager;
 import com.kt.roze.RozeError;
 import com.kt.roze.RozeOptions;
 import com.kt.roze.SoundManager;
-import com.kt.roze.data.model.Link;
 import com.kt.roze.data.model.Route;
 import com.kt.roze.guidance.model.SafetySpotInterface;
 import com.kt.roze.guidance.model.Sound;

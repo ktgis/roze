@@ -13,8 +13,9 @@
 package com.kt.rozenavi.ui.setting;
 
 import android.os.AsyncTask;
-import android.support.annotation.StringRes;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
