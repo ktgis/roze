@@ -44,6 +44,7 @@ import com.kt.roze.RozeOptions;
 import com.kt.roze.RozeResultCode;
 import com.kt.roze.data.model.SafetyOptions;
 import com.kt.roze.guidance.model.TurnGuidance;
+import com.kt.rozenavi.KeyStore;
 import com.kt.rozenavi.R;
 import com.kt.rozenavi.RozeNaviApplication;
 import com.kt.rozenavi.data.NavigationData;
@@ -127,7 +128,7 @@ public class MainActivity extends BaseActivity implements OnMapReadyListener {
         NavigationManager navigationManager = NavigationManager.getInstance();
         //구글플레이서비스를 활용하지 못하는 상황일때 정상적인 내비기능을 활용하지 못하여
         //구글플레이서비스를 업데이트 하거나 사용가능하도록 변경하도록 안내 팝업을 표시 후 앱을 종료시킴
-        RozeResultCode initCode = navigationManager.initialize(getApplicationContext(), "전달받은 API Key 입력");
+        RozeResultCode initCode = navigationManager.initialize(getApplicationContext(), KeyStore.gisKey);
         if (initCode != RozeResultCode.SUCCESS) {
             showNaviInitFailDialog(initCode);
             return;

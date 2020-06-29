@@ -52,7 +52,7 @@ public class RozeNaviApplication extends MultiDexApplication {
         //RozeOptions 초기화 누락될경우 getInstance 동작시 오류
         RozeOptions.initialize(this);
         //GMap 초기화
-        GMapKeyManager.getInstance().init(getApplicationContext(), "전달받은 API Key 입력");
+        GMapKeyManager.getInstance().init(getApplicationContext(), KeyStore.gisKey);
         GMapShared.getInstance(getApplicationContext());
     }
 }

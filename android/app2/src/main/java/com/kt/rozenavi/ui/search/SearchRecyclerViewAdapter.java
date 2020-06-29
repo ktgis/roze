@@ -17,8 +17,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.kt.place.model.poi.Poi;
 import com.kt.rozenavi.R;
+import com.kt.rozenavi.ui.search.place.model.poi.Poi;
 import com.kt.rozenavi.utils.CommonUtils;
 
 import java.util.List;
@@ -60,7 +60,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
     public void onBindViewHolder(LocationViewHolder holder, int position) {
         Poi placeData = searchPlaceDataList.get(position);
         holder.name.setText(placeData.getPoiName());
-        holder.address.setText(placeData.getNewAddress());
+        holder.address.setText(placeData.getPoiAddress());
     }
 
     @Override

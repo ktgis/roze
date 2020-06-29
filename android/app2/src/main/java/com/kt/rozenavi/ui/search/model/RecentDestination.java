@@ -13,19 +13,16 @@
 package com.kt.rozenavi.ui.search.model;
 
 
-import com.kt.place.model.poi.Poi;
+import com.kt.rozenavi.ui.search.place.model.poi.Poi;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import lombok.AllArgsConstructor;
 
 /**
  * 이전 검색 데이터 모델 클래스
  * 검색했던 목적지 정보를 저장 및 로드하는 기능을 제공
  * {@link com.kt.roze.util.JsonFileUtil}을 통해 생성
  */
-@AllArgsConstructor
 public class RecentDestination {
     /**
      * 검색 데이터 저장 파일명
@@ -38,11 +35,7 @@ public class RecentDestination {
     /**
      * 이전 검색 데이터 리스트
      */
-    private List<Poi> destinations;
-
-    public RecentDestination() {
-        this(new ArrayList<Poi>());
-    }
+    private List<Poi> destinations = new ArrayList<>();
 
     /**
      * 이전 검색 데이터 리스트 반환
@@ -63,15 +56,16 @@ public class RecentDestination {
      * @param data 검색 데이터
      */
     public void addPlaceData(Poi data) {
-        int removeIndex = getPlaceDataIndex(data);
+        List<Poi> prevDest = getDestinations();
+        int removeIndex = getPlaceDataIndex(prevDest, data);
         if (removeIndex != -1) {
-            destinations.remove(removeIndex);
+            prevDest.remove(removeIndex);
         }
 
-        destinations.add(0, data);
+        prevDest.add(0, data);
 
-        if (destinations.size() > RECENT_DEST_COUNT) {
-            destinations.remove(destinations.size() - 1);
+        if (prevDest.size() > RECENT_DEST_COUNT) {
+            prevDest.remove(prevDest.size() - 1);
         }
     }
 
@@ -83,15 +77,17 @@ public class RecentDestination {
      * @param data 검색 데이터 객체
      * @return 데이터 index
      */
-    private int getPlaceDataIndex(Poi data) {
+    private int getPlaceDataIndex(List<Poi> prevDest, Poi data) {
+        if (prevDest == null || prevDest.isEmpty()) {
+            return -1;
+        }
         Poi place;
-        for (int i = 0; i < destinations.size(); i++) {
-            place = destinations.get(i);
+        for (int i = 0; i < prevDest.size(); i++) {
+            place = prevDest.get(i);
             if (place.getPoiName().equalsIgnoreCase(data.getPoiName())) {
                 return i;
             }
         }
-
         return -1;
     }
 }

@@ -14,14 +14,11 @@ package com.kt.rozenavi.utils;
 
 import android.app.Activity;
 import android.content.Context;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.kt.place.PlaceManager;
 import com.kt.roze.NavigationManager;
 import com.kt.rozenavi.BuildConfig;
 
@@ -147,8 +144,6 @@ public class UIUtils {
     public static String getVersionString() {
         String version = "";
         version = version + String.format("Roze SDK Version %s", NavigationManager.getInstance().version());
-        version = version + "\n";
-        version = version + String.format("Place SDK Version %s", PlaceManager.getInstance().version());
         version = version + "\n";
         version = version + String.format("App Version %s", BuildConfig.VERSION_NAME);
         return version;
