@@ -1,6 +1,12 @@
 # Changelog
 신버전 sdk 샘플 프로젝트 변경사항
 
+## [2020-06-29]
+
+### 변경사항
+- Place SDK 제공 중지에 따른 샘플앱 내의 Place Code 제거.
+- Place Code 구현에 필요한 Build Gradle 추가. (Kotlin / Coroutine)
+
 ## [2020-06-26]
 
 ### 변경사항
@@ -120,6 +126,7 @@
 
 ### 추가
 - 신규 샘플앱 추가
+[2020-06-29]: https://github.com/ktgis/roze/commit/9bf59de51bf87c676b6815b191e13a0c462d8c0b
 [2020-06-26]: https://github.com/ktgis/roze/commit/0f945bf10c15354ed424f9b38b5de2c162e1e591
 [2020-03-16]: https://github.com/ktgis/roze/commit/21e83924bb141c56a2542fd3d4bbe60b9888242d
 [2020-02-17]: https://github.com/ktgis/roze/commit/d6cd71a45f759ddf0f5692e153c128e8f51a94c3
